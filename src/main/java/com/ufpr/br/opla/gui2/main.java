@@ -44,6 +44,8 @@ public class main extends javax.swing.JFrame {
         guiservices.configurePatternsProfile(fieldPatterns);
         guiservices.configureRelationshipsProfile(fieldRelationships);
         guiservices.configureTemplates(fieldTemplate);
+        
+        guiservices.configureLocaleToSaveModels(fieldOutput);
     }
 
     /**
@@ -61,28 +63,28 @@ public class main extends javax.swing.JFrame {
         fieldSmartyProfile = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         fieldConcernProfile = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnSmartyProfile = new javax.swing.JButton();
+        btnConcernProfile = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         fieldArchitectureInput = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnInput = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         fieldTemplate = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        btnTemplate = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         fieldPatterns = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         fieldRelationships = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btnPatternProfile = new javax.swing.JButton();
+        btnRelationshipProfile = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
+        fieldOutput = new javax.swing.JTextField();
+        btnOutput = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,17 +106,17 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Browser...");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSmartyProfile.setText("Browser...");
+        btnSmartyProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSmartyProfileActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Browser...");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnConcernProfile.setText("Browser...");
+        btnConcernProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnConcernProfileActionPerformed(evt);
             }
         });
 
@@ -127,10 +129,10 @@ public class main extends javax.swing.JFrame {
 
         jLabel5.setText("Architecture (should be .uml file)");
 
-        jButton3.setText("Browser...");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnInput.setText("Browser...");
+        btnInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnInputActionPerformed(evt);
             }
         });
 
@@ -143,10 +145,10 @@ public class main extends javax.swing.JFrame {
 
         jLabel8.setText("Templates Directory:");
 
-        jButton4.setText("Select a Directory...");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnTemplate.setText("Select a Directory...");
+        btnTemplate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnTemplateActionPerformed(evt);
             }
         });
 
@@ -160,17 +162,17 @@ public class main extends javax.swing.JFrame {
 
         jLabel10.setText("Relationships Profile:");
 
-        jButton5.setText("Browser...");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnPatternProfile.setText("Browser...");
+        btnPatternProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnPatternProfileActionPerformed(evt);
             }
         });
 
-        jButton6.setText("Browser...");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnRelationshipProfile.setText("Browser...");
+        btnRelationshipProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btnRelationshipProfileActionPerformed(evt);
             }
         });
 
@@ -179,10 +181,16 @@ public class main extends javax.swing.JFrame {
 
         jLabel12.setText("Output:");
 
-        jButton7.setText("Browser...");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        fieldOutput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                fieldOutputActionPerformed(evt);
+            }
+        });
+
+        btnOutput.setText("Browser...");
+        btnOutput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOutputActionPerformed(evt);
             }
         });
 
@@ -199,7 +207,7 @@ public class main extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(fieldArchitectureInput, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
+                        .addComponent(btnInput)))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -211,7 +219,7 @@ public class main extends javax.swing.JFrame {
                                 .addGap(4, 4, 4)
                                 .addComponent(fieldTemplate)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(302, 302, 302))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -228,8 +236,8 @@ public class main extends javax.swing.JFrame {
                                                     .addComponent(fieldSmartyProfile))
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jButton1)
-                                                    .addComponent(jButton2))))
+                                                    .addComponent(btnSmartyProfile)
+                                                    .addComponent(btnConcernProfile))))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jLabel10)
@@ -237,8 +245,8 @@ public class main extends javax.swing.JFrame {
                                             .addComponent(fieldRelationships, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jButton5)
-                                            .addComponent(jButton6))))
+                                            .addComponent(btnPatternProfile)
+                                            .addComponent(btnRelationshipProfile))))
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,9 +269,9 @@ public class main extends javax.swing.JFrame {
                                 .addGap(6, 6, 6)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton7))
+                                        .addComponent(btnOutput))
                                     .addComponent(jLabel12))))
                         .addContainerGap(114, Short.MAX_VALUE))))
         );
@@ -279,9 +287,9 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldSmartyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
+                    .addComponent(btnSmartyProfile)
                     .addComponent(fieldPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5))
+                    .addComponent(btnPatternProfile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -289,9 +297,9 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldConcernProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
+                    .addComponent(btnConcernProfile)
                     .addComponent(fieldRelationships, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6))
+                    .addComponent(btnRelationshipProfile))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -301,7 +309,7 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(btnTemplate))
                 .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -313,9 +321,9 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldArchitectureInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton7))
+                    .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInput)
+                    .addComponent(btnOutput))
                 .addContainerGap(242, Short.MAX_VALUE))
         );
 
@@ -339,27 +347,27 @@ public class main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInputActionPerformed
         fileChooser(fieldArchitectureInput, "uml");
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnInputActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcernProfileActionPerformed
         String newPath = fileChooser(fieldConcernProfile, "uml");
         if(newPath.equals("")){
             this.config.updatePathToProfileConcerns(fieldConcernProfile.getText());
         }else{
             this.config.updatePathToProfileConcerns(newPath);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnConcernProfileActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnSmartyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSmartyProfileActionPerformed
         String newPath = fileChooser(fieldSmartyProfile, "uml");
         if(newPath.equals("")){
             this.config.updatePathToProfileSmarty(fieldSmartyProfile.getText());
         }else{
             this.config.updatePathToProfileSmarty(newPath);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSmartyProfileActionPerformed
 
     private void fieldConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldConcernProfileActionPerformed
         // TODO add your handling code here:
@@ -369,12 +377,14 @@ public class main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldSmartyProfileActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplateActionPerformed
         String path  = dirChooser(fieldTemplate);
-        if(!"".equals(path)){
+        if("".equals(path)){
+            this.config.updatePathToTemplateFiles(fieldTemplate.getText());
+        }else{
             this.config.updatePathToTemplateFiles(path);
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnTemplateActionPerformed
 
     private String dirChooser(JTextField field) throws HeadlessException {
         JFileChooser c = new JFileChooser();
@@ -390,31 +400,41 @@ public class main extends javax.swing.JFrame {
         return "";
     }
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btnRelationshipProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelationshipProfileActionPerformed
         String newPath = fileChooser(fieldRelationships, "uml");
         if(newPath.equals("")){
             this.config.updatePathToProfileRelationships(fieldRelationships.getText());
         }else{
             this.config.updatePathToProfileRelationships(newPath);
         }
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnRelationshipProfileActionPerformed
 
     private void fieldPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPatternsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldPatternsActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnPatternProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatternProfileActionPerformed
       String newPath = fileChooser(fieldPatterns, "uml");
-        if(newPath.equals("")){
+        if("".equals(newPath)){
             this.config.updatePathToProfilePatterns(fieldPatterns.getText());
         }else{
             this.config.updatePathToProfilePatterns(newPath);
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnPatternProfileActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        dirChooser(jTextField1);
-    }//GEN-LAST:event_jButton7ActionPerformed
+    private void btnOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutputActionPerformed
+        String path = dirChooser(fieldOutput);
+        if("".equals(path)){
+            this.config.updatePathToSaveModels(fieldOutput.getText());
+        }else{
+            this.config.updatePathToSaveModels(path);
+        }
+                
+    }//GEN-LAST:event_btnOutputActionPerformed
+
+    private void fieldOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOutputActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fieldOutputActionPerformed
 
     private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
         JFileChooser c = new JFileChooser();
@@ -428,12 +448,16 @@ public class main extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "The selected file is not allow. You need selects a file with extension .uml, but you selects a ."+ext + " file");
                 return "";
             }else{
-                fieldToSet.setText(c.getCurrentDirectory() + "/"+ c.getSelectedFile().getName());
+                final String path = c.getCurrentDirectory() + "/"+ c.getSelectedFile().getName();
+                fieldToSet.setText(path);
                 fieldToSet.updateUI();
+                return path;
+                
             }
         }
         
-        return c.getCurrentDirectory() + "/" + c.getSelectedFile().getName();
+        return "";
+        
     }
 
     /**
@@ -441,19 +465,20 @@ public class main extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConcernProfile;
+    private javax.swing.JButton btnInput;
+    private javax.swing.JButton btnOutput;
+    private javax.swing.JButton btnPatternProfile;
+    private javax.swing.JButton btnRelationshipProfile;
+    private javax.swing.JButton btnSmartyProfile;
+    private javax.swing.JButton btnTemplate;
     private javax.swing.JTextField fieldArchitectureInput;
     private javax.swing.JTextField fieldConcernProfile;
+    private javax.swing.JTextField fieldOutput;
     private javax.swing.JTextField fieldPatterns;
     private javax.swing.JTextField fieldRelationships;
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -468,7 +493,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 
 

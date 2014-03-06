@@ -57,6 +57,11 @@ public class ManagerApplicationConfig {
         updateConfigurationFile();
     }
     
+    public void updatePathToSaveModels(String newpath){
+        this.configurationFile.setDirectoryToExportModels(newpath);
+        updateConfigurationFile();
+    }
+    
     
     private void updateConfigurationFile() {
         try {

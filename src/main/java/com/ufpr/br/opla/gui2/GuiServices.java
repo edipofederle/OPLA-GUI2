@@ -39,6 +39,7 @@ public class GuiServices {
             final String smarty = getDefaultPath()+"profiles" + this.file_separator + profileSmartyName;
             FilesManager.copyFile("resources/teste.txt", smarty); //TODO mudar para arquivo correto
             fieldSmartyProfile.setText(smarty);
+            fieldSmartyProfile.updateUI();
             config.updatePathToProfileSmarty(smarty);
         }
     }
@@ -51,6 +52,7 @@ public class GuiServices {
             final String concern = getDefaultPath()+"profiles" + this.file_separator + profileConcernsName;
             FilesManager.copyFile("resources/teste.txt", concern); //TODO mudar para arquivo correto
             fieldConcernProfile.setText(concern);
+            fieldConcernProfile.updateUI();
             config.updatePathToProfileConcerns(concern);
         }
     }
@@ -63,6 +65,7 @@ public class GuiServices {
             final String pattern = getDefaultPath()+"profiles"+ this.file_separator + profilePatternName;
             FilesManager.copyFile("resources/teste.txt", pattern); //TODO mudar para arquivo correto
             fieldPatterns.setText(pattern);
+            fieldPatterns.updateUI();
             config.updatePathToProfilePatterns(pattern);
         }
     }
@@ -76,6 +79,7 @@ public class GuiServices {
             final String relationship = getDefaultPath()+"profiles"+ this.file_separator +profileRelationshipName;
             FilesManager.copyFile("resources/teste.txt", relationship); //TODO mudar para arquivo correto
             fieldRelationships.setText(relationship);
+            fieldRelationships.updateUI();
             config.updatePathToProfileRelationships(relationship);
         }
     }
@@ -99,6 +103,10 @@ public class GuiServices {
     private boolean hasTemplateInConfigFile() {
         return config.getConfig().getPathToTemplateModelsDirectory() != null;
     }
+    
+    private boolean hasPathToSaveModelsInConfigFile(){
+        return config.getConfig().getDirectoryToExportModels() != null;
+    }
 
     public void configureTemplates(JTextField fieldTemplate) {
         if(hasTemplateInConfigFile()){
@@ -110,8 +118,22 @@ public class GuiServices {
             FilesManager.copyFile("resources/templates/simples.notation", getDefaultPath() + "templates"+ this.file_separator + "simples.notation");
             final String template = getDefaultPath() + "templates/";
             fieldTemplate.setText(template);
+            fieldTemplate.updateUI();
             config.updatePathToTemplateFiles(template);
         }
+    }
+
+    public void configureLocaleToSaveModels(JTextField fieldOutput) {
+       if(hasPathToSaveModelsInConfigFile()){
+           fieldOutput.setText(config.getConfig().getDirectoryToExportModels());
+       }else{
+           final String path = getDefaultPath()+"output";
+           FilesManager.createPath(path);
+           fieldOutput.setText(user_home);
+           fieldOutput.updateUI();
+           config.updatePathToSaveModels(path);
+       }
+           
     }
     
 }

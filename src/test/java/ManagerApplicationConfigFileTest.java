@@ -23,7 +23,7 @@ public class ManagerApplicationConfigFileTest {
    private ManagerApplicationConfig managerConfig;
     
    @Before
-   public void setUp(){
+   public void setUp() throws FileNotFoundException{
         managerConfig = new ManagerApplicationConfig("application.yaml");
    }
     
