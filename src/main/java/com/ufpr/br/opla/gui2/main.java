@@ -8,6 +8,8 @@ package com.ufpr.br.opla.gui2;
 
 import java.awt.HeadlessException;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.concurrent.ExecutionException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -19,16 +21,23 @@ import javax.swing.JTextField;
 public class main extends javax.swing.JFrame {
     
     
-     private final ManagerApplicationConfig config;
+     private ManagerApplicationConfig config = null;
     
 
     /**
      * Creates new form main
      */
-    public main() {
+    public main() throws ExecutionException {
         initComponents();
       
-        config = new ManagerApplicationConfig("application.yaml");
+
+        try {
+            config = new ManagerApplicationConfig("application.yaml");
+        } catch (FileNotFoundException ex) {
+           JOptionPane.showMessageDialog(null, "Configuration file application.yaml not found. ");
+           System.exit(0);
+        }
+
         GuiServices guiservices = new GuiServices(config);
         guiservices.configureSmartyProfile(fieldSmartyProfile);
         guiservices.configureConcernsProfile(fieldConcernProfile);

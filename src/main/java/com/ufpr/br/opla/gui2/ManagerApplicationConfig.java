@@ -23,12 +23,8 @@ public class ManagerApplicationConfig {
     private DirTarget configurationFile;
     
     
-    public ManagerApplicationConfig(String pathConfigFile){
-        try {
-            this.configurationFile = Yaml.loadType(new File(pathConfigFile), DirTarget.class);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ManagerApplicationConfig.class.getName()).log(Level.SEVERE, null, "Ops, Problem when try load configuration file: "+ ex);
-        }
+    public ManagerApplicationConfig(String pathConfigFile) throws FileNotFoundException{
+        this.configurationFile = Yaml.loadType(new File(pathConfigFile), DirTarget.class);
     }
 
     public DirTarget getConfig() {

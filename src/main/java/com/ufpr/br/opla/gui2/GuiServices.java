@@ -6,8 +6,8 @@ import javax.swing.JTextField;
 public class GuiServices {
     
     private final ManagerApplicationConfig config;
-    private final String username;
-    private final String os;
+    private final String user_home;
+    private final String file_separator;
     private final String profileSmartyName;
     private final String profileConcernsName;
     private final String profilePatternName;
@@ -16,8 +16,9 @@ public class GuiServices {
     
     public GuiServices(ManagerApplicationConfig managerConfig){
         config = managerConfig;
-        os = System.getProperty("os.name");
-        username =  System.getProperty("user.name");
+       
+        user_home =  System.getProperty("user.home");
+        file_separator = System.getProperty("file.separator");
         
         profileSmartyName       = "smarty.profile.uml";
         profileConcernsName     = "concerns.profile.uml";
@@ -25,20 +26,9 @@ public class GuiServices {
         profileRelationshipName = "relationships.profile.uml";  
     }
     
-     /**
-     * Returns default path based in running OS.
-     * 
-     * TODO Linux e Windows
-     * @return 
-     */
+    
     private String getDefaultPath() {
-        String osPath;
-        if(os.contains("Mac OS X")){
-            osPath =  "/Users/"+ username +"/oplatool/";
-        }else{
-            osPath = "";
-        }
-        return osPath;
+      return  user_home +"/oplatool/";
     }
 
     public void configureSmartyProfile(JTextField fieldSmartyProfile) {
@@ -46,7 +36,7 @@ public class GuiServices {
           fieldSmartyProfile.setText(config.getConfig().getPathToProfile());
         }else{
             FilesManager.createPath(getDefaultPath()+"profiles");
-            final String smarty = getDefaultPath()+"profiles/"+profileSmartyName;
+            final String smarty = getDefaultPath()+"profiles" + this.file_separator + profileSmartyName;
             FilesManager.copyFile("resources/teste.txt", smarty); //TODO mudar para arquivo correto
             fieldSmartyProfile.setText(smarty);
             config.updatePathToProfileSmarty(smarty);
@@ -58,7 +48,7 @@ public class GuiServices {
           fieldConcernProfile.setText(config.getConfig().getPathToProfileConcern());
         }else{
             FilesManager.createPath(getDefaultPath()+"profiles");
-            final String concern = getDefaultPath()+"profiles/"+profileConcernsName;
+            final String concern = getDefaultPath()+"profiles" + this.file_separator + profileConcernsName;
             FilesManager.copyFile("resources/teste.txt", concern); //TODO mudar para arquivo correto
             fieldConcernProfile.setText(concern);
             config.updatePathToProfileConcerns(concern);
@@ -70,7 +60,7 @@ public class GuiServices {
           fieldPatterns.setText(config.getConfig().getPathToProfilePatterns());
         }else{
             FilesManager.createPath(getDefaultPath()+"profiles");
-            final String pattern = getDefaultPath()+"profiles/"+profilePatternName;
+            final String pattern = getDefaultPath()+"profiles"+ this.file_separator + profilePatternName;
             FilesManager.copyFile("resources/teste.txt", pattern); //TODO mudar para arquivo correto
             fieldPatterns.setText(pattern);
             config.updatePathToProfilePatterns(pattern);
@@ -83,7 +73,7 @@ public class GuiServices {
           fieldRelationships.setText(config.getConfig().getPathToProfileRelationships());
         }else{
             FilesManager.createPath(getDefaultPath()+"profiles");
-            final String relationship = getDefaultPath()+"profiles/"+profileRelationshipName;
+            final String relationship = getDefaultPath()+"profiles"+ this.file_separator +profileRelationshipName;
             FilesManager.copyFile("resources/teste.txt", relationship); //TODO mudar para arquivo correto
             fieldRelationships.setText(relationship);
             config.updatePathToProfileRelationships(relationship);
@@ -115,9 +105,9 @@ public class GuiServices {
             fieldTemplate.setText(config.getConfig().getPathToTemplateModelsDirectory());
         }else{
             FilesManager.createPath(getDefaultPath()+"templates");
-            FilesManager.copyFile("resources/templates/simples.uml", getDefaultPath() + "templates/simples.uml");
-            FilesManager.copyFile("resources/templates/simples.di", getDefaultPath() + "templates/simples.di");
-            FilesManager.copyFile("resources/templates/simples.notation", getDefaultPath() + "templates/simples.notation");
+            FilesManager.copyFile("resources/templates/simples.uml", getDefaultPath() + "templates"+ this.file_separator + "simples.uml");
+            FilesManager.copyFile("resources/templates/simples.di", getDefaultPath() + "templates" + this.file_separator + "simples.di");
+            FilesManager.copyFile("resources/templates/simples.notation", getDefaultPath() + "templates"+ this.file_separator + "simples.notation");
             final String template = getDefaultPath() + "templates/";
             fieldTemplate.setText(template);
             config.updatePathToTemplateFiles(template);
