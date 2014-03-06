@@ -14,8 +14,6 @@ public class Oplagui {
             public void run() {
                 com.ufpr.br.opla.gui2.main gui = new main();
                 gui.setVisible(true);
-                gui.setDefaultThings();
-  
             }
         });
     }

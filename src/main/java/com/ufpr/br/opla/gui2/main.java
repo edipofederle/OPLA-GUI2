@@ -8,9 +8,6 @@ package com.ufpr.br.opla.gui2;
 
 import java.awt.HeadlessException;
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -21,26 +18,23 @@ import javax.swing.JTextField;
  */
 public class main extends javax.swing.JFrame {
     
-    private ManagerApplicationConfig config;
-    private String username;
-    private String os;
-    private String profileSmartyName;
-    private String profileConcernsName;
-    private String profilePatternName;
-    private String profileRelationshipName;
+    
+     private final ManagerApplicationConfig config;
+    
+
     /**
      * Creates new form main
      */
     public main() {
         initComponents();
+      
         config = new ManagerApplicationConfig("application.yaml");
-        os = System.getProperty("os.name");
-        username =  System.getProperty("user.name");
-        
-        profileSmartyName       = "smarty.profile.uml";
-        profileConcernsName     = "concerns.profile.uml";
-        profilePatternName      = "patterns.profile.uml";
-        profileRelationshipName = "relationships.profile.uml";  
+        GuiServices guiservices = new GuiServices(config);
+        guiservices.configureSmartyProfile(fieldSmartyProfile);
+        guiservices.configureConcernsProfile(fieldConcernProfile);
+        guiservices.configurePatternsProfile(fieldPatterns);
+        guiservices.configureRelationshipsProfile(fieldRelationships);
+        guiservices.configureTemplates(fieldTemplate);
     }
 
     /**
@@ -414,112 +408,5 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 
-    void setDefaultThings() {
-            
-      configureSmartyProfile();
-      configureConcernsProfile();
-      configurePatternsProfile();
-      configureRelationshipsProfile();
-      configureTemplates(); 
-    }
-    
-    /**
-     * Returns default path based in running OS.
-     * 
-     * TODO Linux e Windows
-     * @return 
-     */
-    private String getDefaultPath() {
-        String osPath;
-        if(os.contains("Mac OS X")){
-            osPath =  "/Users/"+ username +"/oplatool/";
-        }else{
-            osPath = "";
-        }
-        return osPath;
-    }
-
-    private void configureSmartyProfile() {
-        if(hasSmartyInConfiFile()){
-          this.fieldSmartyProfile.setText(config.getConfig().getPathToProfile());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String smarty = getDefaultPath()+"profiles/"+profileSmartyName;
-            FilesManager.copyFile("resources/teste.txt", smarty); //TODO mudar para arquivo correto
-            this.fieldSmartyProfile.setText(smarty);
-            config.updatePathToProfileSmarty(smarty);
-        }
-    }
-
-    private void configureConcernsProfile() {
-        if(hasConcernsInConfiFile()){
-          this.fieldConcernProfile.setText(config.getConfig().getPathToProfileConcern());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String concern = getDefaultPath()+"profiles/"+profileConcernsName;
-            FilesManager.copyFile("resources/teste.txt", concern); //TODO mudar para arquivo correto
-            this.fieldConcernProfile.setText(concern);
-            config.updatePathToProfileConcerns(concern);
-        }
-    }
-    
-    private void configurePatternsProfile() {
-       if(hasPatternsInConfigFile()){
-          this.fieldPatterns.setText(config.getConfig().getPathToProfilePatterns());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String pattern = getDefaultPath()+"profiles/"+profilePatternName;
-            FilesManager.copyFile("resources/teste.txt", pattern); //TODO mudar para arquivo correto
-            this.fieldPatterns.setText(pattern);
-            config.updatePathToProfilePatterns(pattern);
-        }
-    }
-    
-    
-     private void configureRelationshipsProfile() {
-        if(hasRelationshipsInConfigFile()){
-          this.fieldRelationships.setText(config.getConfig().getPathToProfileRelationships());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String relationship = getDefaultPath()+"profiles/"+profileRelationshipName;
-            FilesManager.copyFile("resources/teste.txt", relationship); //TODO mudar para arquivo correto
-            this.fieldRelationships.setText(relationship);
-            config.updatePathToProfileRelationships(relationship);
-        }
-    }
-    
-    private boolean hasRelationshipsInConfigFile() {
-       return config.getConfig().getPathToProfileRelationships()!= null;
-    }
-    
-    private boolean hasPatternsInConfigFile() {
-        return config.getConfig().getPathToProfilePatterns()!= null;
-    }
-    
-    private boolean hasSmartyInConfiFile() {
-        return config.getConfig().getPathToProfile() != null;
-    }
-    
-    private boolean hasConcernsInConfiFile() {
-        return config.getConfig().getPathToProfileConcern() != null;
-    }
-    
-    private boolean hasTemplateInConfigFile() {
-        return config.getConfig().getPathToTemplateModelsDirectory() != null;
-    }
-
-    private void configureTemplates() {
-        if(hasTemplateInConfigFile()){
-            this.fieldTemplate.setText(config.getConfig().getPathToTemplateModelsDirectory());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"templates");
-            FilesManager.copyFile("resources/templates/simples.uml", getDefaultPath() + "templates/simples.uml");
-            FilesManager.copyFile("resources/templates/simples.di", getDefaultPath() + "templates/simples.di");
-            FilesManager.copyFile("resources/templates/simples.notation", getDefaultPath() + "templates/simples.notation");
-            final String template = getDefaultPath() + "templates/";
-            this.fieldTemplate.setText(template);
-            config.updatePathToTemplateFiles(template);
-        }
-    }
 
  }

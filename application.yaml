@@ -1,8 +1,8 @@
 --- 
 directoryToExportModels: testeFinal/
 directoryToSaveModels: manipulation/
-pathToProfile: /Users/elf/oplatool/profiles/smarty.profile.uml
+pathToProfile: /Users/elf/mestrado/agmfinal/perfilConcerns.profile.uml
 pathToProfileConcern: /Users/elf/mestrado/agmfinal/perfilConcerns.profile.uml
-pathToProfilePatterns: /Users/elf/mestrado/agmfinal/smarty.profile.uml
+pathToProfilePatterns: /Users/elf/mestrado/agmfinal/agm.uml
 pathToProfileRelationships: /profiles/relationships.profile.uml
 pathToTemplateModelsDirectory: /Users/elf/oplatool/templates/
