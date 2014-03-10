@@ -21,11 +21,13 @@ import org.junit.Test;
 public class ManagerApplicationConfigFileTest {
     
    private ManagerApplicationConfig managerConfig;
-    
+   private final String pathConfigFile = "src/test/java/config/application.yaml";
+   
    @Before
    public void setUp() throws FileNotFoundException{
-        managerConfig = new ManagerApplicationConfig("application.yaml");
+        managerConfig = new ManagerApplicationConfig(pathConfigFile);
    }
+    
     
    @Test
    public void shouldReadFile() throws Exception{
@@ -34,16 +36,15 @@ public class ManagerApplicationConfigFileTest {
    
    @Test
    public void shouldWriteIntoConfigurationFile() throws Exception{
-        assertEquals("/Users/elf/mestrado/sourcesMestrado/arquitetura/perfis/smary.profile.uml", getConfigValue());
+        assertNotNull(getConfigValue());
         
         managerConfig.updatePathToProfileSmarty("newpath");
         
         assertEquals("newpath", getConfigValue());
-         managerConfig.updatePathToProfileSmarty("/Users/elf/mestrado/sourcesMestrado/arquitetura/perfis/smary.profile.uml");
    }
 
     private String getConfigValue() throws FileNotFoundException {
-        DirTarget conf = Yaml.loadType(new File("application.yaml"), DirTarget.class);
+        DirTarget conf = Yaml.loadType(new File(pathConfigFile), DirTarget.class);
         String profilePath = conf.getPathToProfile();
         return profilePath;
     }

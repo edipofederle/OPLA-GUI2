@@ -65,7 +65,7 @@ public class ManagerApplicationConfig {
     
     private void updateConfigurationFile() {
         try {
-            Yaml.dump(configurationFile, new File("application.yaml"), true);
+            Yaml.dump(configurationFile, new File("config/application.yaml"), true);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ManagerApplicationConfig.class.getName()).log(Level.SEVERE, null, "Ops, Error when try update configuration file: " +ex);
         }

@@ -22,6 +22,7 @@ public class main extends javax.swing.JFrame {
     
     
      private ManagerApplicationConfig config = null;
+     private OplaServices oplaService = null;
     
 
     /**
@@ -32,9 +33,10 @@ public class main extends javax.swing.JFrame {
       
 
         try {
-            config = new ManagerApplicationConfig("application.yaml");
+            config = new ManagerApplicationConfig("config/application.yaml");
+            oplaService = new OplaServices(config);
         } catch (FileNotFoundException ex) {
-           JOptionPane.showMessageDialog(null, "Configuration file application.yaml not found. ");
+           JOptionPane.showMessageDialog(null, "Configuration file config/application.yaml not found. ");
            System.exit(0);
         }
 
@@ -85,6 +87,8 @@ public class main extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         fieldOutput = new javax.swing.JTextField();
         btnOutput = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -194,6 +198,20 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setText("Visualize your application.yaml file");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Teste Rodar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -251,35 +269,46 @@ public class main extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7))
-                            .addComponent(jLabel6))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel5)))
-                        .addGap(261, 261, 261)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnOutput))
-                                    .addComponent(jLabel12))))
-                        .addContainerGap(114, Short.MAX_VALUE))))
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel7))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel11)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addComponent(jLabel5)))
+                                        .addGap(261, 261, 261)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(btnOutput))
+                                                    .addComponent(jLabel12))))))
+                                .addGap(0, 108, Short.MAX_VALUE)))
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(207, 207, 207))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addComponent(jLabel6)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -324,7 +353,9 @@ public class main extends javax.swing.JFrame {
                     .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInput)
                     .addComponent(btnOutput))
-                .addContainerGap(242, Short.MAX_VALUE))
+                .addGap(80, 80, 80)
+                .addComponent(jButton2)
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Path Confs", jPanel1);
@@ -348,7 +379,9 @@ public class main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInputActionPerformed
-        fileChooser(fieldArchitectureInput, "uml");
+        String path = fileChooser(fieldArchitectureInput, "uml");
+        
+        VolatileConfs.setArchitectureInputPath(path);
     }//GEN-LAST:event_btnInputActionPerformed
 
     private void btnConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcernProfileActionPerformed
@@ -436,6 +469,22 @@ public class main extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_fieldOutputActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        StringBuffer sb = new StringBuffer();
+        sb.append("Application.yml file content").append("\n\n");
+        sb.append("directoryToExportModels:").append(config.getConfig().getDirectoryToExportModels()).append("\n");
+        sb.append("pathToProfile:").append(config.getConfig().getPathToProfile()).append("\n");
+        sb.append("pathToProfileConcern:").append(config.getConfig().getPathToProfileConcern()).append("\n");
+        sb.append("pathToProfilePatterns").append(config.getConfig().getPathToProfilePatterns()).append("\n");
+        sb.append("pathToProfileRelationships").append(config.getConfig().getPathToProfileRelationships()).append("\n");
+        sb.append("pathToTemplateModelsDirectory").append(config.getConfig().getPathToTemplateModelsDirectory()).append("\n");
+        JOptionPane.showMessageDialog(null, sb);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        oplaService.run();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
         JFileChooser c = new JFileChooser();
         int rVal = c.showOpenDialog(this);
@@ -479,6 +528,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldRelationships;
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
