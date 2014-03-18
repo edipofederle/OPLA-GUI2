@@ -5,17 +5,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author elf
  */
-public class DatabaseInitializer {
+public class Database {
     
     private static Connection connection;
-    private static String pathDatabase = "";
+    private static String pathDatabase;
+    
+    public Database(String pathToDatabase){
+        this.pathDatabase = pathToDatabase;
+    }
 
     /**
      * Create a connection with database and returns a Statement to working with.
@@ -25,16 +27,17 @@ public class DatabaseInitializer {
      * @throws java.sql.SQLException 
      * @throws com.ufpr.br.opla.exceptions.MissingConfigurationException 
      */
-    public static Statement initialize() throws MissingConfigurationException, SQLException, ClassNotFoundException {
+    public Statement getConnection() throws MissingConfigurationException, SQLException, ClassNotFoundException {
         
-        if ("".equals(pathDatabase))
+        if ("".equals(this.pathDatabase))
             throw new MissingConfigurationException("Path to database should not be blank");
        
         
-        return getConnection();
+        return makeConnection();
     }  
 
-    private static Statement getConnection() throws SQLException, ClassNotFoundException {
+    //TODO singleton
+    private static Statement makeConnection() throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         Statement statement = null;
         connection = DriverManager.getConnection("jdbc:sqlite:"+pathDatabase);
@@ -43,10 +46,6 @@ public class DatabaseInitializer {
         
         
         return statement;
-    }
-
-    public static void setPathToDb(String pathToDB) {
-        pathDatabase = pathToDB;
     }
 
 }

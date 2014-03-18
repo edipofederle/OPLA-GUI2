@@ -1,7 +1,9 @@
 import com.ufpr.br.opla.exceptions.MissingConfigurationException;
-import com.ufpr.br.opla.results.DatabaseInitializer;
+import com.ufpr.br.opla.results.Database;
 import java.io.File;
+import java.sql.Statement;
 import org.junit.After;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,38 +21,45 @@ import org.junit.Test;
 public class InitializeDatabaseTest {
     
     private static final String PATH_TO_DATABASE = "src/test/resources/opla.db";
+    private Database db;
     
     @Before
     public void setUp(){
-        DatabaseInitializer.setPathToDb(PATH_TO_DATABASE);
+         db = new Database(PATH_TO_DATABASE);
     }
     
     @After
     public void cleanUp(){
-        File db = new File(PATH_TO_DATABASE);
-        db.delete();
+        File dbfile = new File(PATH_TO_DATABASE);
+        dbfile.delete();
     }
     
     @Test(expected=MissingConfigurationException.class)
     public void shouldExceptionWhenDontHavePathToDatabaseFile() throws  Exception{
-        DatabaseInitializer.setPathToDb("");
-        DatabaseInitializer.initialize();
-        
+        Database db = new Database("");
+        db.getConnection();
     }
     
     @Test
     public void shouldCreateDBOnlyOnce() throws Exception{
-        DatabaseInitializer.initialize();
+        db.getConnection();
         
-        File db = new File(PATH_TO_DATABASE);
+        File dbfile = new File(PATH_TO_DATABASE);
         
-        assertTrue(db.exists());
-        long timestamp = db.lastModified();
+        assertTrue(dbfile.exists());
+        long timestamp = dbfile.lastModified();
         
         File db2 = new File(PATH_TO_DATABASE);
         
-        DatabaseInitializer.initialize();
+        db.getConnection();
         assertTrue(timestamp == db2.lastModified() );
+    }
+    
+    @Test
+    public void shouldReturnStatement() throws Exception{
+        Statement st = db.getConnection();
+        
+        assertNotNull(st);
     }
     
 }

@@ -10,9 +10,10 @@ package com.ufpr.br.opla.results;
  *
  * @author elf
  */
-public class InfoResults {
+public class InfoResult {
     
     private String name; // INFO_PLANAME_N (where n is number of run)
+    private int executation_id;
     private String listOfConcerns; //separated by pipe |
     private int numberOfPackages;
     private int numberOfVariabilities;
@@ -126,5 +127,15 @@ public class InfoResults {
     public void setName(String name) {
         this.name = "INFO_"+name;
     }
+
+    public int getExecutation_id() {
+        return executation_id;
+    }
+
+    public void setExecutation_id(int executation_id) {
+        this.executation_id = executation_id;
+    }
+    
+    
     
 }
