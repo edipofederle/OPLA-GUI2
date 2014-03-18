@@ -5,7 +5,7 @@ package com.ufpr.br.opla.results;
 
 /**
  *
- * @author elf
+ * @author elf`
  */
 public class FunResults {
     
@@ -14,5 +14,21 @@ public class FunResults {
      * the values are separated by pipe ("|").
      *  
      */
-    private String objetives;
+    private String objectives;
+
+    public String getObjectives() {
+        return objectives;
+    }
+    
+    /**
+     *  String objs should be a string of values separated with pipes |.
+     * 
+     * Ex: 0.19191919 | 0.199193393 | 39393993
+     * 
+     * @param objs 
+     */
+    public void setObjectives(String objs) {
+        this.objectives = objs;
+    }
+    
 }
