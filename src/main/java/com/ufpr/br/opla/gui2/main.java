@@ -494,7 +494,7 @@ public class main extends javax.swing.JFrame {
             String ext = FilesManager.getExtension(f);
             
             if(!ext.equalsIgnoreCase(allowExtension)){
-                JOptionPane.showMessageDialog(null, "The selected file is not allow. You need selects a file with extension .uml, but you selects a ."+ext + " file");
+                JOptionPane.showMessageDialog(null, "The selected file is not allowed. You need selects a file with extension .uml, but you selects a ."+ext + " file");
                 return "";
             }else{
                 final String path = c.getCurrentDirectory() + "/"+ c.getSelectedFile().getName();
