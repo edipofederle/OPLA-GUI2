@@ -25,11 +25,11 @@ public class InitializeDatabaseTest {
         DatabaseInitializer.setPathToDb(PATH_TO_DATABASE);
     }
     
-//    @After
-//    public void cleanUp(){
-//        File db = new File(PATH_TO_DATABASE);
-//        db.delete();
-//    }
+    @After
+    public void cleanUp(){
+        File db = new File(PATH_TO_DATABASE);
+        db.delete();
+    }
     
     @Test(expected=MissingConfigurationException.class)
     public void shouldExceptionWhenDontHavePathToDatabaseFile() throws  Exception{
