@@ -12,6 +12,7 @@ package com.ufpr.br.opla.results;
  */
 public class InfoResults {
     
+    private String name; // INFO_PLANAME_N (where n is number of run)
     private String listOfConcerns; //separated by pipe |
     private int numberOfPackages;
     private int numberOfVariabilities;
@@ -109,5 +110,21 @@ public class InfoResults {
     public void setNumberOfassociationsClass(int numberOfassociationsClass) {
         this.numberOfassociationsClass = numberOfassociationsClass;
     }  
+
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * name must be "plaName_runNumber"
+     * 
+     * Then his method will set name 
+     * like: INFO_plaName_runNumber
+     * 
+     * @param name 
+     */
+    public void setName(String name) {
+        this.name = "INFO_"+name;
+    }
     
 }
