@@ -18,7 +18,7 @@ import org.junit.Test;
  *
  * @author elf
  */
-public class NewEmptyJUnitTest{
+public class FilesManagerTest{
     
    @Test
    public void shouldCreatePathIfDontExists() throws IOException{

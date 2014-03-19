@@ -9,6 +9,9 @@ package com.ufpr.br.opla.results;
  */
 public class FunResults {
     
+    
+    private Integer id; //DB propose
+    
     /**
      * Objectives are stored on a single attribute,
      * the values are separated by pipe ("|").
@@ -29,6 +32,10 @@ public class FunResults {
      */
     public void setObjectives(String objs) {
         this.objectives = objs;
+    }
+    
+    public Integer getId(){
+        return this.id;
     }
     
 }

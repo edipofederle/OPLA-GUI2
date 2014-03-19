@@ -45,7 +45,7 @@ public class InfoResultsPersistenceTest {
         
         when(fakeInfoResult.getListOfConcerns())
                            .thenReturn("concern1 | concern2");
-        when(fakeInfoResult.getExecutation_id()).thenReturn(1);
+        when(fakeInfoResult.getExecutionId()).thenReturn("1");
         when(fakeInfoResult.getName()).thenReturn("INFO_AGM_1");
         when(fakeInfoResult.getNumberOfPackages()).thenReturn(10);
         when(fakeInfoResult.getNumberOfVariabilities()).thenReturn(5);
@@ -61,7 +61,7 @@ public class InfoResultsPersistenceTest {
         
         persistence.persistInfoDatas(fakeInfoResult);
         
-        String query = "insert into infos(executation_id, name,"
+        String query = "insert into infos(execution_id, name,"
                 + " list_of_concerns, number_of_packages, number"
                 + "_of_variabilities, number_of_interfaces, number_of_classes,"
                 + " number_of_dependencies, number_of_abstractions,"

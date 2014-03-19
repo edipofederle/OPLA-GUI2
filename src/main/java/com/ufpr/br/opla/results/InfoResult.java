@@ -12,18 +12,19 @@ package com.ufpr.br.opla.results;
  */
 public class InfoResult {
     
+    private Integer id;
     private String name; // INFO_PLANAME_N (where n is number of run)
-    private int executation_id;
+    private String executionId;
     private String listOfConcerns; //separated by pipe |
-    private int numberOfPackages;
-    private int numberOfVariabilities;
-    private int numberOfClasses;
-    private int numberOfInterfaces;
-    private int numberOfDependencies;
-    private int numberOfAbstraction;
-    private int numberOfAssociations;
-    private int numberOfGeneralizations;
-    private int numberOfassociationsClass;
+    private Integer numberOfPackages;
+    private Integer numberOfVariabilities;
+    private Integer numberOfClasses;
+    private Integer numberOfInterfaces;
+    private Integer numberOfDependencies;
+    private Integer numberOfAbstraction;
+    private Integer numberOfAssociations;
+    private Integer numberOfGeneralizations;
+    private Integer numberOfassociationsClass;
 
     public String getListOfConcerns() {
         return listOfConcerns;
@@ -40,75 +41,75 @@ public class InfoResult {
         this.listOfConcerns = listOfConcerns;
     }
 
-    public int getNumberOfPackages() {
+    public Integer getNumberOfPackages() {
         return numberOfPackages;
     }
 
-    public void setNumberOfPackages(int numberOfPackages) {
+    public void setNumberOfPackages(Integer numberOfPackages) {
         this.numberOfPackages = numberOfPackages;
     }
 
-    public int getNumberOfVariabilities() {
+    public Integer getNumberOfVariabilities() {
         return numberOfVariabilities;
     }
 
-    public void setNumberOfVariabilities(int numberOfVariabilities) {
+    public void setNumberOfVariabilities(Integer numberOfVariabilities) {
         this.numberOfVariabilities = numberOfVariabilities;
     }
 
-    public int getNumberOfClasses() {
+    public Integer getNumberOfClasses() {
         return numberOfClasses;
     }
 
-    public void setNumberOfClasses(int numberOfClasses) {
+    public void setNumberOfClasses(Integer numberOfClasses) {
         this.numberOfClasses = numberOfClasses;
     }
 
-    public int getNumberOfInterfaces() {
+    public Integer getNumberOfInterfaces() {
         return numberOfInterfaces;
     }
 
-    public void setNumberOfInterfaces(int numberOfInterfaces) {
+    public void setNumberOfInterfaces(Integer numberOfInterfaces) {
         this.numberOfInterfaces = numberOfInterfaces;
     }
 
-    public int getNumberOfDependencies() {
+    public Integer getNumberOfDependencies() {
         return numberOfDependencies;
     }
 
-    public void setNumberOfDependencies(int numberOfDependencies) {
+    public void setNumberOfDependencies(Integer numberOfDependencies) {
         this.numberOfDependencies = numberOfDependencies;
     }
 
-    public int getNumberOfAbstraction() {
+    public Integer getNumberOfAbstraction() {
         return numberOfAbstraction;
     }
 
-    public void setNumberOfAbstraction(int numberOfAbstraction) {
+    public void setNumberOfAbstraction(Integer numberOfAbstraction) {
         this.numberOfAbstraction = numberOfAbstraction;
     }
 
-    public int getNumberOfAssociations() {
+    public Integer getNumberOfAssociations() {
         return numberOfAssociations;
     }
 
-    public void setNumberOfAssociations(int numberOfAssociations) {
+    public void setNumberOfAssociations(Integer numberOfAssociations) {
         this.numberOfAssociations = numberOfAssociations;
     }
 
-    public int getNumberOfGeneralizations() {
+    public Integer getNumberOfGeneralizations() {
         return numberOfGeneralizations;
     }
 
-    public void setNumberOfGeneralizations(int numberOfGeneralizations) {
+    public void setNumberOfGeneralizations(Integer numberOfGeneralizations) {
         this.numberOfGeneralizations = numberOfGeneralizations;
     }
 
-    public int getNumberOfassociationsClass() {
+    public Integer getNumberOfassociationsClass() {
         return numberOfassociationsClass;
     }
 
-    public void setNumberOfassociationsClass(int numberOfassociationsClass) {
+    public void setNumberOfassociationsClass(Integer numberOfassociationsClass) {
         this.numberOfassociationsClass = numberOfassociationsClass;
     }  
 
@@ -128,14 +129,22 @@ public class InfoResult {
         this.name = "INFO_"+name;
     }
 
-    public int getExecutation_id() {
-        return executation_id;
+    public Integer getId() {
+        return id;
     }
 
-    public void setExecutation_id(int executation_id) {
-        this.executation_id = executation_id;
+    public void setId(Integer id) {
+        this.id = id;
     }
-    
-    
+
+    public String getExecutionId() {
+        return executionId;
+    }
+
+    public void setExecutionId(String executionId) {
+        this.executionId = executionId;
+    }
+
+
     
 }

@@ -21,14 +21,14 @@ public class ResultPersistence {
     public void persistInfoDatas(InfoResult fakeInfoResult) throws SQLException{
         StringBuffer query = new StringBuffer();
         
-        query.append("insert into infos(executation_id, name, list_of_concerns,"
+        query.append("insert into infos(execution_id, name, list_of_concerns,"
                 + " number_of_packages, number_of_variabilities,"
                 + " number_of_interfaces, "
                 + "number_of_classes, number_of_dependencies,"
                 + " number_of_abstractions, number_of_generalizations,"
                 + " number_of_associations, number_of_associations_class)"
                 + " values (");
-        query.append(fakeInfoResult.getExecutation_id());
+        query.append(fakeInfoResult.getExecutionId());
         query.append(",");
         query.append("'");
         query.append(fakeInfoResult.getName());
