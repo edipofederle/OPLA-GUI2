@@ -1,4 +1,4 @@
-package com.ufpr.br.opla.results;
+package com.ufpr.br.opla.db;
 
 import com.ufpr.br.opla.exceptions.MissingConfigurationException;
 import java.sql.Connection;
@@ -13,10 +13,15 @@ import java.sql.Statement;
 public class Database {
     
     private static Connection connection;
+    private static Database uniqueDB;
     private static String pathDatabase;
+       
+    private Database(){}
     
-    public Database(String pathToDatabase){
-        this.pathDatabase = pathToDatabase;
+    public static synchronized Database getInstance(){
+        if(uniqueDB  == null)
+            uniqueDB = new Database();
+        return uniqueDB;
     }
 
     /**
@@ -27,25 +32,29 @@ public class Database {
      * @throws java.sql.SQLException 
      * @throws com.ufpr.br.opla.exceptions.MissingConfigurationException 
      */
-    public Statement getConnection() throws MissingConfigurationException, SQLException, ClassNotFoundException {
+    public Statement getConnection() throws MissingConfigurationException,
+                                            SQLException,
+                                            ClassNotFoundException {
         
-        if ("".equals(this.pathDatabase))
+        if ("".equals(pathDatabase))
             throw new MissingConfigurationException("Path to database should not be blank");
        
         
         return makeConnection();
     }  
-
-    //TODO singleton
-    private static Statement makeConnection() throws SQLException, ClassNotFoundException {
+    
+    private Statement makeConnection() throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
-        Statement statement = null;
+        
         connection = DriverManager.getConnection("jdbc:sqlite:"+pathDatabase);
-        statement = connection.createStatement();
+        Statement statement = connection.createStatement();
         statement.setQueryTimeout(30); //in seconds
-        
-        
+                
         return statement;
+    }
+    
+    public static void setPathToDB(String path){
+        pathDatabase = path;
     }
 
 }

@@ -7,7 +7,7 @@
 package com.ufpr.br.opla.persistence.test;
 
 import com.ufpr.br.opla.persistence.ResultPersistence;
-import com.ufpr.br.opla.results.Database;
+import com.ufpr.br.opla.db.Database;
 import com.ufpr.br.opla.results.InfoResult;
 import java.sql.Statement;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +43,8 @@ public class InfoResultsPersistenceTest {
         
         InfoResult fakeInfoResult = mock(InfoResult.class);
         
-        when(fakeInfoResult.getListOfConcerns()).thenReturn("concern1 | concern2");
+        when(fakeInfoResult.getListOfConcerns())
+                           .thenReturn("concern1 | concern2");
         when(fakeInfoResult.getExecutation_id()).thenReturn(1);
         when(fakeInfoResult.getName()).thenReturn("INFO_AGM_1");
         when(fakeInfoResult.getNumberOfPackages()).thenReturn(10);
@@ -60,10 +61,14 @@ public class InfoResultsPersistenceTest {
         
         persistence.persistInfoDatas(fakeInfoResult);
         
-        String query = "insert into infos (executation_id, name, list_of_concerns, number_of_packages, number"
-                + "_of_variabilities, number_of_interfaces, number_of_classes, number_of_dependencies, number_of_abstractions,"
-                + " number_of_generalizations, number_of_associations, number_of_associations_class)"
-                                + " values (1,'INFO_AGM_1','concern1 | concern2',10,5,6,20,2,3,3,5,1)";
+        String query = "insert into infos(executation_id, name,"
+                + " list_of_concerns, number_of_packages, number"
+                + "_of_variabilities, number_of_interfaces, number_of_classes,"
+                + " number_of_dependencies, number_of_abstractions,"
+                + " number_of_generalizations, number_of_associations,"
+                + " number_of_associations_class)"
+                + " values (1,'INFO_AGM_1',"
+                + "'concern1 | concern2',10,5,6,20,2,3,3,5,1)";
         verify(st).executeUpdate(query);
     }
     
