@@ -57,16 +57,11 @@ public class FunctionalTests {
         execution.setInfos(infos);
         execution.setFuns(funs);
         
-        //Fourth step: Initialize classes responsible for persistence.
-        InfosResultPersistence resultPersistence = new
-            InfosResultPersistence(connection);
-        
-        FunsResultPersistence funPersistence = new
-            FunsResultPersistence(connection);
-        
-        
+        //Fourth step: Initialize ExecutionPersistence class
         ExecutionPersistence persistence = new ExecutionPersistence(
-                connection, resultPersistence, funPersistence);
+                connection,
+                new InfosResultPersistence(connection),
+                new FunsResultPersistence(connection));
         
         
         //Fifth Step: Persiste One execution.
