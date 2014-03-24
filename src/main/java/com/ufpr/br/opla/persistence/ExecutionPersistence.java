@@ -17,25 +17,31 @@ import java.sql.Statement;
 public class ExecutionPersistence {
     
     private final Statement statement;
-    private final ResultPersistence resultPersistence;
+    private final InfosResultPersistence infosPersistence;
+    private final FunsResultPersistence funsPersistence;
 
     public void persist(Execution fakeExecution) throws SQLException {
        StringBuilder query = new StringBuilder();
-       query.append("insert into executions (id) values ");
+       query.append("insert into executions (id, experiement_id) values ");
        query.append("(");
        query.append(fakeExecution.getId());
+       query.append(",");
+       query.append(fakeExecution.getExperiement().getId());
        query.append(")");
         
         
        statement.executeUpdate(query.toString());
        
        for(InfoResult ir : fakeExecution.getInfos())
-        this.resultPersistence.persistInfoDatas(ir);
+        this.infosPersistence.persistInfoDatas(ir);
+       
+       this.funsPersistence.persistFunsDatas(fakeExecution.getFuns());
     }
 
-    public ExecutionPersistence(Statement st, ResultPersistence resultPersistence) {
+    public ExecutionPersistence(Statement st, InfosResultPersistence resultPersistence, FunsResultPersistence funsPersistence) {
         this.statement = st;
-        this.resultPersistence = resultPersistence;
+        this.infosPersistence = resultPersistence;
+        this.funsPersistence = funsPersistence;
     }
 
 }

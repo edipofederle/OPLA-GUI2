@@ -1,4 +1,4 @@
-/*
+ /*
 Fun files is where objective values are stored.
 */
 package com.ufpr.br.opla.results;
@@ -11,6 +11,7 @@ public class FunResults {
     
     
     private Integer id; //DB propose
+    private String executionId;
     
     /**
      * Objectives are stored on a single attribute,
@@ -36,6 +37,14 @@ public class FunResults {
     
     public Integer getId(){
         return this.id;
+    }
+    
+    public void setExecutionId(String executionId){
+        this.executionId = executionId;
+    }
+    
+    public String getExecutionId(){
+        return this.executionId;
     }
     
 }

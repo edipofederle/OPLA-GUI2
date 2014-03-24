@@ -6,7 +6,7 @@
 
 package com.ufpr.br.opla.persistence.test;
 
-import com.ufpr.br.opla.persistence.ResultPersistence;
+import com.ufpr.br.opla.persistence.InfosResultPersistence;
 import com.ufpr.br.opla.db.Database;
 import com.ufpr.br.opla.results.InfoResult;
 import java.sql.Statement;
@@ -27,7 +27,7 @@ public class InfoResultsPersistenceTest {
         Database db = mock(Database.class);
         Statement st = mock(Statement.class);
         when(db.getConnection()).thenReturn(st);
-        ResultPersistence persistence = new ResultPersistence(st);
+        InfosResultPersistence persistence = new InfosResultPersistence(st);
         assertNotNull(persistence);
     }
 
@@ -39,7 +39,7 @@ public class InfoResultsPersistenceTest {
         
         when(db.getConnection()).thenReturn(st);
         
-        ResultPersistence persistence = new ResultPersistence(st);
+        InfosResultPersistence persistence = new InfosResultPersistence(st);
         
         InfoResult fakeInfoResult = mock(InfoResult.class);
         

@@ -14,7 +14,7 @@ import java.sql.Statement;
  *
  * @author elf
  */
-public class ResultPersistence {
+public class InfosResultPersistence {
     
     private final Statement statement;
 
@@ -62,7 +62,7 @@ public class ResultPersistence {
     }
     
 
-    public ResultPersistence(Statement st) {
+    public InfosResultPersistence(Statement st) {
         this.statement = st;
     }
     

@@ -14,13 +14,16 @@ import java.util.List;
 public class Execution {
     
     private String id;
+    private String experiementId;
     private List<InfoResult> infos;
-    private List<FunResults> funs;
+    private FunResults funs;
+    private final Experiment experiment;
     
     //TODO metrics, time, hypervolume etc.
     
-    public Execution(){
+    public Execution(Experiment experiment){
         this.id = Id.generateUniqueId();
+        this.experiment = experiment;
     }
 
     public List<InfoResult> getInfos() {
@@ -31,16 +34,20 @@ public class Execution {
         this.infos = infos;
     }
 
-    public List<FunResults> getFuns() {
+    public FunResults getFuns() {
         return funs;
     }
 
-    public void setFuns(List<FunResults> funs) {
+    public void setFuns(FunResults funs) {
         this.funs = funs;
     }
 
     public String getId() {
         return id;
+    }
+    
+    public Experiment getExperiement(){
+        return this.experiment;
     }
       
 }

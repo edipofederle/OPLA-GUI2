@@ -16,12 +16,13 @@ import java.util.List;
  */
 public class Factory {
 
-   public static List<FunResults> givenFuns() {
-        List<FunResults> funs = new ArrayList<>();
+   public static FunResults givenFuns(String executionId) {
+        
         FunResults f1 = new FunResults();
+        f1.setExecutionId(executionId);
         f1.setObjectives("101010 | 19919191 | 1919911");
 
-        return funs;
+        return f1;
     }
 
     public static List<InfoResult> givenInfos(String executionId) {
