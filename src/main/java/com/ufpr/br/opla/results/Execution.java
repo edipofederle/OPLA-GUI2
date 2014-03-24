@@ -13,8 +13,7 @@ import java.util.List;
  */
 public class Execution {
     
-    private String id;
-    private String experiementId;
+    private final String id;
     private List<InfoResult> infos;
     private FunResults funs;
     private final Experiment experiment;
@@ -43,7 +42,7 @@ public class Execution {
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
     
     public Experiment getExperiement(){
