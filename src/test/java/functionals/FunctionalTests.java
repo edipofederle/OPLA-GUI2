@@ -40,26 +40,38 @@ public class FunctionalTests {
     @Test
     public void test1() throws Exception{
         
-        //First step
-        Experiment experiment = new Experiment("ExpTest1", "a description"); 
-        experiment.save();
+        //First step: Creates a experiement and persist it
+        Experiment experiement = new Experiment("ExpTest1", "a description"); 
+        experiement.save();
         
         //Second step
         //Create a execution. Execution is each run of experiement.
-        Execution execution = new Execution(experiment);
+        //A execution belongs to a experiement.
+        Execution execution = new Execution(experiement);
         
+        //Third step: Some fake datas (Test propose only).
+        //This datas will come from algoritm execution.
         List<InfoResult> infos = Factory.givenInfos(execution.getId());
-        FunResults funs = Factory.givenFuns(execution.getId()); // Nao sendo persistido ainda
+        FunResults funs = Factory.givenFuns(execution.getId());
         
         execution.setInfos(infos);
         execution.setFuns(funs);
         
-        InfosResultPersistence resultPersistence = new InfosResultPersistence(connection);
-        FunsResultPersistence funPersistence = new FunsResultPersistence(connection);
+        //Fourth step: Initialize classes responsible for persistence.
+        InfosResultPersistence resultPersistence = new
+            InfosResultPersistence(connection);
+        
+        FunsResultPersistence funPersistence = new
+            FunsResultPersistence(connection);
+        
         
         ExecutionPersistence persistence = new ExecutionPersistence(
                 connection, resultPersistence, funPersistence);
         
+        
+        //Fifth Step: Persiste One execution.
+        //This will persiste the execution, funs datas (objectives), infos datas (numbers of classes etc.)
+        //Also persite Metrics
         persistence.persist(execution);
         
 
