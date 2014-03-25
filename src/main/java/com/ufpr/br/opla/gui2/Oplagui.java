@@ -1,6 +1,5 @@
 package com.ufpr.br.opla.gui2;
 
-import arquitetura.builders.ArchitectureBuilder;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
