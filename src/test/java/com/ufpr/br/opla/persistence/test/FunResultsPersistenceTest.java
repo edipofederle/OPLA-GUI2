@@ -36,7 +36,6 @@ public class FunResultsPersistenceTest {
         persistence.persistFunsDatas(funs);
         
         String query = "insert into objectives (execution_id, objectives) values ("+funs.getExecutionId()+",'"+funs.getObjectives()+"')";
-        System.out.println(query);
         verify(st).executeUpdate(query);
         
         

@@ -56,7 +56,7 @@ public class InfosResultPersistence {
         query.append(",");
         query.append(fakeInfoResult.getNumberOfassociationsClass());
         query.append(")");
-        System.out.println(query);
+
         
         statement.executeUpdate(query.toString());
     }
