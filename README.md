@@ -33,14 +33,14 @@ Download OPLA-Algorithms JAR file at: <link_para_o_jar_aqui>
 
 In order to install the JAR on your local repository you should run this command:
     
-    >> mvn install:install-file -Dfile=/paht/to/jar -DgroupId=ufpr.br -DartifactId=opla-algorithms -Dversion=0.1 -Dpackaging=jar
+    >> mvn install:install-file -Dfile=OPLA-algoritms-0.0.1.jar -DgroupId=ufpr.br -DartifactId=opla-algorithms -Dversion=0.1 -Dpackaging=jar
     
 Then add the dependency to pom.xml
 
     <dependency>
         <groupId>ufpr.br</groupId>
-        <artifactId>OPLA-algoritms</artifactId>
-        <version>0.0.1</version>
+        <artifactId>opla-algorithms</artifactId>
+        <version>0.1</version>
     </dependency>
 
 You can chance values for groupId, artifactId and version, if you wish/need.

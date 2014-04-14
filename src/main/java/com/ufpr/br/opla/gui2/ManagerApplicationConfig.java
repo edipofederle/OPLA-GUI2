@@ -57,8 +57,13 @@ public class ManagerApplicationConfig {
         updateConfigurationFile();
     }
     
-    public void updatePathToSaveModels(String newpath){
+    public void updatePathToExportModels(String newpath){
         this.configurationFile.setDirectoryToExportModels(newpath);
+        updateConfigurationFile();
+    }
+    
+    public void updatePathToSaveModels(String path) {
+        this.configurationFile.setDirectoryToSaveModels(path);
         updateConfigurationFile();
     }
     
@@ -70,5 +75,7 @@ public class ManagerApplicationConfig {
             Logger.getLogger(ManagerApplicationConfig.class.getName()).log(Level.SEVERE, null, "Ops, Error when try update configuration file: " +ex);
         }
     }
+
+  
     
 }

@@ -17,7 +17,7 @@ public class GuiServices {
     public GuiServices(ManagerApplicationConfig managerConfig){
         config = managerConfig;
        
-        user_home =  System.getProperty("user.home");
+        user_home      = System.getProperty("user.home");
         file_separator = System.getProperty("file.separator");
         
         profileSmartyName       = "smarty.profile.uml";
@@ -107,6 +107,10 @@ public class GuiServices {
     private boolean hasPathToSaveModelsInConfigFile(){
         return config.getConfig().getDirectoryToExportModels() != null;
     }
+    
+    private boolean hasPathToManipulationDir() {
+        return config.getConfig().getDirectoryToSaveModels() != null;
+    }
 
     public void configureTemplates(JTextField fieldTemplate) {
         if(hasTemplateInConfigFile()){
@@ -123,7 +127,11 @@ public class GuiServices {
         }
     }
 
-    public void configureLocaleToSaveModels(JTextField fieldOutput) {
+    /**
+     * Saida, arquivos uml, di e notation.
+     * @param fieldOutput 
+     */
+    public void configureLocaleToExportModels(JTextField fieldOutput) {
        if(hasPathToSaveModelsInConfigFile()){
            fieldOutput.setText(config.getConfig().getDirectoryToExportModels());
        }else{
@@ -131,9 +139,25 @@ public class GuiServices {
            FilesManager.createPath(path);
            fieldOutput.setText(user_home);
            fieldOutput.updateUI();
-           config.updatePathToSaveModels(path);
+           config.updatePathToExportModels(path);
        }
            
     }
+    
+    /**
+     * Diretorio usado no processo de maniuplacao.
+     * @param fieldManipulationDir 
+     */
+    public void configureLocaleToSaveModels(JTextField fieldManipulationDir) {
+       if(hasPathToManipulationDir()){
+           fieldManipulationDir.setText(config.getConfig().getDirectoryToSaveModels());
+       }else{
+           final String path = getDefaultPath()+"temp";
+           FilesManager.createPath(path);
+           fieldManipulationDir.setText(path);
+           fieldManipulationDir.updateUI();
+           config.updatePathToSaveModels(path);
+       }
+    } 
     
 }

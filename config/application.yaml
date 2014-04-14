@@ -1,8 +1,8 @@
 --- 
-directoryToExportModels: /Users/elf/Desktop/666/
-directoryToSaveModels: manipulation/
-pathToProfile: newpath
-pathToProfileConcern: /Users/elf/mestrado/sourcesMestrado/arquitetura/perfis/concerns.profile.uml
-pathToProfilePatterns: /Users/elf/Documents/workspaceModeling/profiles/patterns.profile.uml
-pathToProfileRelationships: /Users/elf/Documents/workspaceModeling/profiles/relationships.profile.uml
-pathToTemplateModelsDirectory: /Users/elf/Desktop/templates/
+directoryToExportModels: /Users/elf/Documents
+directoryToSaveModels: /Users/elf/oplatool/temp
+pathToProfile: /Users/elf/oplatool/profiles/smarty.profile.uml
+pathToProfileConcern: /Users/elf/oplatool/profiles/concerns.profile.uml
+pathToProfilePatterns: /Users/elf/oplatool/profiles/patterns.profile.uml
+pathToProfileRelationships: /Users/elf/oplatool/profiles/relationships.profile.uml
+pathToTemplateModelsDirectory: /Users/elf/oplatool/templates/

@@ -8,13 +8,13 @@ package com.ufpr.br.opla.gui2;
  */
 public class VolatileConfs {
     
-    private static String architectureInputPath;
+    private static String[] architectureInputPath;
 
-    public static String getArchitectureInputPath() {
+    public static String[] getArchitectureInputPath() {
         return architectureInputPath;
     }
 
-    public static void setArchitectureInputPath(String path) {
+    public static void setArchitectureInputPath(String[] path) {
         architectureInputPath = path;
     }
     
