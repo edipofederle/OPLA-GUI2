@@ -34,7 +34,7 @@ public class main extends javax.swing.JFrame {
         initComponents();   
 
         try {
-            config = new ManagerApplicationConfig("config/application.yaml");
+            config = new ManagerApplicationConfig("/Users/elf/NetBeansProjects/OPLA-GUI2/config/application.yaml");
        //     oplaService = new OplaServices(config);
         } catch (FileNotFoundException ex) {
            JOptionPane.showMessageDialog(null, "Configuration file config/application.yaml not found. ");
