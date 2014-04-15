@@ -3,7 +3,6 @@ package com.ufpr.br.opla.gui2;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.ho.yaml.Yaml;
@@ -22,12 +21,10 @@ public class ManagerApplicationConfig {
     
    
     private DirTarget configurationFile;
+
     
-    
-    public ManagerApplicationConfig(String pathConfigFile) throws FileNotFoundException{
-         InputStream is = Thread.currentThread().getContextClassLoader().
-					getResourceAsStream("config/application.yaml");
-        this.configurationFile = Yaml.loadType(is, DirTarget.class);
+    public ManagerApplicationConfig() throws FileNotFoundException{
+        this.configurationFile = Yaml.loadType(new File(UserHome.getConfigurationFilePath()), DirTarget.class);
     }
 
     public DirTarget getConfig() {
@@ -73,12 +70,10 @@ public class ManagerApplicationConfig {
     
     private void updateConfigurationFile() {
         try {
-            Yaml.dump(configurationFile, new File("config/application.yaml"), true);
+            Yaml.dump(configurationFile, new File(UserHome.getConfigurationFilePath()), true);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ManagerApplicationConfig.class.getName()).log(Level.SEVERE, null, "Ops, Error when try update configuration file: " +ex);
         }
     }
-
-  
     
 }

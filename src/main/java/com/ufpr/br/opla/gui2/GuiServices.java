@@ -1,126 +1,114 @@
 package com.ufpr.br.opla.gui2;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 
-
 public class GuiServices {
-    
+
+    private static final String PROFILES = "profiles";
+    private static final String user_home = System.getProperty("user.home");
+    private static final String file_separator = System.getProperty("file.separator");
     private final ManagerApplicationConfig config;
-    private final String user_home;
-    private final String file_separator;
     private final String profileSmartyName;
     private final String profileConcernsName;
     private final String profilePatternName;
     private final String profileRelationshipName;
-    
-    
-    public GuiServices(ManagerApplicationConfig managerConfig){
+
+    public GuiServices(ManagerApplicationConfig managerConfig) {
         config = managerConfig;
-       
-        user_home      = System.getProperty("user.home");
-        file_separator = System.getProperty("file.separator");
-        
-        profileSmartyName       = "smarty.profile.uml";
-        profileConcernsName     = "concerns.profile.uml";
-        profilePatternName      = "patterns.profile.uml";
-        profileRelationshipName = "relationships.profile.uml";  
-    }
-    
-    
-    private String getDefaultPath() {
-      return  user_home +"/oplatool/";
+
+        profileSmartyName = "smarty.profile.uml";
+        profileConcernsName = "concerns.profile.uml";
+        profilePatternName = "patterns.profile.uml";
+        profileRelationshipName = "relationships.profile.uml";
     }
 
-    public void configureSmartyProfile(JTextField fieldSmartyProfile) {
-        if(hasSmartyInConfiFile()){
-          fieldSmartyProfile.setText(config.getConfig().getPathToProfile());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String smarty = getDefaultPath()+"profiles" + this.file_separator + profileSmartyName;
-            FilesManager.copyFile("resources/teste.txt", smarty); //TODO mudar para arquivo correto
-            fieldSmartyProfile.setText(smarty);
+    public void configureSmartyProfile(JTextField fieldSmartyProfile, JCheckBox check, JButton button) {
+        if(config.getConfig().getPathToProfile() != null && config.getConfig().getPathToProfile().equals("")){
+            check.setSelected(true);
+            button.setEnabled(false);
+        }else if (hasSmartyInConfiFile()) {
+            fieldSmartyProfile.setText(config.getConfig().getPathToProfile());
+        } else {
+            String smartySource = Thread.currentThread().getContextClassLoader().
+                    getResource(PROFILES + file_separator + profileSmartyName).getFile();
+
+            final String smartyDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileSmartyName;
+
+            FilesManager.copyFile(smartySource, smartyDest);
+            fieldSmartyProfile.setText(smartyDest);
             fieldSmartyProfile.updateUI();
-            config.updatePathToProfileSmarty(smarty);
+            config.updatePathToProfileSmarty(smartyDest);
         }
     }
 
-    public void configureConcernsProfile(JTextField fieldConcernProfile) {
-        if(hasConcernsInConfiFile()){
-          fieldConcernProfile.setText(config.getConfig().getPathToProfileConcern());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String concern = getDefaultPath()+"profiles" + this.file_separator + profileConcernsName;
-            FilesManager.copyFile("resources/teste.txt", concern); //TODO mudar para arquivo correto
-            fieldConcernProfile.setText(concern);
+    public void configureConcernsProfile(JTextField fieldConcernProfile, JCheckBox check, JButton button) {
+         if(config.getConfig().getPathToProfileConcern() != null && config.getConfig().getPathToProfileConcern().equals("")){
+            check.setSelected(true);
+            button.setEnabled(false);
+        }else if (hasConcernsInConfiFile()) {
+            fieldConcernProfile.setText(config.getConfig().getPathToProfileConcern());
+        } else {
+
+            String concernSource = Thread.currentThread().getContextClassLoader().
+                    getResource(PROFILES + file_separator + profileConcernsName).getFile();
+
+            final String concernDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileConcernsName;
+            FilesManager.copyFile(concernSource, concernDest);
+            fieldConcernProfile.setText(concernDest);
             fieldConcernProfile.updateUI();
-            config.updatePathToProfileConcerns(concern);
+            config.updatePathToProfileConcerns(concernDest);
         }
     }
-    
-    public void configurePatternsProfile(JTextField fieldPatterns ) {
-       if(hasPatternsInConfigFile()){
-          fieldPatterns.setText(config.getConfig().getPathToProfilePatterns());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String pattern = getDefaultPath()+"profiles"+ this.file_separator + profilePatternName;
-            FilesManager.copyFile("resources/teste.txt", pattern); //TODO mudar para arquivo correto
-            fieldPatterns.setText(pattern);
+
+    public void configurePatternsProfile(JTextField fieldPatterns, JCheckBox check, JButton button) {   
+        if(config.getConfig().getPathToProfilePatterns() != null && config.getConfig().getPathToProfilePatterns().equals("")){
+            check.setSelected(true);
+            button.setEnabled(false);
+        }else if (hasPatternsInConfigFile()) {
+            fieldPatterns.setText(config.getConfig().getPathToProfilePatterns());
+        } else {
+
+            String patternSource = Thread.currentThread().getContextClassLoader().
+                    getResource(PROFILES + file_separator + profilePatternName).getFile();
+            
+            final String patternDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profilePatternName;
+            FilesManager.copyFile(patternSource, patternDest); //TODO mudar para arquivo correto
+            fieldPatterns.setText(patternDest);
             fieldPatterns.updateUI();
-            config.updatePathToProfilePatterns(pattern);
+            config.updatePathToProfilePatterns(patternDest);
         }
     }
-    
-    
-     public void configureRelationshipsProfile(JTextField fieldRelationships) {
-        if(hasRelationshipsInConfigFile()){
-          fieldRelationships.setText(config.getConfig().getPathToProfileRelationships());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"profiles");
-            final String relationship = getDefaultPath()+"profiles"+ this.file_separator +profileRelationshipName;
-            FilesManager.copyFile("resources/teste.txt", relationship); //TODO mudar para arquivo correto
-            fieldRelationships.setText(relationship);
+
+    public void configureRelationshipsProfile(JTextField fieldRelationships, JCheckBox check, JButton button) {
+        if(config.getConfig().getPathToProfileRelationships() != null && config.getConfig().getPathToProfileRelationships().equals("")){
+            check.setSelected(true);
+            button.setEnabled(false);
+        }else 
+        if (hasRelationshipsInConfigFile()) {
+            fieldRelationships.setText(config.getConfig().getPathToProfileRelationships());
+        } else {
+
+            String relationthispSource = Thread.currentThread().getContextClassLoader().
+                    getResource(PROFILES + file_separator + profileRelationshipName).getFile();
+
+            final String relationshipDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileRelationshipName;
+            FilesManager.copyFile(relationthispSource, relationshipDest);
+            fieldRelationships.setText(relationshipDest);
             fieldRelationships.updateUI();
-            config.updatePathToProfileRelationships(relationship);
+            config.updatePathToProfileRelationships(relationshipDest);
         }
-    }
-    
-    private boolean hasRelationshipsInConfigFile() {
-       return config.getConfig().getPathToProfileRelationships()!= null;
-    }
-    
-    private boolean hasPatternsInConfigFile() {
-        return config.getConfig().getPathToProfilePatterns()!= null;
-    }
-    
-    private boolean hasSmartyInConfiFile() {
-        return config.getConfig().getPathToProfile() != null;
-    }
-    
-    private boolean hasConcernsInConfiFile() {
-        return config.getConfig().getPathToProfileConcern() != null;
-    }
-    
-    private boolean hasTemplateInConfigFile() {
-        return config.getConfig().getPathToTemplateModelsDirectory() != null;
-    }
-    
-    private boolean hasPathToSaveModelsInConfigFile(){
-        return config.getConfig().getDirectoryToExportModels() != null;
-    }
-    
-    private boolean hasPathToManipulationDir() {
-        return config.getConfig().getDirectoryToSaveModels() != null;
     }
 
     public void configureTemplates(JTextField fieldTemplate) {
-        if(hasTemplateInConfigFile()){
+        if (hasTemplateInConfigFile()) {
             fieldTemplate.setText(config.getConfig().getPathToTemplateModelsDirectory());
-        }else{
-            FilesManager.createPath(getDefaultPath()+"templates");
-            FilesManager.copyFile("resources/templates/simples.uml", getDefaultPath() + "templates"+ this.file_separator + "simples.uml");
-            FilesManager.copyFile("resources/templates/simples.di", getDefaultPath() + "templates" + this.file_separator + "simples.di");
-            FilesManager.copyFile("resources/templates/simples.notation", getDefaultPath() + "templates"+ this.file_separator + "simples.notation");
-            final String template = getDefaultPath() + "templates/";
+        } else {
+            FilesManager.copyFile("resources/templates/simples.uml", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.uml");
+            FilesManager.copyFile("resources/templates/simples.di", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.di");
+            FilesManager.copyFile("resources/templates/simples.notation", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.notation");
+            final String template = UserHome.getOplaUserHome() + "templates/";
             fieldTemplate.setText(template);
             fieldTemplate.updateUI();
             config.updatePathToTemplateFiles(template);
@@ -129,35 +117,62 @@ public class GuiServices {
 
     /**
      * Saida, arquivos uml, di e notation.
-     * @param fieldOutput 
+     *
+     * @param fieldOutput
      */
     public void configureLocaleToExportModels(JTextField fieldOutput) {
-       if(hasPathToSaveModelsInConfigFile()){
-           fieldOutput.setText(config.getConfig().getDirectoryToExportModels());
-       }else{
-           final String path = getDefaultPath()+"output";
-           FilesManager.createPath(path);
-           fieldOutput.setText(user_home);
-           fieldOutput.updateUI();
-           config.updatePathToExportModels(path);
-       }
-           
+        if (hasPathToSaveModelsInConfigFile()) {
+            fieldOutput.setText(config.getConfig().getDirectoryToExportModels());
+        } else {
+            final String path = UserHome.getOplaUserHome() + "output";
+            fieldOutput.setText(user_home);
+            fieldOutput.updateUI();
+            config.updatePathToExportModels(path);
+        }
+
     }
-    
+
     /**
      * Diretorio usado no processo de maniuplacao.
-     * @param fieldManipulationDir 
+     *
+     * @param fieldManipulationDir
      */
     public void configureLocaleToSaveModels(JTextField fieldManipulationDir) {
-       if(hasPathToManipulationDir()){
-           fieldManipulationDir.setText(config.getConfig().getDirectoryToSaveModels());
-       }else{
-           final String path = getDefaultPath()+"temp";
-           FilesManager.createPath(path);
-           fieldManipulationDir.setText(path);
-           fieldManipulationDir.updateUI();
-           config.updatePathToSaveModels(path);
-       }
-    } 
-    
+        if (hasPathToManipulationDir()) {
+            fieldManipulationDir.setText(config.getConfig().getDirectoryToSaveModels());
+        } else {
+            final String path = UserHome.getOplaUserHome() + "temp";
+            fieldManipulationDir.setText(path);
+            fieldManipulationDir.updateUI();
+            config.updatePathToSaveModels(path);
+        }
+    }
+
+    private boolean hasRelationshipsInConfigFile() {
+        return config.getConfig().getPathToProfileRelationships() != null;
+    }
+
+    private boolean hasPatternsInConfigFile() {
+        return config.getConfig().getPathToProfilePatterns() != null;
+    }
+
+    private boolean hasSmartyInConfiFile() {
+        return config.getConfig().getPathToProfile() != null;
+    }
+
+    private boolean hasConcernsInConfiFile() {
+        return config.getConfig().getPathToProfileConcern() != null;
+    }
+
+    private boolean hasTemplateInConfigFile() {
+        return config.getConfig().getPathToTemplateModelsDirectory() != null;
+    }
+
+    private boolean hasPathToSaveModelsInConfigFile() {
+        return config.getConfig().getDirectoryToExportModels() != null;
+    }
+
+    private boolean hasPathToManipulationDir() {
+        return config.getConfig().getDirectoryToSaveModels() != null;
+    }
 }

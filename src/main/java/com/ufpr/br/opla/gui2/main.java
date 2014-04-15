@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.ufpr.br.opla.gui2;
 
 import java.awt.HeadlessException;
@@ -21,34 +20,43 @@ import javax.swing.JTextField;
  * @author elf
  */
 public class main extends javax.swing.JFrame {
-    
-    
-     private ManagerApplicationConfig config = null;
+
+    private ManagerApplicationConfig config = null;
 //     private OplaServices oplaService = null;
-    
+    private String pathSmartyBck;
+    private String pathConcernBck;
+    private String pathRelationchipBck;
+    private String pathPatternBck;
 
     /**
      * Creates new form main
      */
     public main() throws ExecutionException {
-        initComponents();   
+        initComponents();
 
         try {
-            config = new ManagerApplicationConfig("/Users/elf/NetBeansProjects/OPLA-GUI2/config/application.yaml");
-       //     oplaService = new OplaServices(config);
+            config = new ManagerApplicationConfig();
+            //     oplaService = new OplaServices(config);
         } catch (FileNotFoundException ex) {
-           JOptionPane.showMessageDialog(null, "Configuration file config/application.yaml not found. ");
-           System.exit(0);
+            JOptionPane.showMessageDialog(null, "Configuration file config/application.yaml not found. ");
+            System.exit(0);
         }
-
+        
+        //Text Field are disabled
+        fieldSmartyProfile.setEditable(false);
+        fieldConcernProfile.setEditable(false);
+        fieldPatterns.setEditable(false);      
+        fieldRelationships.setEditable(false);        
+                
+                
         GuiServices guiservices = new GuiServices(config);
-        guiservices.configureSmartyProfile(fieldSmartyProfile);
-        guiservices.configureConcernsProfile(fieldConcernProfile);
-        guiservices.configurePatternsProfile(fieldPatterns);
-        guiservices.configureRelationshipsProfile(fieldRelationships);
+        guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
+        guiservices.configureConcernsProfile(fieldConcernProfile, checkConcerns, btnConcernProfile);
+        guiservices.configurePatternsProfile(fieldPatterns, checkPatterns, btnPatternProfile);
+        guiservices.configureRelationshipsProfile(fieldRelationships, checkRelationship, btnRelationshipProfile);
         guiservices.configureTemplates(fieldTemplate);
         guiservices.configureLocaleToSaveModels(fieldManipulationDir);
-        
+
         guiservices.configureLocaleToExportModels(fieldOutput);
     }
 
@@ -96,6 +104,11 @@ public class main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         fieldArchitectureInput = new javax.swing.JTextArea();
         btnCleanListArchs = new javax.swing.JButton();
+        btnManipulationDir = new javax.swing.JButton();
+        checkSmarty = new javax.swing.JCheckBox();
+        checkConcerns = new javax.swing.JCheckBox();
+        checkRelationship = new javax.swing.JCheckBox();
+        checkPatterns = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -232,104 +245,165 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        btnManipulationDir.setText("Browser...");
+        btnManipulationDir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManipulationDirActionPerformed(evt);
+            }
+        });
+
+        checkSmarty.setText("SMarty");
+        checkSmarty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkSmartyActionPerformed(evt);
+            }
+        });
+
+        checkConcerns.setText("Concerns");
+        checkConcerns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkConcernsActionPerformed(evt);
+            }
+        });
+
+        checkRelationship.setText("Relationship");
+        checkRelationship.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkRelationshipActionPerformed(evt);
+            }
+        });
+
+        checkPatterns.setText("Patterns");
+        checkPatterns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkPatternsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(checkSmarty)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(checkConcerns)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(checkRelationship)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(checkPatterns)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(235, 235, 235))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(454, 454, 454)
-                                        .addComponent(jLabel9))
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel2))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(fieldConcernProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
-                                                    .addComponent(fieldSmartyProfile))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(btnSmartyProfile)
-                                                    .addComponent(btnConcernProfile))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jLabel10)
-                                            .addComponent(fieldPatterns)
-                                            .addComponent(fieldRelationships, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(fieldConcernProfile, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE)
+                                            .addComponent(fieldSmartyProfile))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnPatternProfile)
-                                            .addComponent(btnRelationshipProfile))))
-                                .addContainerGap())
+                                            .addComponent(btnConcernProfile, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(btnSmartyProfile))))
+                                .addGap(46, 46, 46)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(fieldRelationships, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnRelationshipProfile))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(fieldPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(btnPatternProfile))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addComponent(jLabel10))))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(fieldTemplate)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(302, 302, 302))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel8))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(fieldTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel7)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(fieldManipulationDir, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnManipulationDir))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(176, 176, 176)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel4)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel14))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(12, 12, 12)
+                                                .addComponent(jLabel15))))))
+                            .addComponent(jLabel11)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel7)
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jLabel5)
+                                .addGap(263, 263, 263)
+                                .addComponent(jLabel13)))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(fieldManipulationDir, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jLabel14))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(10, 10, 10)
-                                    .addComponent(jLabel15))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(221, 221, 221)
+                                .addComponent(btnInput)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnCleanListArchs))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(89, 89, 89)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(btnInput)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnCleanListArchs))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnOutput)
-                                .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(229, 229, 229))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnOutput))
+                            .addComponent(jLabel12))
+                        .addGap(0, 142, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9)
+                        .addGap(448, 448, 448))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(20, 20, 20)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(checkSmarty)
+                            .addComponent(checkConcerns)
+                            .addComponent(checkRelationship)
+                            .addComponent(checkPatterns))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -340,7 +414,7 @@ public class main extends javax.swing.JFrame {
                     .addComponent(btnSmartyProfile)
                     .addComponent(fieldPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPatternProfile))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel10))
@@ -350,46 +424,42 @@ public class main extends javax.swing.JFrame {
                     .addComponent(btnConcernProfile)
                     .addComponent(fieldRelationships, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRelationshipProfile))
-                .addGap(18, 18, 18)
+                .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fieldTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTemplate))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
                     .addComponent(jLabel4)
                     .addComponent(jLabel14))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(fieldManipulationDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTemplate)
+                    .addComponent(fieldManipulationDir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnManipulationDir))
+                .addGap(33, 33, 33)
+                .addComponent(jLabel11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
                     .addComponent(jLabel13))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnOutput)
-                        .addGap(109, 109, 109))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnInput)
-                            .addComponent(btnCleanListArchs))
-                        .addContainerGap())))
+                            .addComponent(fieldOutput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnOutput))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnInput)
+                    .addComponent(btnCleanListArchs))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Path Confs", jPanel1);
@@ -414,18 +484,18 @@ public class main extends javax.swing.JFrame {
 
     private void btnConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcernProfileActionPerformed
         String newPath = fileChooser(fieldConcernProfile, "uml");
-        if(newPath.equals("")){
+        if (newPath.equals("")) {
             this.config.updatePathToProfileConcerns(fieldConcernProfile.getText());
-        }else{
+        } else {
             this.config.updatePathToProfileConcerns(newPath);
         }
     }//GEN-LAST:event_btnConcernProfileActionPerformed
 
     private void btnSmartyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSmartyProfileActionPerformed
         String newPath = fileChooser(fieldSmartyProfile, "uml");
-        if(newPath.equals("")){
+        if (newPath.equals("")) {
             this.config.updatePathToProfileSmarty(fieldSmartyProfile.getText());
-        }else{
+        } else {
             this.config.updatePathToProfileSmarty(newPath);
         }
     }//GEN-LAST:event_btnSmartyProfileActionPerformed
@@ -439,10 +509,10 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldSmartyProfileActionPerformed
 
     private void btnTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplateActionPerformed
-        String path  = dirChooser(fieldTemplate);
-        if("".equals(path)){
+        String path = dirChooser(fieldTemplate);
+        if ("".equals(path)) {
             this.config.updatePathToTemplateFiles(fieldTemplate.getText());
-        }else{
+        } else {
             this.config.updatePathToTemplateFiles(path);
         }
     }//GEN-LAST:event_btnTemplateActionPerformed
@@ -463,9 +533,9 @@ public class main extends javax.swing.JFrame {
 
     private void btnRelationshipProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelationshipProfileActionPerformed
         String newPath = fileChooser(fieldRelationships, "uml");
-        if(newPath.equals("")){
+        if (newPath.equals("")) {
             this.config.updatePathToProfileRelationships(fieldRelationships.getText());
-        }else{
+        } else {
             this.config.updatePathToProfileRelationships(newPath);
         }
     }//GEN-LAST:event_btnRelationshipProfileActionPerformed
@@ -475,22 +545,22 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldPatternsActionPerformed
 
     private void btnPatternProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatternProfileActionPerformed
-      String newPath = fileChooser(fieldPatterns, "uml");
-        if("".equals(newPath)){
+        String newPath = fileChooser(fieldPatterns, "uml");
+        if ("".equals(newPath)) {
             this.config.updatePathToProfilePatterns(fieldPatterns.getText());
-        }else{
+        } else {
             this.config.updatePathToProfilePatterns(newPath);
         }
     }//GEN-LAST:event_btnPatternProfileActionPerformed
 
     private void btnOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutputActionPerformed
         String path = dirChooser(fieldOutput);
-        if("".equals(path)){
+        if ("".equals(path)) {
             this.config.updatePathToExportModels(fieldOutput.getText());
-        }else{
+        } else {
             this.config.updatePathToExportModels(path);
         }
-                
+
     }//GEN-LAST:event_btnOutputActionPerformed
 
     private void fieldOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOutputActionPerformed
@@ -512,10 +582,10 @@ public class main extends javax.swing.JFrame {
     private void btnInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInputActionPerformed
         String archs[] = fieldArchitectureInput.getText().split(",");
         List<String> invalidEntries = validateEntries(archs);
-        
-        if(invalidEntries.isEmpty()){
+
+        if (invalidEntries.isEmpty()) {
             VolatileConfs.setArchitectureInputPath(archs);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "There invalid entries for architecture list. Check it please");
         }
     }//GEN-LAST:event_btnInputActionPerformed
@@ -525,6 +595,67 @@ public class main extends javax.swing.JFrame {
         VolatileConfs.setArchitectureInputPath(null);
     }//GEN-LAST:event_btnCleanListArchsActionPerformed
 
+    private void btnManipulationDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManipulationDirActionPerformed
+        String path = dirChooser(fieldManipulationDir);
+        if ("".equals(path)) {
+            this.config.updatePathToSaveModels(fieldManipulationDir.getText());
+        } else {
+            this.config.updatePathToSaveModels(path);
+        }
+    }//GEN-LAST:event_btnManipulationDirActionPerformed
+
+    private void checkSmartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSmartyActionPerformed
+        if(!checkSmarty.isSelected()){
+            fieldSmartyProfile.setText(pathSmartyBck);
+            btnSmartyProfile.setEnabled(true);
+            this.config.updatePathToProfileSmarty(pathSmartyBck);
+        }else{
+            pathSmartyBck = fieldSmartyProfile.getText();
+            fieldSmartyProfile.setText("");
+            this.config.updatePathToProfileSmarty("");
+            btnSmartyProfile.setEnabled(false);
+        }
+    }//GEN-LAST:event_checkSmartyActionPerformed
+
+    private void checkConcernsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConcernsActionPerformed
+        if(!checkConcerns.isSelected()){
+            fieldConcernProfile.setText(pathConcernBck);
+            btnConcernProfile.setEnabled(true);
+            this.config.updatePathToProfileConcerns(pathConcernBck);
+        }else{
+            pathConcernBck = fieldConcernProfile.getText();
+            fieldConcernProfile.setText("");
+            this.config.updatePathToProfileConcerns("");
+            btnConcernProfile.setEnabled(false);
+        }
+    }//GEN-LAST:event_checkConcernsActionPerformed
+
+    private void checkRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRelationshipActionPerformed
+       if(!checkRelationship.isSelected()){
+            fieldRelationships.setText(pathRelationchipBck);
+            btnRelationshipProfile.setEnabled(true);
+            this.config.updatePathToProfileRelationships(pathRelationchipBck);
+        }else{
+            pathRelationchipBck = fieldRelationships.getText();
+            fieldRelationships.setText("");
+            this.config.updatePathToProfileRelationships("");
+            btnRelationshipProfile.setEnabled(false);
+        }
+    }//GEN-LAST:event_checkRelationshipActionPerformed
+
+    private void checkPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPatternsActionPerformed
+       if(!checkPatterns.isSelected()){
+            fieldPatterns.setText(pathPatternBck);
+            btnPatternProfile.setEnabled(true);
+            this.config.updatePathToProfilePatterns(pathPatternBck);
+        }else{
+            pathPatternBck = fieldPatterns.getText();
+            fieldPatterns.setText("");
+            this.config.updatePathToProfilePatterns("");
+            btnPatternProfile.setEnabled(false);
+        }
+    }//GEN-LAST:event_checkPatternsActionPerformed
+
     private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
         JFileChooser c = new JFileChooser();
         int rVal = c.showOpenDialog(this);
@@ -532,36 +663,39 @@ public class main extends javax.swing.JFrame {
 
             File f = new File(c.getCurrentDirectory() + c.getSelectedFile().getName());
             String ext = FilesManager.getExtension(f);
-            
-            if(!ext.equalsIgnoreCase(allowExtension)){
-                JOptionPane.showMessageDialog(null, "The selected file is not allowed. You need selects a file with extension .uml, but you selects a ."+ext + " file");
+
+            if (!ext.equalsIgnoreCase(allowExtension)) {
+                JOptionPane.showMessageDialog(null, "The selected file is not allowed. You need selects a file with extension .uml, but you selects a ." + ext + " file");
                 return "";
-            }else{
-                final String path = c.getCurrentDirectory() + "/"+ c.getSelectedFile().getName();
+            } else {
+                final String path = c.getCurrentDirectory() + "/" + c.getSelectedFile().getName();
                 fieldToSet.setText(path);
                 fieldToSet.updateUI();
                 return path;
-                
+
             }
         }
-        
-        return "";
-        
-    }
 
+        return "";
+
+    }
     /**
      * @param args the command line arguments
      */
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCleanListArchs;
     private javax.swing.JButton btnConcernProfile;
     private javax.swing.JButton btnInput;
+    private javax.swing.JButton btnManipulationDir;
     private javax.swing.JButton btnOutput;
     private javax.swing.JButton btnPatternProfile;
     private javax.swing.JButton btnRelationshipProfile;
     private javax.swing.JButton btnSmartyProfile;
     private javax.swing.JButton btnTemplate;
+    private javax.swing.JCheckBox checkConcerns;
+    private javax.swing.JCheckBox checkPatterns;
+    private javax.swing.JCheckBox checkRelationship;
+    private javax.swing.JCheckBox checkSmarty;
     private javax.swing.JTextArea fieldArchitectureInput;
     private javax.swing.JTextField fieldConcernProfile;
     private javax.swing.JTextField fieldManipulationDir;
@@ -593,16 +727,16 @@ public class main extends javax.swing.JFrame {
 
     private List<String> validateEntries(String[] archs) {
         List<String> invalidsEntries = new ArrayList<String>();
-        
+
         for (int i = 0; i < archs.length; i++) {
             String arch = archs[i].substring(archs[i].indexOf('.'), archs[i].length());
-            if(!arch.equalsIgnoreCase(".uml"))
+            if (!arch.equalsIgnoreCase(".uml")) {
                 invalidsEntries.add(archs[i]);
+            }
         }
-        
+
         return invalidsEntries;
     }
 
-   
-
- }
+ 
+}

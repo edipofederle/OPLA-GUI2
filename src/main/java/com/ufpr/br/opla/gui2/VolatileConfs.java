@@ -16,6 +16,6 @@ public class VolatileConfs {
 
     public static void setArchitectureInputPath(String[] path) {
         architectureInputPath = path;
-    }
+    } 
     
 }

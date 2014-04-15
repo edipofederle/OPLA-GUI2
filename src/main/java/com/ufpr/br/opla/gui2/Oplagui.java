@@ -11,21 +11,30 @@ import java.util.logging.Logger;
 public class Oplagui {
 
     public static void main(String args[]) {
-   
+
         java.awt.EventQueue.invokeLater(new Runnable() {
-           
+
             @Override
             public void run() {
                 com.ufpr.br.opla.gui2.main gui;
-                try {
+                try {                  
+                    
+                    UserHome.createDefaultOplaPathIfDontExists();
+                    UserHome.createProfilesPath();
+                    UserHome.createTemplatePath();
+                    UserHome.createOutputPath();
+                    UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
+                    UserHome.copyConfigFileToUserHome();
+                    
+                    
+                    
                     gui = new main();
                     gui.setVisible(true);
                 } catch (ExecutionException ex) {
                     Logger.getLogger(Oplagui.class.getName()).log(Level.SEVERE, null, ex);
                 }
-               
+
             }
         });
     }
-    
 }
