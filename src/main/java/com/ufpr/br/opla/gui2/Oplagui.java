@@ -1,6 +1,5 @@
 package com.ufpr.br.opla.gui2;
 
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,20 +16,10 @@ public class Oplagui {
             @Override
             public void run() {
                 com.ufpr.br.opla.gui2.main gui;
-                try {                  
-                    
-                    UserHome.createDefaultOplaPathIfDontExists();
-                    UserHome.createProfilesPath();
-                    UserHome.createTemplatePath();
-                    UserHome.createOutputPath();
-                    UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
-                    UserHome.copyConfigFileToUserHome();
-                    
-                    
-                    
+                try {                                    
                     gui = new main();
                     gui.setVisible(true);
-                } catch (ExecutionException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(Oplagui.class.getName()).log(Level.SEVERE, null, ex);
                 }
 

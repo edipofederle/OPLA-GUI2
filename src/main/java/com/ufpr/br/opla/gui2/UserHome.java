@@ -21,11 +21,11 @@ public class UserHome {
         String a = Thread.currentThread().getContextClassLoader().
                 getResource("config/application.yaml").getFile();
         
-        FilesManager.copyFile (a, home + "application.yaml");
+        FileUtil.copy(a, home + "application.yaml");
     }
     
     public static String getOplaUserHome(){
-        return home;
+        return System.getProperty("user.home") + System.getProperty("file.separator") + "oplatool" + System.getProperty("file.separator") ;
     }
     
     public static String getConfigurationFilePath(){
@@ -39,19 +39,19 @@ public class UserHome {
     }
 
     public static void createProfilesPath() {
-      FilesManager.createPath(home + "profiles");
+      FileUtil.createPath(home + "profiles");
     }
 
    public static void createTemplatePath() {
-     FilesManager.createPath(home + "templates");
+     FileUtil.createPath(home + "templates");
    }
 
    public static void createOutputPath() {
-    FilesManager.createPath(home + "output");
+    FileUtil.createPath(home + "output");
    }
 
    public static void createTempPath() {
-    FilesManager.createPath(home + "temp");
+    FileUtil.createPath(home + "temp");
    }
        
 }

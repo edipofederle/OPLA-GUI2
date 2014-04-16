@@ -10,7 +10,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -22,7 +23,7 @@ import javax.swing.JTextField;
 public class main extends javax.swing.JFrame {
 
     private ManagerApplicationConfig config = null;
-//     private OplaServices oplaService = null;
+    //private OplaServices oplaService = null;
     private String pathSmartyBck;
     private String pathConcernBck;
     private String pathRelationchipBck;
@@ -31,24 +32,36 @@ public class main extends javax.swing.JFrame {
     /**
      * Creates new form main
      */
-    public main() throws ExecutionException {
+    public main() throws Exception {
         initComponents();
-
         try {
+
+            UserHome.createDefaultOplaPathIfDontExists();
+
+            String source = "config/application.yaml";
+            String target = UserHome.getOplaUserHome() + "application.yaml";
+            FileUtil.copy(source, target);
+
+            UserHome.createProfilesPath();
+            UserHome.createTemplatePath();
+            UserHome.createOutputPath();
+            UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
+
+
             config = new ManagerApplicationConfig();
-            //     oplaService = new OplaServices(config);
         } catch (FileNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, "Configuration file config/application.yaml not found. ");
-            System.exit(0);
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+
+
         //Text Field are disabled
         fieldSmartyProfile.setEditable(false);
         fieldConcernProfile.setEditable(false);
-        fieldPatterns.setEditable(false);      
-        fieldRelationships.setEditable(false);        
-                
-                
+        fieldPatterns.setEditable(false);
+        fieldRelationships.setEditable(false);
+
+
         GuiServices guiservices = new GuiServices(config);
         guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
         guiservices.configureConcernsProfile(fieldConcernProfile, checkConcerns, btnConcernProfile);
@@ -605,11 +618,11 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnManipulationDirActionPerformed
 
     private void checkSmartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSmartyActionPerformed
-        if(!checkSmarty.isSelected()){
+        if (!checkSmarty.isSelected()) {
             fieldSmartyProfile.setText(pathSmartyBck);
             btnSmartyProfile.setEnabled(true);
             this.config.updatePathToProfileSmarty(pathSmartyBck);
-        }else{
+        } else {
             pathSmartyBck = fieldSmartyProfile.getText();
             fieldSmartyProfile.setText("");
             this.config.updatePathToProfileSmarty("");
@@ -618,11 +631,11 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkSmartyActionPerformed
 
     private void checkConcernsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConcernsActionPerformed
-        if(!checkConcerns.isSelected()){
+        if (!checkConcerns.isSelected()) {
             fieldConcernProfile.setText(pathConcernBck);
             btnConcernProfile.setEnabled(true);
             this.config.updatePathToProfileConcerns(pathConcernBck);
-        }else{
+        } else {
             pathConcernBck = fieldConcernProfile.getText();
             fieldConcernProfile.setText("");
             this.config.updatePathToProfileConcerns("");
@@ -631,11 +644,11 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkConcernsActionPerformed
 
     private void checkRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRelationshipActionPerformed
-       if(!checkRelationship.isSelected()){
+        if (!checkRelationship.isSelected()) {
             fieldRelationships.setText(pathRelationchipBck);
             btnRelationshipProfile.setEnabled(true);
             this.config.updatePathToProfileRelationships(pathRelationchipBck);
-        }else{
+        } else {
             pathRelationchipBck = fieldRelationships.getText();
             fieldRelationships.setText("");
             this.config.updatePathToProfileRelationships("");
@@ -644,11 +657,11 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkRelationshipActionPerformed
 
     private void checkPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPatternsActionPerformed
-       if(!checkPatterns.isSelected()){
+        if (!checkPatterns.isSelected()) {
             fieldPatterns.setText(pathPatternBck);
             btnPatternProfile.setEnabled(true);
             this.config.updatePathToProfilePatterns(pathPatternBck);
-        }else{
+        } else {
             pathPatternBck = fieldPatterns.getText();
             fieldPatterns.setText("");
             this.config.updatePathToProfilePatterns("");
@@ -662,7 +675,7 @@ public class main extends javax.swing.JFrame {
         if (rVal == JFileChooser.APPROVE_OPTION) {
 
             File f = new File(c.getCurrentDirectory() + c.getSelectedFile().getName());
-            String ext = FilesManager.getExtension(f);
+            String ext = FileUtil.getExtension(f);
 
             if (!ext.equalsIgnoreCase(allowExtension)) {
                 JOptionPane.showMessageDialog(null, "The selected file is not allowed. You need selects a file with extension .uml, but you selects a ." + ext + " file");
@@ -737,6 +750,4 @@ public class main extends javax.swing.JFrame {
 
         return invalidsEntries;
     }
-
- 
 }

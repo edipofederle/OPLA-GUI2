@@ -31,15 +31,13 @@ public class GuiServices {
         }else if (hasSmartyInConfiFile()) {
             fieldSmartyProfile.setText(config.getConfig().getPathToProfile());
         } else {
-            String smartySource = Thread.currentThread().getContextClassLoader().
-                    getResource(PROFILES + file_separator + profileSmartyName).getFile();
+            String source = PROFILES + file_separator + profileSmartyName;
+            final String target = UserHome.getOplaUserHome() + "profiles" + file_separator + profileSmartyName;
+            FileUtil.copy(source, target);
 
-            final String smartyDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileSmartyName;
-
-            FilesManager.copyFile(smartySource, smartyDest);
-            fieldSmartyProfile.setText(smartyDest);
+            fieldSmartyProfile.setText(target);
             fieldSmartyProfile.updateUI();
-            config.updatePathToProfileSmarty(smartyDest);
+            config.updatePathToProfileSmarty(target);
         }
     }
 
@@ -51,11 +49,11 @@ public class GuiServices {
             fieldConcernProfile.setText(config.getConfig().getPathToProfileConcern());
         } else {
 
-            String concernSource = Thread.currentThread().getContextClassLoader().
-                    getResource(PROFILES + file_separator + profileConcernsName).getFile();
+            String source = PROFILES + file_separator + profileConcernsName;
 
             final String concernDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileConcernsName;
-            FilesManager.copyFile(concernSource, concernDest);
+            FileUtil.copy(source, concernDest);
+            
             fieldConcernProfile.setText(concernDest);
             fieldConcernProfile.updateUI();
             config.updatePathToProfileConcerns(concernDest);
@@ -70,11 +68,11 @@ public class GuiServices {
             fieldPatterns.setText(config.getConfig().getPathToProfilePatterns());
         } else {
 
-            String patternSource = Thread.currentThread().getContextClassLoader().
-                    getResource(PROFILES + file_separator + profilePatternName).getFile();
+            String source = PROFILES + file_separator + profilePatternName;
             
             final String patternDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profilePatternName;
-            FilesManager.copyFile(patternSource, patternDest); //TODO mudar para arquivo correto
+            FileUtil.copy(source, patternDest);
+            
             fieldPatterns.setText(patternDest);
             fieldPatterns.updateUI();
             config.updatePathToProfilePatterns(patternDest);
@@ -90,11 +88,14 @@ public class GuiServices {
             fieldRelationships.setText(config.getConfig().getPathToProfileRelationships());
         } else {
 
-            String relationthispSource = Thread.currentThread().getContextClassLoader().
-                    getResource(PROFILES + file_separator + profileRelationshipName).getFile();
+            String source = PROFILES + file_separator + profileRelationshipName;
 
             final String relationshipDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileRelationshipName;
-            FilesManager.copyFile(relationthispSource, relationshipDest);
+            
+            
+            FileUtil.copy(source, relationshipDest);
+
+            
             fieldRelationships.setText(relationshipDest);
             fieldRelationships.updateUI();
             config.updatePathToProfileRelationships(relationshipDest);
@@ -105,9 +106,12 @@ public class GuiServices {
         if (hasTemplateInConfigFile()) {
             fieldTemplate.setText(config.getConfig().getPathToTemplateModelsDirectory());
         } else {
-            FilesManager.copyFile("resources/templates/simples.uml", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.uml");
-            FilesManager.copyFile("resources/templates/simples.di", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.di");
-            FilesManager.copyFile("resources/templates/simples.notation", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.notation");
+           FileUtil.copy("templates/simples.uml", UserHome.getOplaUserHome() + "templates" + file_separator + "simples.uml");
+            FileUtil.copy("templates/simples.di", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.di");
+            FileUtil.copy("templates/simples.notation", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.notation");
+            
+            
+            
             final String template = UserHome.getOplaUserHome() + "templates/";
             fieldTemplate.setText(template);
             fieldTemplate.updateUI();
