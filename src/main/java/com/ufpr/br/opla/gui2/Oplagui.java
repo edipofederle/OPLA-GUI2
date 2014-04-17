@@ -18,7 +18,9 @@ public class Oplagui {
                 com.ufpr.br.opla.gui2.main gui;
                 try {                                    
                     gui = new main();
+                    gui.setResizable(false);
                     gui.setVisible(true);
+                    
                 } catch (Exception ex) {
                     Logger.getLogger(Oplagui.class.getName()).log(Level.SEVERE, null, ex);
                 }

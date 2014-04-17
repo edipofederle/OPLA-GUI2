@@ -8,14 +8,33 @@ package com.ufpr.br.opla.gui2;
  */
 public class VolatileConfs {
     
-    private static String[] architectureInputPath;
+    private static String[] architecturesInputPath;
+    private static String algorithmName;
 
     public static String[] getArchitectureInputPath() {
-        return architectureInputPath;
+        return architecturesInputPath;
     }
 
     public static void setArchitectureInputPath(String[] path) {
-        architectureInputPath = path;
-    } 
+        architecturesInputPath = path;
+    }
+
+    public static String getAlgorithmName() {
+        return algorithmName;
+    }
+
+    public static void setAlgorithmName(String algorithmName) {
+        VolatileConfs.algorithmName = algorithmName;
+    }
+
+    public static String[] getArchitecturesInputPath() {
+        return architecturesInputPath;
+    }
+
+    public static void setArchitecturesInputPath(String[] architecturesInputPath) {
+        VolatileConfs.architecturesInputPath = architecturesInputPath;
+    }
+    
+    
     
 }
