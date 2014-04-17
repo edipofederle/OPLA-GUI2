@@ -1287,8 +1287,10 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkFeatureDrivenActionPerformed
 
     private void numberOfRunsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numberOfRunsFocusLost
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Number Of Runs: {0}", fieldNumberOfRuns.getText());
-        VolatileConfs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
+        if(isDigit(fieldNumberOfRuns.getText())){
+            Logger.getLogger(main.class.getName()).log(Level.INFO, "Number Of Runs: {0}", fieldNumberOfRuns.getText());
+            VolatileConfs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
+        }
     }//GEN-LAST:event_numberOfRunsFocusLost
 
     private void fieldNumberOfRunsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNumberOfRunsActionPerformed
@@ -1296,25 +1298,31 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldNumberOfRunsActionPerformed
 
     private void fieldMaxEvaluationsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldMaxEvaluationsFocusLost
+       if(isDigit(fieldMaxEvaluations.getText())){
         Logger.getLogger(main.class.getName()).log(Level.INFO, "Max Evaluations: {0}", fieldMaxEvaluations.getText());
         VolatileConfs.setMaxEvaluations(Integer.parseInt(fieldMaxEvaluations.getText()));
+        }
     }//GEN-LAST:event_fieldMaxEvaluationsFocusLost
 
     private void fieldPopulationSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPopulationSizeFocusLost
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Population Size: {0}", fieldPopulationSize.getText());
-        VolatileConfs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
+        if(isDigit(fieldPopulationSize.getText())){
+            Logger.getLogger(main.class.getName()).log(Level.INFO, "Population Size: {0}", fieldPopulationSize.getText());
+            VolatileConfs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
+        }
     }//GEN-LAST:event_fieldPopulationSizeFocusLost
 
     private void fieldNumberOfRunsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumberOfRunsKeyTyped
         onlyDigit(evt);
     }
 
-    private void onlyDigit(KeyEvent evt) {
+    private boolean onlyDigit(KeyEvent evt) {
         char c = evt.getKeyChar();
         if(!(Character.isDigit(c) || (c==KeyEvent.VK_BACK_SPACE) || c==KeyEvent.VK_DELETE)){
             getToolkit().beep();
             evt.consume(); 
+            return false;
         }
+        return true;
     }//GEN-LAST:event_fieldNumberOfRunsKeyTyped
 
     private void fieldMaxEvaluationsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldMaxEvaluationsKeyTyped
@@ -1471,5 +1479,14 @@ public class main extends javax.swing.JFrame {
         checkPLAExt.setSelected(true);
         checkConventional.setSelected(true);
         checkFeatureDriven.setSelected(true);
+    }
+
+    private boolean isDigit(String text) {
+        try{
+            Integer.parseInt(text);
+        }catch(Exception e){
+            return false;
+        }   
+        return true;
     }
 }
