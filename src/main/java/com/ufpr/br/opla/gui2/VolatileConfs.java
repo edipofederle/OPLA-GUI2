@@ -1,5 +1,8 @@
 package com.ufpr.br.opla.gui2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author elf
@@ -9,7 +12,8 @@ package com.ufpr.br.opla.gui2;
 public class VolatileConfs {
     
     private static String[] architecturesInputPath;
-    private static String algorithmName;
+    private static String algorithmName; // Cambo algorithm
+    private static List<String> metricsSelecteds = new ArrayList<>(); //checkboxs metrics
 
     public static String[] getArchitectureInputPath() {
         return architecturesInputPath;
@@ -34,7 +38,9 @@ public class VolatileConfs {
     public static void setArchitecturesInputPath(String[] architecturesInputPath) {
         VolatileConfs.architecturesInputPath = architecturesInputPath;
     }
-    
-    
+
+    public static List<String> getMetricsSelecteds() {
+        return metricsSelecteds;
+    }
     
 }
