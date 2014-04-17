@@ -129,7 +129,7 @@ public class GuiServices {
             fieldOutput.setText(config.getConfig().getDirectoryToExportModels());
         } else {
             final String path = UserHome.getOplaUserHome() + "output";
-            fieldOutput.setText(user_home);
+            fieldOutput.setText(path);
             fieldOutput.updateUI();
             config.updatePathToExportModels(path);
         }
