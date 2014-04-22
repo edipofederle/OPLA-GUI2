@@ -109,9 +109,7 @@ public class GuiServices {
            FileUtil.copy("templates/simples.uml", UserHome.getOplaUserHome() + "templates" + file_separator + "simples.uml");
             FileUtil.copy("templates/simples.di", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.di");
             FileUtil.copy("templates/simples.notation", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.notation");
-            
-            
-            
+
             final String template = UserHome.getOplaUserHome() + "templates/";
             fieldTemplate.setText(template);
             fieldTemplate.updateUI();
@@ -128,7 +126,7 @@ public class GuiServices {
         if (hasPathToSaveModelsInConfigFile()) {
             fieldOutput.setText(config.getConfig().getDirectoryToExportModels());
         } else {
-            final String path = UserHome.getOplaUserHome() + "output";
+            final String path = UserHome.getOplaUserHome() + "output/";
             fieldOutput.setText(path);
             fieldOutput.updateUI();
             config.updatePathToExportModels(path);
@@ -145,7 +143,7 @@ public class GuiServices {
         if (hasPathToManipulationDir()) {
             fieldManipulationDir.setText(config.getConfig().getDirectoryToSaveModels());
         } else {
-            final String path = UserHome.getOplaUserHome() + "temp";
+            final String path = UserHome.getOplaUserHome() + "temp/";
             fieldManipulationDir.setText(path);
             fieldManipulationDir.updateUI();
             config.updatePathToSaveModels(path);

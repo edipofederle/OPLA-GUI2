@@ -1,5 +1,6 @@
 package com.ufpr.br.opla.gui2;
 
+import arquitetura.io.ReaderConfig;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,7 +17,7 @@ public class Oplagui {
             @Override
             public void run() {
                 com.ufpr.br.opla.gui2.main gui;
-                try {                                    
+                try {
                     gui = new main();
                     gui.setResizable(false);
                     gui.setVisible(true);

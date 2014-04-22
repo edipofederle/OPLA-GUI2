@@ -29,7 +29,7 @@ Then add the dependency to pom.xml
 
 ### OPLA-Algorithms
 
-Download OPLA-Algorithms JAR file at: <link_para_o_jar_aqui>
+Download OPLA-Algorithms JAR file at: https://www.dropbox.com/s/zkxubuycic3rv1d/OPLA-algoritms-0.0.1.jar
 
 In order to install the JAR on your local repository you should run this command:
     

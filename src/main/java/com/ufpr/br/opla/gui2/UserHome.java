@@ -39,19 +39,19 @@ public class UserHome {
     }
 
     public static void createProfilesPath() {
-      FileUtil.createPath(home + "profiles");
+      FileUtil.createPath(home + "profiles/");
     }
 
    public static void createTemplatePath() {
-     FileUtil.createPath(home + "templates");
+     FileUtil.createPath(home + "templates/");
    }
 
    public static void createOutputPath() {
-    FileUtil.createPath(home + "output");
+    FileUtil.createPath(home + "output/");
    }
 
    public static void createTempPath() {
-    FileUtil.createPath(home + "temp");
+    FileUtil.createPath(home + "temp/");
    }
        
 }

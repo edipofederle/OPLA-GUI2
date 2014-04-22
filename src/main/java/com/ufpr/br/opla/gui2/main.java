@@ -14,12 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import javax.swing.*;
 import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.Metrics;
+import jmetal.experiments.NSGAIIConfig;
 
 /**
  *
@@ -52,12 +50,19 @@ public class main extends javax.swing.JFrame {
         hidePanelMutationProbabilityByDefault();
         checkAllMetricsByDefault();
         
+        //db
+        configureDb();
+        
         try {
             UserHome.createDefaultOplaPathIfDontExists();
 
             String source = "config/application.yaml";
             String target = UserHome.getOplaUserHome() + "application.yaml";
-            FileUtil.copy(source, target);
+            
+            //Somente copia arquivo de configuracao se
+            //ainda nao existir na pasta da oplatool do usuario
+            if(!(new File(target).exists()))
+                FileUtil.copy(source, target);
 
             UserHome.createProfilesPath();
             UserHome.createTemplatePath();
@@ -109,10 +114,9 @@ public class main extends javax.swing.JFrame {
         String algoritms[] = {"Select One", "NSGA-II", "PAES"};
         comboAlgorithms.removeAllItems();
         
-        for (int i = 0; i < algoritms.length; i++) {
+        for (int i = 0; i < algoritms.length; i++)
             comboAlgorithms.addItem(algoritms[i]);
-        }
-        
+               
         comboAlgorithms.setSelectedIndex(0);
     }
 
@@ -197,6 +201,7 @@ public class main extends javax.swing.JFrame {
         jPanel8 = new javax.swing.JPanel();
         fieldOutput = new javax.swing.JTextField();
         btnOutput = new javax.swing.JButton();
+        btnRun = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -971,19 +976,33 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnRun.setText("run");
+        btnRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRunActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout algorithmsLayout = new javax.swing.GroupLayout(algorithms);
         algorithms.setLayout(algorithmsLayout);
         algorithmsLayout.setHorizontalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, algorithmsLayout.createSequentialGroup()
+                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 22, Short.MAX_VALUE))
+                    .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 22, Short.MAX_VALUE))
+                        .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(algorithmsLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnRun)
+                                .addGap(109, 109, 109))))))
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -992,9 +1011,14 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRun)
+                        .addGap(24, 24, 24))))
         );
 
         jTabbedPane1.addTab("Experiment Confs", algorithms);
@@ -1333,6 +1357,34 @@ public class main extends javax.swing.JFrame {
         onlyDigit(evt);
     }//GEN-LAST:event_fieldPopulationSizeKeyTyped
 
+    /**
+     * Rodar experimento
+     * 
+     * @param evt 
+     */
+    private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
+        /*
+         * Primeiramente verifica qual algoritmo foi selecionado
+         */
+        String algoritmToRun = comboAlgorithms.getSelectedItem().toString();
+        if(comboAlgorithms.getSelectedIndex() == 0){
+            final JOptionPane pane = new JOptionPane("You need select a algoritm");
+            final JDialog d = pane.createDialog((JFrame)null, "OPLA-Tool");
+            d.setVisible(true);
+        }
+        
+        if("NSGA-II".equals(algoritmToRun)){
+            
+            NSGAIIConfig configs = new NSGAIIConfig();
+            
+            if(checkMutation.isSelected()){
+                List<String> mutationsOperators = MutationOperatorsSelected.getSelectedMutationOperators();
+                //....
+            }
+        }
+        
+    }//GEN-LAST:event_btnRunActionPerformed
+
     private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
         JFileChooser c = new JFileChooser();
         int rVal = c.showOpenDialog(this);
@@ -1369,6 +1421,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnOutput;
     private javax.swing.JButton btnPatternProfile;
     private javax.swing.JButton btnRelationshipProfile;
+    private javax.swing.JButton btnRun;
     private javax.swing.JButton btnSmartyProfile;
     private javax.swing.JButton btnTemplate;
     private javax.swing.JCheckBox checkAddClass;
@@ -1488,5 +1541,22 @@ public class main extends javax.swing.JFrame {
             return false;
         }   
         return true;
+    }
+
+    /**
+     * Somente faz um copia do banco de dados vazio para a pasta
+     * da oplatool no diretorio do usaurio se o mesmo nao existir.
+     **/
+    private void configureDb() {
+        final String pathDb = UserHome.getOplaUserHome() + "db/oplatool.db";
+        
+        if(!(new File(pathDb).exists())){
+            File dirDb = new File(UserHome.getOplaUserHome() + "db/");
+            if(!dirDb.exists())
+                dirDb.mkdirs();
+            
+            FileUtil.copy("emptyDB/oplatool.db", pathDb);
+        }
+      
     }
 }
