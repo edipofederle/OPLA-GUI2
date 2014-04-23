@@ -17,6 +17,9 @@ public class Oplagui {
             public void run() {
                 com.ufpr.br.opla.gui2.main gui;
                 try {
+                    
+                    database.Database.setPathToDB(UserHome.getPathToDb());
+                    
                     gui = new main();
                     gui.setResizable(false);
                     gui.setVisible(true);

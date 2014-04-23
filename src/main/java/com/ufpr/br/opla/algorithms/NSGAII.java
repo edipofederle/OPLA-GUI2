@@ -27,7 +27,7 @@ public class NSGAII {
             JTextArea fieldArchitectureInput, JTextField fieldNumberOfRuns, JTextField fieldPopulationSize,
             JTextField fieldMaxEvaluations, JCheckBox checkCrossover, JTextField fieldCrossoverProbability) {
         
-        ReaderConfig.setPathToConfigurationFile("/Users/elf/oplatool/application.yaml");
+        ReaderConfig.setPathToConfigurationFile(UserHome.getPathToConfigFile());
         ReaderConfig.load();
         
         NSGAIIConfig configs = new NSGAIIConfig();
@@ -54,7 +54,7 @@ public class NSGAII {
         }
 
         //Configura onde o db esta localizado
-        configs.setPathToDb(UserHome.getOplaUserHome()+"db"+UserHome.getFileSeparator()+"oplatool.db");
+        configs.setPathToDb(UserHome.getPathToDb());
 
         //Instancia a classe de configuracao da OPLA.java
         OPLAConfigs oplaConfig = new OPLAConfigs();

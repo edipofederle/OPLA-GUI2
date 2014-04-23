@@ -8,10 +8,12 @@ package com.ufpr.br.opla.gui2;
 import arquitetura.io.ReaderConfig;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.experiementsUtils.MutationOperatorsSelected;
+import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +54,7 @@ public class main extends javax.swing.JFrame {
         hidePanelCrossoverProbabilityByDefault();
         hidePanelMutationProbabilityByDefault();
         checkAllMetricsByDefault();
+        initiExecutedExperiments();
          
         //db
         configureDb();
@@ -213,6 +216,8 @@ public class main extends javax.swing.JFrame {
         fieldOutput = new javax.swing.JTextField();
         btnOutput = new javax.swing.JButton();
         btnRun = new javax.swing.JButton();
+        experiments = new javax.swing.JPanel();
+        comboListExperiments = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -505,7 +510,7 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Path Confs", ApplicationConfs);
@@ -1025,7 +1030,7 @@ public class main extends javax.swing.JFrame {
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addContainerGap(22, Short.MAX_VALUE))
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1034,6 +1039,27 @@ public class main extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Experiment Confs", algorithms);
+
+        comboListExperiments.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
+        experiments.setLayout(experimentsLayout);
+        experimentsLayout.setHorizontalGroup(
+            experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(experimentsLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(comboListExperiments, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(785, Short.MAX_VALUE))
+        );
+        experimentsLayout.setVerticalGroup(
+            experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(experimentsLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(comboListExperiments, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(620, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Experiements", experiments);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1462,7 +1488,9 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkRelationship;
     private javax.swing.JCheckBox checkSmarty;
     private javax.swing.JComboBox comboAlgorithms;
+    private javax.swing.JComboBox comboListExperiments;
     private javax.swing.JSlider crossProbSlider;
+    private javax.swing.JPanel experiments;
     private javax.swing.JTextArea fieldArchitectureInput;
     private javax.swing.JTextField fieldConcernProfile;
     private javax.swing.JTextField fieldCrossoverProbability;
@@ -1567,6 +1595,22 @@ public class main extends javax.swing.JFrame {
             FileUtil.copy("emptyDB/oplatool.db", pathDb);
         }
       
+    }
+
+    private void initiExecutedExperiments() {
+        comboListExperiments.removeAllItems();
+        try {
+            List<results.Experiment> exps = results.Experiment.all();
+            System.out.println(exps.size());
+            for(results.Experiment e : exps){
+                comboListExperiments.addItem(e.getId() + " - " + e.getName() + " ("+ e.getCreatedAt() +")");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
 }

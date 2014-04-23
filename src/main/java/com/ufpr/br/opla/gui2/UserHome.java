@@ -57,5 +57,13 @@ public class UserHome {
    public static String getFileSeparator(){
        return file_separator;
    }
+
+   public static String getPathToDb() {
+    return getOplaUserHome() + "db" + file_separator + "oplatool.db";
+   }
+   
+   public static String getPathToConfigFile(){
+       return getOplaUserHome() + "application.yaml";
+   }
        
 }
