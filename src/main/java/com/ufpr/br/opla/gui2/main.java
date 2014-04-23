@@ -1270,7 +1270,8 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCleanListArchs1ActionPerformed
 
     private void btnInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInput1ActionPerformed
-        Validators.validateEntries(fieldArchitectureInput.getText().split(","));
+
+        Validators.validateEntries(fieldArchitectureInput.getText());
     }//GEN-LAST:event_btnInput1ActionPerformed
 
     private void fieldOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOutputActionPerformed
@@ -1371,7 +1372,7 @@ public class main extends javax.swing.JFrame {
 
         //Validacoes inicias
         //Verifica se as entradas sao validas. Caso contrario finaliza
-        if(!Validators.validateEntries(fieldArchitectureInput.getText().split(",")))
+        if(!Validators.validateEntries(fieldArchitectureInput.getText()))
             return;
         
         //Recupera o algoritmo selecionado pelo usuário

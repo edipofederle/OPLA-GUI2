@@ -16,7 +16,13 @@ import javax.swing.JOptionPane;
  */
 public class Validators {
 
-    public static boolean validateEntries(String[] archs) {
+    public static boolean validateEntries(String archsInput) {
+        if(archsInput.isEmpty()){
+            JOptionPane.showMessageDialog(null,
+                    "You need enter at least one architecture");
+            return false;
+        }
+        String archs[] = archsInput.trim().split(",");
         List<String> invalidsEntries = new ArrayList<>();
 
         for (int i = 0; i < archs.length; i++) {
@@ -35,7 +41,6 @@ public class Validators {
             }
 
         }
-
 
         if (invalidsEntries.isEmpty()) {
             VolatileConfs.setArchitectureInputPath(archs);
