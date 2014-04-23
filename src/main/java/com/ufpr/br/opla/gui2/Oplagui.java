@@ -1,6 +1,5 @@
 package com.ufpr.br.opla.gui2;
 
-import arquitetura.io.ReaderConfig;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

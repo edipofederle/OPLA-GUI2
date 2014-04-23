@@ -53,5 +53,9 @@ public class UserHome {
    public static void createTempPath() {
     FileUtil.createPath(home + "temp/");
    }
+   
+   public static String getFileSeparator(){
+       return file_separator;
+   }
        
 }
