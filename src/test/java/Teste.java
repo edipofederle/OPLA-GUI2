@@ -42,14 +42,14 @@ public class Teste {
 	// Seta os parametros desejados
 	configs.setMutationOperators(operators);
 	configs.setPlas(plas);
-	configs.setNumberOfRuns(30);
+	configs.setNumberOfRuns(4);
 	configs.setPopulationSize(10);
 	configs.setMaxEvaluations(100);
 	configs.disableCrossover();
 	configs.setMutationProbability(0.9);
 	
 	//Configura onde o db esta localizado
-	configs.setPathToDb("/Users/elf/Desktop/opla_test.db");
+	configs.setPathToDb("/Users/elf/oplatool/db/oplatool.db");
 	
 	//Instancia a classe de configuracao da OPLA.java
 	OPLAConfigs oplaConfig = new OPLAConfigs();
@@ -58,6 +58,7 @@ public class Teste {
 	oplaConfig.setNumberOfObjectives(4);
 	
 	//Quais metricas deseja-se utilizar
+        //
 	List<String> selectedMetrics = Arrays.asList(
 		Metrics.ELEGANCE.getName(),
 		Metrics.CONVENTIONAL.getName(),

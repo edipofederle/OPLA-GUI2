@@ -8,19 +8,20 @@ package com.ufpr.br.opla.gui2;
 import arquitetura.io.ReaderConfig;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.experiementsUtils.MutationOperatorsSelected;
-import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import jmetal.experiments.*;
+import results.Execution;
+import results.FunResults;
 
 /**
  *
@@ -37,6 +38,7 @@ public class main extends javax.swing.JFrame {
     private String pathPatternBck;
     private String crossoverProbabilityBck;
     private String mutationProbabilityBck;
+    private String selectedExperiment;
     
     
 
@@ -46,18 +48,20 @@ public class main extends javax.swing.JFrame {
     public main() throws Exception {
               
         initComponents();
-        
+               
+        configureDb();
         
         initAlgorithmsCombo();
         checkAllMutationOperatorsByDefault();
         hidePanelMutationOperatorsByDefault();
         hidePanelCrossoverProbabilityByDefault();
         hidePanelMutationProbabilityByDefault();
+        hidePanelSolutionsByDefault();
         checkAllMetricsByDefault();
         initiExecutedExperiments();
+        panelExecutions.setVisible(false);
          
-        //db
-        configureDb();
+
         
         try {
             UserHome.createDefaultOplaPathIfDontExists();
@@ -113,6 +117,36 @@ public class main extends javax.swing.JFrame {
            VolatileConfs.getMetricsSelecteds().add(metric);
         }else{
            VolatileConfs.getMetricsSelecteds().remove(metric);
+        }
+    }
+
+    private void createTableExecutions(String idExperiment) throws HeadlessException {
+        panelExecutions.setVisible(true);
+        DefaultTableModel modelTableExecutions = new DefaultTableModel();
+        modelTableExecutions.addColumn("Execution");
+        modelTableExecutions.addColumn("Time");
+        modelTableExecutions.addColumn("Generated Solutions");
+        tableExecutions.setModel(modelTableExecutions);
+        
+        GuiUtils.makeTableNotEditable(tableExecutions);
+        
+        try{
+            List<Execution> all = db.Database.getAllExecutionsByExperimentId(idExperiment);
+            for(Execution exec : all){
+            Object[] row = new Object[4];
+            row[0] = exec.getId();
+            row[1] = exec.getTime();
+            int numberSolutions = ReadSolutionsFiles.read(idExperiment,
+                    exec.getId(), 
+                    this.config.getConfig().getDirectoryToExportModels()).size();
+            row[2] = numberSolutions;
+            modelTableExecutions.addRow(row);
+            }  
+        }catch(Exception e){
+            e.getStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Possibly the data are not found on disk",
+                    "Erro when try load data." , 0);
         }
     }
 
@@ -217,7 +251,17 @@ public class main extends javax.swing.JFrame {
         btnOutput = new javax.swing.JButton();
         btnRun = new javax.swing.JButton();
         experiments = new javax.swing.JPanel();
-        comboListExperiments = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableExp = new javax.swing.JTable();
+        jLabel13 = new javax.swing.JLabel();
+        panelExecutions = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableExecutions = new javax.swing.JTable();
+        jLabel16 = new javax.swing.JLabel();
+        panelSolutions = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tableSolutions = new javax.swing.JTable();
+        jLabel17 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -510,10 +554,10 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(242, Short.MAX_VALUE))
+                .addContainerGap(617, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Path Confs", ApplicationConfs);
+        jTabbedPane1.addTab("General Configurations", ApplicationConfs);
 
         algorithms.setName("algorithms");
 
@@ -1012,14 +1056,11 @@ public class main extends javax.swing.JFrame {
                         .addGap(0, 22, Short.MAX_VALUE))
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(algorithmsLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnRun)
-                                .addGap(109, 109, 109))))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRun))
+                        .addContainerGap(308, Short.MAX_VALUE))))
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1028,38 +1069,174 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(22, Short.MAX_VALUE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRun)
-                        .addGap(24, 24, 24))))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRun)))
+                .addContainerGap(397, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Experiment Confs", algorithms);
+        jTabbedPane1.addTab("Experiment Configurations", algorithms);
 
-        comboListExperiments.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        tableExp.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "id", "name", "algorithm", "Created at"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableExp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableExpMouseClicked(evt);
+            }
+        });
+        tableExp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tableExpKeyPressed(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tableExp);
+
+        jLabel13.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
+        jLabel13.setText("Experiments");
+
+        tableExecutions.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableExecutions.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableExecutionsMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tableExecutions);
+
+        jLabel16.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
+        jLabel16.setText("Executions");
+
+        javax.swing.GroupLayout panelExecutionsLayout = new javax.swing.GroupLayout(panelExecutions);
+        panelExecutions.setLayout(panelExecutionsLayout);
+        panelExecutionsLayout.setHorizontalGroup(
+            panelExecutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelExecutionsLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(panelExecutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelExecutionsLayout.setVerticalGroup(
+            panelExecutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelExecutionsLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        tableSolutions.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableSolutions.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableSolutionsMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tableSolutions);
+
+        jLabel17.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
+        jLabel17.setText("Solutions ");
+
+        javax.swing.GroupLayout panelSolutionsLayout = new javax.swing.GroupLayout(panelSolutions);
+        panelSolutions.setLayout(panelSolutionsLayout);
+        panelSolutionsLayout.setHorizontalGroup(
+            panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSolutionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel17))
+                .addContainerGap(163, Short.MAX_VALUE))
+        );
+        panelSolutionsLayout.setVerticalGroup(
+            panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSolutionsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel17)
+                .addGap(12, 12, 12)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(123, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
         experiments.setLayout(experimentsLayout);
         experimentsLayout.setHorizontalGroup(
             experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(experimentsLayout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(comboListExperiments, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(785, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(experimentsLayout.createSequentialGroup()
+                        .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(207, Short.MAX_VALUE))
         );
         experimentsLayout.setVerticalGroup(
             experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(experimentsLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(comboListExperiments, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(620, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(experimentsLayout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(335, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Experiements", experiments);
+        jTabbedPane1.addTab("Executed Experiments", experiments);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1432,6 +1609,72 @@ public class main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRunActionPerformed
 
+    private void tableExpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExpMouseClicked
+        if (evt.getClickCount() == 2) {
+            JTable target = (JTable)evt.getSource();
+            int rowIndex = target.getSelectedRow();
+            
+            String idExperiment = target.getModel().getValueAt(rowIndex, 0).toString();
+            
+            GuiUtils.hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
+                    this.selectedExperiment, idExperiment, panelSolutions,
+                    panelExecutions);
+            
+            this.selectedExperiment = idExperiment;
+            createTableExecutions(idExperiment);
+        }
+    }//GEN-LAST:event_tableExpMouseClicked
+
+    private void tableExpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableExpKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableExpKeyPressed
+
+    private void tableExecutionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExecutionsMouseClicked
+        if (evt.getClickCount() == 2) {
+            panelSolutions.setVisible(true);
+            
+            JTable target = (JTable)evt.getSource();
+            int rowIndex = target.getSelectedRow();
+            String idExecution = target.getModel().getValueAt(rowIndex, 0).toString();
+            
+            List<File> solutions = ReadSolutionsFiles.read(this.selectedExperiment,
+                            idExecution,
+                            this.config.getConfig().getDirectoryToExportModels());
+            
+            Map<String, String> objectives = db.Database.
+                    getAllObjectivesByExecution(idExecution);
+            
+            DefaultTableModel model = new DefaultTableModel(); 
+            model.addColumn("Solution");
+            model.addColumn("Objectives");
+            
+            tableSolutions.setModel(model);
+            
+            for(File f : solutions){
+                Object[] row = new Object[2];
+                row[0] = f.getName();
+                row[1] = GuiUtils.formatObjectives(objectives.get(FileUtil.extractObjectiveIdFromFile(f.getName())));
+                model.addRow(row);
+            }
+        }
+    }//GEN-LAST:event_tableExecutionsMouseClicked
+
+    private void tableSolutionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSolutionsMouseClicked
+        if (evt.getClickCount() == 2) {
+            JTable target = (JTable)evt.getSource();
+            int columnIndex = target.getSelectedColumn();
+            int rowIndex = target.getSelectedRow();
+            String value = target.getModel().getColumnName(columnIndex);
+            
+            if("objectives".equalsIgnoreCase(value)){
+                String content = target.getModel().getValueAt(rowIndex, columnIndex).toString();
+                JOptionPane.showMessageDialog(null, GuiUtils.formatObjectives(content), "Objectives", 1);
+                
+            }
+            
+        }
+    }//GEN-LAST:event_tableSolutionsMouseClicked
+
     private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
         JFileChooser c = new JFileChooser();
         int rVal = c.showOpenDialog(this);
@@ -1488,7 +1731,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkRelationship;
     private javax.swing.JCheckBox checkSmarty;
     private javax.swing.JComboBox comboAlgorithms;
-    private javax.swing.JComboBox comboListExperiments;
     private javax.swing.JSlider crossProbSlider;
     private javax.swing.JPanel experiments;
     private javax.swing.JTextArea fieldArchitectureInput;
@@ -1509,8 +1751,11 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1525,15 +1770,23 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelAlgorithms;
     private javax.swing.JLabel labelOperators;
     private javax.swing.JSlider mutatinProbSlider;
     private javax.swing.JPanel panelCrossProb;
+    private javax.swing.JPanel panelExecutions;
     private javax.swing.JPanel panelMetrics;
     private javax.swing.JPanel panelMutationProb;
     private javax.swing.JPanel panelOperatorsMutation;
+    private javax.swing.JPanel panelSolutions;
+    private javax.swing.JTable tableExecutions;
+    private javax.swing.JTable tableExp;
+    private javax.swing.JTable tableSolutions;
     // End of variables declaration//GEN-END:variables
 
    
@@ -1551,8 +1804,8 @@ public class main extends javax.swing.JFrame {
        
        FeatureMutationOperators[] operators = FeatureMutationOperators.values();
        for (FeatureMutationOperators operator : operators) {
-            MutationOperatorsSelected.getSelectedMutationOperators()
-                .add(operator.getOperatorName());
+            MutationOperatorsSelected.getSelectedMutationOperators() 
+               .add(operator.getOperatorName());
         }
     }
 
@@ -1564,7 +1817,10 @@ public class main extends javax.swing.JFrame {
         panelMutationProb.setVisible(false);
     }
 
-    private void checkAllMetricsByDefault() {
+    private void checkAllMetricsByDefault() {       
+        for (Metrics m : Metrics.values())
+            VolatileConfs.getMetricsSelecteds().add(m.getName());
+            
         checkElegance.setSelected(true);
         checkPLAExt.setSelected(true);
         checkConventional.setSelected(true);
@@ -1594,23 +1850,53 @@ public class main extends javax.swing.JFrame {
             
             FileUtil.copy("emptyDB/oplatool.db", pathDb);
         }
-      
-    }
-
-    private void initiExecutedExperiments() {
-        comboListExperiments.removeAllItems();
         try {
-            List<results.Experiment> exps = results.Experiment.all();
-            System.out.println(exps.size());
-            for(results.Experiment e : exps){
-                comboListExperiments.addItem(e.getId() + " - " + e.getName() + " ("+ e.getCreatedAt() +")");
-            }
+           db.Database.setContent(results.Experiment.all());
         } catch (SQLException ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
             Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+      
     }
+
+    private void initiExecutedExperiments() {
+        try {
+            DefaultTableModel model = new DefaultTableModel(); 
+            model.addColumn("ID");
+            model.addColumn("Name");
+            model.addColumn("Algorithm");
+            model.addColumn("Created at");
+            
+            GuiUtils.makeTableNotEditable(tableExp);
+            
+            tableExp.setModel(model);
+            
+            List<results.Experiment> allExp = db.Database.getContent();
+            
+            
+            for(results.Experiment exp : allExp){
+                Object[] row = new Object[4];
+                row[0] = exp.getId();
+                row[1] = exp.getName();
+                row[2] = exp.getAlgorithm();
+                row[3] = exp.getCreatedAt();
+                model.addRow(row);
+            }                  
+        } catch (Exception ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void hidePanelSolutionsByDefault() {
+        GuiUtils.makeTableNotEditable(tableSolutions);
+        panelSolutions.setVisible(false);
+    }
+
+
+    
+    
+    
+
 
 }

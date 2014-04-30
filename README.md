@@ -17,7 +17,7 @@ Download OPLA-Tool JAR file at: <link_para_o_jar_aqui>
 
 In order to install the JAR on your local repository you should run this command:
    
-    >> mvn install:install-file -Dfile=/paht/to/jar -DgroupId=ufpr.br -DartifactId=opla-tool -Dversion=0.1 -Dpackaging=jar
+    >> mvn install:install-file -Dfile=opla-tool-0.0.1.jar -DgroupId=ufpr.br -DartifactId=opla-tool -Dversion=0.1 -Dpackaging=jar
   
 Then add the dependency to pom.xml
 

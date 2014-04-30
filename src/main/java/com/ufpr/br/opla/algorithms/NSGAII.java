@@ -44,6 +44,7 @@ public class NSGAII {
         configs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
         configs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
         configs.setMaxEvaluations(Integer.parseInt(fieldMaxEvaluations.getText()));
+               
 
         //Se crossover estiver marcado, configura probabilidade
         //Caso contrario desativa
@@ -59,7 +60,7 @@ public class NSGAII {
         //Instancia a classe de configuracao da OPLA.java
         OPLAConfigs oplaConfig = new OPLAConfigs();
         
-        //Numero de objetivos /TODO ver isso com thelma. Numero de objetivos/numero de metricas
+        //Numero de objetivos /TODO ver isso com Thelma. Numero de objetivos/numero de metricas
         oplaConfig.setNumberOfObjectives(VolatileConfs.getMetricsSelecteds().size());
         oplaConfig.setSelectedMetrics(VolatileConfs.getMetricsSelecteds());
 

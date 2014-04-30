@@ -1,5 +1,6 @@
 package com.ufpr.br.opla.gui2;
 
+import arquitetura.io.ReaderConfig;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +18,7 @@ public class Oplagui {
             public void run() {
                 com.ufpr.br.opla.gui2.main gui;
                 try {
-                    
+                    ReaderConfig.load();
                     database.Database.setPathToDB(UserHome.getPathToDb());
                     
                     gui = new main();

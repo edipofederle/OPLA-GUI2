@@ -61,4 +61,15 @@ public class FileUtil {
        }
        return ext;
     }
+    
+    //exemplo: VAR_2_agm-5629174275.uml
+    static String extractObjectiveIdFromFile(String name) {
+        String b = name.split("-")[1];
+	String a =  b.substring(0, b.length()-4);
+        if(a.startsWith("0")){
+            return a.substring(1, a.length());
+        }
+        
+        return a;
+    }
 }
