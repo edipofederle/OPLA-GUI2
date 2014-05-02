@@ -4,12 +4,77 @@
  */
 package com.ufpr.br.opla.algorithms;
 
+import arquitetura.io.ReaderConfig;
+import com.ufpr.br.opla.experiementsUtils.MutationOperatorsSelected;
+import com.ufpr.br.opla.gui2.UserHome;
+import com.ufpr.br.opla.gui2.VolatileConfs;
+import java.util.List;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import jmetal.experiments.NSGAII_OPLA_FeatMutInitializer;
+import jmetal.experiments.OPLAConfigs;
+import jmetal.experiments.PAES_OPLA_FeatMutInitializer;
+import jmetal.experiments.PaesConfigs;
+
 /**
  *
  * @author elf
  */
 public class PAES {
     
+    public void execute(JComboBox comboAlgorithms, JCheckBox checkMutation, JTextField fieldMutationProb,
+            JTextArea fieldArchitectureInput, JTextField fieldNumberOfRuns, JTextField fieldPaesArchiveSize,
+            JTextField fieldMaxEvaluations, JCheckBox checkCrossover, JTextField fieldCrossoverProbability) {
+        
+        ReaderConfig.setPathToConfigurationFile(UserHome.getPathToConfigFile());
+        ReaderConfig.load();
+        
+        PaesConfigs configs = new PaesConfigs();
+
+        //Se mutação estiver marcada, pega os operadores selecionados
+        //,e seta a probabilidade de mutacao
+        if (checkMutation.isSelected()) {
+            List<String> mutationsOperators = MutationOperatorsSelected.getSelectedMutationOperators();
+            configs.setMutationOperators(mutationsOperators);
+            configs.setMutationProbability(Double.parseDouble(fieldMutationProb.getText()));
+        }
+        
+        configs.setPlas(fieldArchitectureInput.getText());
+        configs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
+        configs.setMaxEvaluations(Integer.parseInt(fieldMaxEvaluations.getText()));
+        configs.setArchiveSize(Integer.parseInt(fieldPaesArchiveSize.getText()));
+               
+
+        //Se crossover estiver marcado, configura probabilidade
+        //Caso contrario desativa
+        if (checkCrossover.isSelected()) {
+            configs.setCrossoverProbability(Double.parseDouble(fieldCrossoverProbability.getText()));
+        } else {
+            configs.disableCrossover();            
+        }
+
+        //Configura onde o db esta localizado
+        configs.setPathToDb(UserHome.getPathToDb());
+
+        //Instancia a classe de configuracao da OPLA.java
+        OPLAConfigs oplaConfig = new OPLAConfigs();
+        
+        //Numero de objetivos /TODO ver isso com Thelma. Numero de objetivos/numero de metricas
+        oplaConfig.setNumberOfObjectives(VolatileConfs.getMetricsSelecteds().size());
+        oplaConfig.setSelectedMetrics(VolatileConfs.getMetricsSelecteds());
+
+        //Add as confs de OPLA na classe de configuracoes gerais.
+        configs.setOplaConfigs(oplaConfig);
+
+        //Utiliza a classe Initializer do NSGAII passando as configs.
+        PAES_OPLA_FeatMutInitializer paes = new PAES_OPLA_FeatMutInitializer(configs);
+
+        //Executa
+        paes.run();
+        
+    }
     
     
 }

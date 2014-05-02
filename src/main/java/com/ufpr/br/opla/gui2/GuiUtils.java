@@ -4,6 +4,8 @@
  */
 package com.ufpr.br.opla.gui2;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 
@@ -20,17 +22,16 @@ public class GuiUtils {
         }
     }
 
-    public static String formatObjectives(String content) {
-        StringBuilder objectivesFormated = new StringBuilder();
-        System.out.println(content);
+    public static Map<String, String> formatObjectives(String content, String experimentId) {
+        String[] titles = db.Database.getOrdenedObjectives(experimentId).split(" ");  
         String objs[] = content.split("\\|");
-
-        for (int i = 0; i < objs.length; i++) {
-            objectivesFormated.append(objs[i]);
-            objectivesFormated.append("\n");
-        }
-
-        return objectivesFormated.toString();
+        
+        Map<String, String> mapObjectives = new HashMap<>();
+        
+        for (int i = 0; i < objs.length; i++)
+            mapObjectives.put(titles[i].toUpperCase(), objs[i]);
+        
+        return mapObjectives;
     }
 
     /**
@@ -41,11 +42,10 @@ public class GuiUtils {
      * @param panelExecutions 
      */
     public static void hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
-            String selectedExperiment, String idExperiment, JPanel panelSolutions,
-            JPanel panelExecutions) {
+            String selectedExperiment, String idExperiment, JPanel panelSolutions, JPanel panelObjectives) {
         if (selectedExperiment != null && !selectedExperiment.equals(idExperiment)) {
+            panelObjectives.setVisible(false);
             panelSolutions.setVisible(false);
-            panelExecutions.setVisible(false);
         }
     }
 }

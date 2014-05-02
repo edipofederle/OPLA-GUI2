@@ -5,23 +5,24 @@
  */
 package com.ufpr.br.opla.gui2;
 
-import arquitetura.io.ReaderConfig;
 import com.ufpr.br.opla.algorithms.NSGAII;
+import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.experiementsUtils.MutationOperatorsSelected;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import jmetal.experiments.*;
 import results.Execution;
-import results.FunResults;
 
 /**
  *
@@ -158,6 +159,14 @@ public class main extends javax.swing.JFrame {
                        fieldMaxEvaluations, checkCrossover,
                        fieldCrossoverProbability);
     }
+    
+    private void executePAES(){
+           PAES paes = new PAES();
+        paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
+                       fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
+                       fieldMaxEvaluations, checkCrossover,
+                       fieldCrossoverProbability);
+    }
 
     private void initAlgorithmsCombo() {
         String algoritms[] = {"Select One", "NSGA-II", "PAES"};
@@ -262,12 +271,20 @@ public class main extends javax.swing.JFrame {
         tableExecutions = new javax.swing.JTable();
         jLabel16 = new javax.swing.JLabel();
         panelSolutions = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tableSolutions = new javax.swing.JTable();
         jLabel17 = new javax.swing.JLabel();
+        comboSolutions = new javax.swing.JComboBox();
+        panelObjectives = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tableObjectives = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
+
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
         jButton1.setText("Visualize your application.yaml file");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -557,7 +574,7 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(298, Short.MAX_VALUE))
+                .addContainerGap(369, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("General Configurations", ApplicationConfs);
@@ -1048,7 +1065,9 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        btnRun.setText("run");
+        btnRun.setBackground(new java.awt.Color(255, 204, 102));
+        btnRun.setForeground(new java.awt.Color(0, 153, 0));
+        btnRun.setText("RUN");
         btnRun.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRunActionPerformed(evt);
@@ -1083,12 +1102,18 @@ public class main extends javax.swing.JFrame {
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRun))
+                        .addComponent(btnRun, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(114, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Experiment Configurations", algorithms);
+
+        experiments.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                experimentsMouseClicked(evt);
+            }
+        });
 
         tableExp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1174,26 +1199,19 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tableSolutions.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tableSolutions.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableSolutionsMouseClicked(evt);
+        jLabel17.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
+        jLabel17.setText("Select a Solution");
+
+        comboSolutions.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboSolutionsItemStateChanged(evt);
             }
         });
-        jScrollPane4.setViewportView(tableSolutions);
-
-        jLabel17.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
-        jLabel17.setText("Solutions ");
+        comboSolutions.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                comboSolutionsFocusLost(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelSolutionsLayout = new javax.swing.GroupLayout(panelSolutions);
         panelSolutions.setLayout(panelSolutionsLayout);
@@ -1202,18 +1220,37 @@ public class main extends javax.swing.JFrame {
             .addGroup(panelSolutionsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelSolutionsLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(comboSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel17))
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelSolutionsLayout.setVerticalGroup(
             panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSolutionsLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel17)
-                .addGap(12, 12, 12)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(comboSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jScrollPane4.setViewportView(tableObjectives);
+
+        javax.swing.GroupLayout panelObjectivesLayout = new javax.swing.GroupLayout(panelObjectives);
+        panelObjectives.setLayout(panelObjectivesLayout);
+        panelObjectivesLayout.setHorizontalGroup(
+            panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelObjectivesLayout.createSequentialGroup()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 59, Short.MAX_VALUE))
+        );
+        panelObjectivesLayout.setVerticalGroup(
+            panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelObjectivesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
@@ -1221,15 +1258,20 @@ public class main extends javax.swing.JFrame {
         experimentsLayout.setHorizontalGroup(
             experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(experimentsLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(experimentsLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
-                        .addGap(18, 18, 18)
-                        .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(experimentsLayout.createSequentialGroup()
+                                .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel13))
+                                .addGap(18, 18, 18)
+                                .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(experimentsLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(207, Short.MAX_VALUE))
         );
         experimentsLayout.setVerticalGroup(
@@ -1244,7 +1286,9 @@ public class main extends javax.swing.JFrame {
                     .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(243, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Executed Experiments", experiments);
@@ -1616,12 +1660,22 @@ public class main extends javax.swing.JFrame {
             //Caso usuário aceite, verifica qual algoritmo executar
             //E invoca a classe responsável.
             if (dialogResult == 0) {
-                if ("NSGA-II".equals(algoritmToRun)) {
+                if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
                     jLabel12.setText("Executando....");
                     java.awt.EventQueue.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             executeNSGAII();
+                            jLabel12.setText("Finished....");
+                        }
+                    });
+                }
+                if("PAES".equalsIgnoreCase(algoritmToRun)){
+                    jLabel12.setText("Executando....");
+                    java.awt.EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            executePAES();
                             jLabel12.setText("Finished....");
                         }
                     });
@@ -1639,7 +1693,7 @@ public class main extends javax.swing.JFrame {
             
             GuiUtils.hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
                     this.selectedExperiment, idExperiment, panelSolutions,
-                    panelExecutions);
+                    panelObjectives);
             
             this.selectedExperiment = idExperiment;
             createTableExecutions(idExperiment);
@@ -1653,48 +1707,62 @@ public class main extends javax.swing.JFrame {
     private void tableExecutionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExecutionsMouseClicked
         if (evt.getClickCount() == 2) {
             panelSolutions.setVisible(true);
-            
-            JTable target = (JTable)evt.getSource();
+
+            JTable target = (JTable) evt.getSource();
             int rowIndex = target.getSelectedRow();
             String idExecution = target.getModel().getValueAt(rowIndex, 0).toString();
-            
+
             List<File> solutions = ReadSolutionsFiles.read(this.selectedExperiment,
-                            idExecution,
-                            this.config.getConfig().getDirectoryToExportModels());
-            
-            Map<String, String> objectives = db.Database.
-                    getAllObjectivesByExecution(idExecution);
-            
-            DefaultTableModel model = new DefaultTableModel(); 
-            model.addColumn("Solution");
-            model.addColumn("Objectives");
-            
-            tableSolutions.setModel(model);
-            
-            for(File f : solutions){
-                Object[] row = new Object[2];
-                row[0] = f.getName();
-                row[1] = GuiUtils.formatObjectives(objectives.get(FileUtil.extractObjectiveIdFromFile(f.getName())));
-                model.addRow(row);
-            }
+                    idExecution,
+                    this.config.getConfig().getDirectoryToExportModels());
+
+            comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
         }
     }//GEN-LAST:event_tableExecutionsMouseClicked
 
-    private void tableSolutionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSolutionsMouseClicked
-        if (evt.getClickCount() == 2) {
-            JTable target = (JTable)evt.getSource();
-            int columnIndex = target.getSelectedColumn();
-            int rowIndex = target.getSelectedRow();
-            String value = target.getModel().getColumnName(columnIndex);
-            
-            if("objectives".equalsIgnoreCase(value)){
-                String content = target.getModel().getValueAt(rowIndex, columnIndex).toString();
-                JOptionPane.showMessageDialog(null, GuiUtils.formatObjectives(content), "Objectives", 1);
-                
-            }
-            
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+    
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void experimentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_experimentsMouseClicked
+         if(db.Database.getContent().isEmpty()){
+            JOptionPane.showMessageDialog(null, "No experiment executed yet. ");
         }
-    }//GEN-LAST:event_tableSolutionsMouseClicked
+    }//GEN-LAST:event_experimentsMouseClicked
+
+    private void comboSolutionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboSolutionsItemStateChanged
+
+        Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
+
+        String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
+        String objectiveId = FileUtil.extractObjectiveIdFromFile(fileName);
+
+        Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
+
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Metric");
+        model.addColumn("Value");
+
+        GuiUtils.makeTableNotEditable(tableObjectives);
+
+        tableObjectives.setModel(model);
+
+        Iterator<Entry<String, String>> it = r.entrySet().iterator();
+        while(it.hasNext()){
+            Object[] row = new Object[2];
+            Map.Entry pairs = (Map.Entry<String, String>)it.next();
+            row[0] = pairs.getKey();
+            row[1] = pairs.getValue();
+            it.remove(); // evitar ConcurrentModificationException
+            model.addRow(row);
+        }
+        
+        panelObjectives.setVisible(true);
+    }//GEN-LAST:event_comboSolutionsItemStateChanged
+
+    private void comboSolutionsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_comboSolutionsFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboSolutionsFocusLost
 
     private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
         JFileChooser c = new JFileChooser();
@@ -1752,6 +1820,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkRelationship;
     private javax.swing.JCheckBox checkSmarty;
     private javax.swing.JComboBox comboAlgorithms;
+    private javax.swing.JComboBox comboSolutions;
     private javax.swing.JSlider crossProbSlider;
     private javax.swing.JPanel experiments;
     private javax.swing.JTextArea fieldArchitectureInput;
@@ -1805,11 +1874,12 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel panelExperimentSettings;
     private javax.swing.JPanel panelMetrics;
     private javax.swing.JPanel panelMutationProb;
+    private javax.swing.JPanel panelObjectives;
     private javax.swing.JPanel panelOperatorsMutation;
     private javax.swing.JPanel panelSolutions;
     private javax.swing.JTable tableExecutions;
     private javax.swing.JTable tableExp;
-    private javax.swing.JTable tableSolutions;
+    private javax.swing.JTable tableObjectives;
     // End of variables declaration//GEN-END:variables
 
    
@@ -1912,8 +1982,8 @@ public class main extends javax.swing.JFrame {
     }
 
     private void hidePanelSolutionsByDefault() {
-        GuiUtils.makeTableNotEditable(tableSolutions);
         panelSolutions.setVisible(false);
+        panelObjectives.setVisible(false);
     }
 
     private void disableFieldsOnStart() {
@@ -1936,7 +2006,7 @@ public class main extends javax.swing.JFrame {
     private void enableFieldsForNSGAII() {
         fieldNumberOfRuns.setEnabled(true);
         fieldMaxEvaluations.setEnabled(true);
-         fieldPopulationSize.setEnabled(true);
+        fieldPopulationSize.setEnabled(true);
     }
 
     private void hideFieldsForPases() {

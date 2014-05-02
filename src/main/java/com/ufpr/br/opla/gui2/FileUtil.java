@@ -66,9 +66,8 @@ public class FileUtil {
     static String extractObjectiveIdFromFile(String name) {
         String b = name.split("-")[1];
 	String a =  b.substring(0, b.length()-4);
-        if(a.startsWith("0")){
+        if(a.startsWith("0"))
             return a.substring(1, a.length());
-        }
         
         return a;
     }
