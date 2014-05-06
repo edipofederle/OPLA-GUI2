@@ -101,4 +101,14 @@ public class Database {
         return "";       
          
     }
+
+    public static void reloadContent() {
+        try {
+            content = results.Experiment.all();
+        } catch (SQLException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

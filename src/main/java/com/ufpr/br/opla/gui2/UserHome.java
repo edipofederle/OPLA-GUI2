@@ -13,7 +13,7 @@ import java.io.File;
 public class UserHome {
 
     private static final String user_home = System.getProperty("user.home");
-    private static final String file_separator = System.getProperty("file.separator");
+    private static final String file_separator = "/";
     private static final String home = user_home + file_separator + "oplatool" + file_separator;
 
     public static void copyConfigFileToUserHome() {

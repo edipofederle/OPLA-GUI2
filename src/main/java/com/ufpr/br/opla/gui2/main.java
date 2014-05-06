@@ -40,8 +40,6 @@ public class main extends javax.swing.JFrame {
     private String crossoverProbabilityBck;
     private String mutationProbabilityBck;
     private String selectedExperiment;
-    
-    
 
     /**
      * Creates new form main
@@ -126,7 +124,7 @@ public class main extends javax.swing.JFrame {
         panelExecutions.setVisible(true);
         DefaultTableModel modelTableExecutions = new DefaultTableModel();
         modelTableExecutions.addColumn("Execution");
-        modelTableExecutions.addColumn("Time");
+        modelTableExecutions.addColumn("Time (ms)");
         modelTableExecutions.addColumn("Generated Solutions");
         tableExecutions.setModel(modelTableExecutions);
         
@@ -1667,6 +1665,7 @@ public class main extends javax.swing.JFrame {
                         public void run() {
                             executeNSGAII();
                             jLabel12.setText("Finished....");
+                            db.Database.reloadContent();
                         }
                     });
                 }
@@ -1677,6 +1676,7 @@ public class main extends javax.swing.JFrame {
                         public void run() {
                             executePAES();
                             jLabel12.setText("Finished....");
+                            db.Database.reloadContent();
                         }
                     });
                 }
@@ -1934,14 +1934,14 @@ public class main extends javax.swing.JFrame {
      * da oplatool no diretorio do usaurio se o mesmo nao existir.
      **/
     private void configureDb() {
-        final String pathDb = UserHome.getOplaUserHome() + "db/oplatool.db";
+        final String pathDb = UserHome.getPathToDb();
         
         if(!(new File(pathDb).exists())){
-            File dirDb = new File(UserHome.getOplaUserHome() + "db/");
+            File dirDb = new File(UserHome.getOplaUserHome() + "db");
             if(!dirDb.exists())
                 dirDb.mkdirs();
             
-            FileUtil.copy("emptyDB/oplatool.db", pathDb);
+            FileUtil.copy("oplatool.db", pathDb);
         }
         try {
            db.Database.setContent(results.Experiment.all());
