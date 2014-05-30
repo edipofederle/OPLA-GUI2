@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -48,4 +49,9 @@ public class GuiUtils {
             panelSolutions.setVisible(false);
         }
     }
+
+  public static void addComomColumnsToTable(DefaultTableModel model) {
+    model.addColumn("Experiment");
+    model.addColumn("Execution");
+  }
 }

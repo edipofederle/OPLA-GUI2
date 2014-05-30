@@ -19,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>ufpr.br</groupId>
-            <artifactId>opla-algorithms</artifactId>
+            <artifactId>opla-core</artifactId>
             <version>0.1</version>
         </dependency>
         <dependency>

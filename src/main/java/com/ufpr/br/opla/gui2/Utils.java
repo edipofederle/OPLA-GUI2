@@ -9,12 +9,21 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang.WordUtils;
 
 /**
  *
  * @author elf
  */
-public class FileUtil {
+public class Utils {
+  
+    public static String extractSolutionIdFromSolutionFileName(String fileName){
+      return fileName.substring(fileName.indexOf("-")+1, fileName.length()-4);
+    }
+    
+    public static String capitalize(String word){
+      return WordUtils.capitalize(word);
+    }
  
     public static void copy(String source, String target) {
         try {
@@ -62,13 +71,14 @@ public class FileUtil {
        return ext;
     }
     
-    //exemplo: VAR_2_agm-5629174275.uml
-    static String extractObjectiveIdFromFile(String name) {
-        String b = name.split("-")[1];
-	String a =  b.substring(0, b.length()-4);
-        if(a.startsWith("0"))
-            return a.substring(1, a.length());
-        
-        return a;
+  //exemplo: VAR_2_agm-5629174275.uml
+  static String extractObjectiveIdFromFile(String name) {
+    String b = name.split("-")[1];
+    String a = b.substring(0, b.length() - 4);
+    if (a.startsWith("0")) {
+      return a.substring(1, a.length());
     }
+
+    return a;
+  }
 }

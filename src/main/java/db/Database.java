@@ -11,6 +11,10 @@ import java.sql.Statement;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import metrics.Conventional;
+import metrics.Elegance;
+import metrics.FeatureDriven;
+import metrics.PLAExtensibility;
 import results.Execution;
 import results.Experiment;
 
@@ -111,4 +115,49 @@ public class Database {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+  public static PLAExtensibility getPlaExtMetricsForSolution(String idSolution, String idExperiement) {
+    for(Experiment exp : content)
+      if(exp.getId().equals(idExperiement))
+        for(Execution exec : exp.getExecutions())
+          for(PLAExtensibility plaExt : exec.getAllMetrics().getPlaExtensibility())
+            if(plaExt.getIdSolution().equals(idSolution))
+              return plaExt;
+
+    return null;
+    
+  }
+
+  public static Elegance getEleganceMetricsForSolution(String idSolution, String idExperiement) {
+    for (Experiment exp : content) 
+      if (exp.getId().equals(idExperiement)) 
+        for (Execution exec : exp.getExecutions()) 
+          for (Elegance elegance : exec.getAllMetrics().getElegance()) 
+            if (elegance.getIdSolution().equals(idSolution)) 
+              return elegance;
+
+    return null;
+  }
+
+  public static Conventional getConventionalsMetricsForSolution(String idSolution, String idExperiement) {
+    for (Experiment exp : content) 
+      if (exp.getId().equals(idExperiement)) 
+        for (Execution exec : exp.getExecutions()) 
+          for (Conventional con : exec.getAllMetrics().getConventional()) 
+            if (con.getIdSolution().equals(idSolution)) 
+              return con;
+
+    return null;
+  }
+
+  public static FeatureDriven getFeatureDrivenMetricsForSolution(String idSolution, String idExperiement) {
+     for (Experiment exp : content) 
+      if (exp.getId().equals(idExperiement)) 
+        for (Execution exec : exp.getExecutions()) 
+          for (FeatureDriven f : exec.getAllMetrics().getFeatureDriven()) 
+            if (f.getIdSolution().equals(idSolution)) 
+              return f;
+
+    return null;
+  }
 }

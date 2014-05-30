@@ -33,7 +33,7 @@ public class GuiServices {
         } else {
             String source = PROFILES + file_separator + profileSmartyName;
             final String target = UserHome.getOplaUserHome() + "profiles" + file_separator + profileSmartyName;
-            FileUtil.copy(source, target);
+            Utils.copy(source, target);
 
             fieldSmartyProfile.setText(target);
             fieldSmartyProfile.updateUI();
@@ -52,7 +52,7 @@ public class GuiServices {
             String source = PROFILES + file_separator + profileConcernsName;
 
             final String concernDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileConcernsName;
-            FileUtil.copy(source, concernDest);
+            Utils.copy(source, concernDest);
             
             fieldConcernProfile.setText(concernDest);
             fieldConcernProfile.updateUI();
@@ -71,7 +71,7 @@ public class GuiServices {
             String source = PROFILES + file_separator + profilePatternName;
             
             final String patternDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profilePatternName;
-            FileUtil.copy(source, patternDest);
+            Utils.copy(source, patternDest);
             
             fieldPatterns.setText(patternDest);
             fieldPatterns.updateUI();
@@ -93,7 +93,7 @@ public class GuiServices {
             final String relationshipDest = UserHome.getOplaUserHome() + "profiles" + file_separator + profileRelationshipName;
             
             
-            FileUtil.copy(source, relationshipDest);
+            Utils.copy(source, relationshipDest);
 
             
             fieldRelationships.setText(relationshipDest);
@@ -106,9 +106,9 @@ public class GuiServices {
         if (hasTemplateInConfigFile()) {
             fieldTemplate.setText(config.getConfig().getPathToTemplateModelsDirectory());
         } else {
-           FileUtil.copy("templates/simples.uml", UserHome.getOplaUserHome() + "templates" + file_separator + "simples.uml");
-            FileUtil.copy("templates/simples.di", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.di");
-            FileUtil.copy("templates/simples.notation", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.notation");
+           Utils.copy("templates/simples.uml", UserHome.getOplaUserHome() + "templates" + file_separator + "simples.uml");
+            Utils.copy("templates/simples.di", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.di");
+            Utils.copy("templates/simples.notation", UserHome.getOplaUserHome() + "templates" + this.file_separator + "simples.notation");
 
             final String template = UserHome.getOplaUserHome() + "templates/";
             fieldTemplate.setText(template);

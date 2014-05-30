@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,10 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import jmetal.experiments.*;
+import metrics.Conventional;
+import metrics.Elegance;
+import metrics.FeatureDriven;
+import metrics.PLAExtensibility;
 import results.Execution;
 
 /**
@@ -29,159 +34,160 @@ import results.Execution;
  * @author elf
  */
 public class main extends javax.swing.JFrame {
-    
-    
-    private ManagerApplicationConfig config = null;
-    //private OplaServices oplaService = null;
-    private String pathSmartyBck;
-    private String pathConcernBck;
-    private String pathRelationchipBck;
-    private String pathPatternBck;
-    private String crossoverProbabilityBck;
-    private String mutationProbabilityBck;
-    private String selectedExperiment;
 
-    /**
-     * Creates new form main
-     */
-    public main() throws Exception {
-              
-        initComponents();
-               
-        configureDb();
-        
-        initAlgorithmsCombo();
-        disableFieldsOnStart();
-        checkAllMutationOperatorsByDefault();
-        hidePanelMutationOperatorsByDefault();
-        hidePanelCrossoverProbabilityByDefault();
-        hidePanelMutationProbabilityByDefault();
-        hidePanelSolutionsByDefault();
-        checkAllMetricsByDefault();
-        initiExecutedExperiments();
-        panelExecutions.setVisible(false);
-         
+  private ManagerApplicationConfig config = null;
+  //private OplaServices oplaService = null;
+  private String pathSmartyBck;
+  private String pathConcernBck;
+  private String pathRelationchipBck;
+  private String pathPatternBck;
+  private String crossoverProbabilityBck;
+  private String mutationProbabilityBck;
+  private String selectedExperiment;
+  private String selectedExecution;
 
-        
-        try {
-            UserHome.createDefaultOplaPathIfDontExists();
+  /**
+   * Creates new form main
+   */
+  public main() throws Exception {
 
-            String source = "config/application.yaml";
-            String target = UserHome.getOplaUserHome() + "application.yaml";
-            
-            //Somente copia arquivo de configuracao se
-            //ainda nao existir na pasta da oplatool do usuario
-            if(!(new File(target).exists()))
-                FileUtil.copy(source, target);
+    initComponents();
 
-            UserHome.createProfilesPath();
-            UserHome.createTemplatePath();
-            UserHome.createOutputPath();
-            UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
+    configureDb();
+    initAlgorithmsCombo();
+    disableFieldsOnStart();
+    checkAllMutationOperatorsByDefault();
+    hidePanelMutationOperatorsByDefault();
+    hidePanelCrossoverProbabilityByDefault();
+    hidePanelMutationProbabilityByDefault();
+    hidePanelSolutionsByDefault();
+    hidePanelShowMetricsByDefault();
+    checkAllMetricsByDefault();
+    initiExecutedExperiments();
+    panelExecutions.setVisible(false);
 
-            config = new ManagerApplicationConfig();
-        } catch (FileNotFoundException ex) {
-             java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, ex.getMessage());
-        }
+    try {
+      UserHome.createDefaultOplaPathIfDontExists();
 
-        //Text Field are disabled
-        fieldSmartyProfile.setEditable(false);
-        fieldConcernProfile.setEditable(false);
-        fieldPatterns.setEditable(false);
-        fieldRelationships.setEditable(false);
+      String source = "config/application.yaml";
+      String target = UserHome.getOplaUserHome() + "application.yaml";
 
+      //Somente copia arquivo de configuracao se
+      //ainda nao existir na pasta da oplatool do usuario
+      if (!(new File(target).exists())) {
+        Utils.copy(source, target);
+      }
 
-        GuiServices guiservices = new GuiServices(config);
-        guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
-        guiservices.configureConcernsProfile(fieldConcernProfile, checkConcerns, btnConcernProfile);
-        guiservices.configurePatternsProfile(fieldPatterns, checkPatterns, btnPatternProfile);
-        guiservices.configureRelationshipsProfile(fieldRelationships, checkRelationship, btnRelationshipProfile);
-        guiservices.configureTemplates(fieldTemplate);
-        guiservices.configureLocaleToSaveModels(fieldManipulationDir);
+      UserHome.createProfilesPath();
+      UserHome.createTemplatePath();
+      UserHome.createOutputPath();
+      UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
 
-        guiservices.configureLocaleToExportModels(fieldOutput);
+      config = new ManagerApplicationConfig();
+    } catch (FileNotFoundException ex) {
+      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, ex.getMessage());
     }
 
-    private void addOrRemoveOperatorMutation(final String operatorName) {
-        if (!checkFeatureMutation.isSelected()) {            
-            MutationOperatorsSelected.getSelectedMutationOperators()
-                    .remove(operatorName);
-        } else {
-            MutationOperatorsSelected.getSelectedMutationOperators()
-                    .add(operatorName);
-        }
+    //Text Field are disabled
+    fieldSmartyProfile.setEditable(false);
+    fieldConcernProfile.setEditable(false);
+    // fieldPatterns.setEditable(false);
+    //  fieldRelationships.setEditable(false);
+
+
+    GuiServices guiservices = new GuiServices(config);
+    guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
+    guiservices.configureConcernsProfile(fieldConcernProfile, checkConcerns, btnConcernProfile);
+    // guiservices.configurePatternsProfile(fieldPatterns, checkPatterns, btnPatternProfile);
+    // guiservices.configureRelationshipsProfile(fieldRelationships, checkRelationship, btnRelationshipProfile);
+    guiservices.configureTemplates(fieldTemplate);
+    guiservices.configureLocaleToSaveModels(fieldManipulationDir);
+
+    guiservices.configureLocaleToExportModels(fieldOutput);
+  }
+
+  private void addOrRemoveOperatorMutation(final String operatorName) {
+    if (!checkFeatureMutation.isSelected()) {
+      MutationOperatorsSelected.getSelectedMutationOperators().remove(operatorName);
+    } else {
+      MutationOperatorsSelected.getSelectedMutationOperators().add(operatorName);
+    }
+  }
+
+  private void addToMetrics(JCheckBox check, final String metric) {
+    if (check.isSelected()) {
+      VolatileConfs.getMetricsSelecteds().add(metric);
+    } else {
+      VolatileConfs.getMetricsSelecteds().remove(metric);
+    }
+  }
+
+  private void createTableExecutions(String idExperiment) throws HeadlessException {
+    panelExecutions.setVisible(true);
+    DefaultTableModel modelTableExecutions = new DefaultTableModel();
+    modelTableExecutions.addColumn("Execution");
+    modelTableExecutions.addColumn("Time (ms)");
+    modelTableExecutions.addColumn("Generated Solutions");
+    modelTableExecutions.addColumn("Non Dominated Solutons");
+    tableExecutions.setModel(modelTableExecutions);
+
+    GuiUtils.makeTableNotEditable(tableExecutions);
+
+    try {
+      List<Execution> all = db.Database.getAllExecutionsByExperimentId(idExperiment);
+      for (Execution exec : all) {
+        Object[] row = new Object[5];
+        row[0] = exec.getId();
+        row[1] = exec.getTime();
+        int numberNonDominatedSolutions = ReadSolutionsFiles.countNumberNonDominatedSolutins(idExperiment, this.config.getConfig().getDirectoryToExportModels());
+        int numberSolutions = ReadSolutionsFiles.read(idExperiment,
+                exec.getId(),
+                this.config.getConfig().getDirectoryToExportModels()).size();
+        row[2] = numberSolutions - numberNonDominatedSolutions;
+        row[3] = numberNonDominatedSolutions;
+        modelTableExecutions.addRow(row);
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+      JOptionPane.showMessageDialog(null,
+              "Possibly the data are not found on disk",
+              "Erro when try load data.", 0);
+    }
+  }
+
+  private void executeNSGAII() {
+    NSGAII nsgaii = new NSGAII();
+    nsgaii.execute(comboAlgorithms, checkMutation, fieldMutationProb,
+            fieldArchitectureInput, fieldNumberOfRuns, fieldPopulationSize,
+            fieldMaxEvaluations, checkCrossover,
+            fieldCrossoverProbability);
+  }
+
+  private void executePAES() {
+    PAES paes = new PAES();
+    paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
+            fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
+            fieldMaxEvaluations, checkCrossover,
+            fieldCrossoverProbability);
+  }
+
+  private void initAlgorithmsCombo() {
+    String algoritms[] = {"Select One", "NSGA-II", "PAES"};
+    comboAlgorithms.removeAllItems();
+
+    for (int i = 0; i < algoritms.length; i++) {
+      comboAlgorithms.addItem(algoritms[i]);
     }
 
-    private void addToMetrics(JCheckBox check, final String metric) {
-        if(check.isSelected()){
-           VolatileConfs.getMetricsSelecteds().add(metric);
-        }else{
-           VolatileConfs.getMetricsSelecteds().remove(metric);
-        }
-    }
+    comboAlgorithms.setSelectedIndex(0);
+  }
 
-    private void createTableExecutions(String idExperiment) throws HeadlessException {
-        panelExecutions.setVisible(true);
-        DefaultTableModel modelTableExecutions = new DefaultTableModel();
-        modelTableExecutions.addColumn("Execution");
-        modelTableExecutions.addColumn("Time (ms)");
-        modelTableExecutions.addColumn("Generated Solutions");
-        tableExecutions.setModel(modelTableExecutions);
-        
-        GuiUtils.makeTableNotEditable(tableExecutions);
-        
-        try{
-            List<Execution> all = db.Database.getAllExecutionsByExperimentId(idExperiment);
-            for(Execution exec : all){
-            Object[] row = new Object[4];
-            row[0] = exec.getId();
-            row[1] = exec.getTime();
-            int numberSolutions = ReadSolutionsFiles.read(idExperiment,
-                    exec.getId(), 
-                    this.config.getConfig().getDirectoryToExportModels()).size();
-            row[2] = numberSolutions;
-            modelTableExecutions.addRow(row);
-            }  
-        }catch(Exception e){
-            e.getStackTrace();
-            JOptionPane.showMessageDialog(null,
-                    "Possibly the data are not found on disk",
-                    "Erro when try load data." , 0);
-        }
-    }
-
-    private void executeNSGAII() {
-        NSGAII nsgaii = new NSGAII();
-        nsgaii.execute(comboAlgorithms, checkMutation, fieldMutationProb,
-                       fieldArchitectureInput, fieldNumberOfRuns, fieldPopulationSize,
-                       fieldMaxEvaluations, checkCrossover,
-                       fieldCrossoverProbability);
-    }
-    
-    private void executePAES(){
-           PAES paes = new PAES();
-        paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
-                       fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
-                       fieldMaxEvaluations, checkCrossover,
-                       fieldCrossoverProbability);
-    }
-
-    private void initAlgorithmsCombo() {
-        String algoritms[] = {"Select One", "NSGA-II", "PAES"};
-        comboAlgorithms.removeAllItems();
-        
-        for (int i = 0; i < algoritms.length; i++)
-            comboAlgorithms.addItem(algoritms[i]);
-               
-        comboAlgorithms.setSelectedIndex(0);
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    @SuppressWarnings("unchecked")
+  /**
+   * This method is called from within the constructor to initialize the form.
+   * WARNING: Do NOT modify this code. The content of this method is always
+   * regenerated by the Form Editor.
+   */
+  @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -191,20 +197,12 @@ public class main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         checkSmarty = new javax.swing.JCheckBox();
         checkConcerns = new javax.swing.JCheckBox();
-        checkRelationship = new javax.swing.JCheckBox();
-        checkPatterns = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         fieldSmartyProfile = new javax.swing.JTextField();
         btnSmartyProfile = new javax.swing.JButton();
-        btnPatternProfile = new javax.swing.JButton();
-        jLabel9 = new javax.swing.JLabel();
-        fieldPatterns = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         fieldConcernProfile = new javax.swing.JTextField();
         btnConcernProfile = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        fieldRelationships = new javax.swing.JTextField();
-        btnRelationshipProfile = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -274,6 +272,10 @@ public class main extends javax.swing.JFrame {
         panelObjectives = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tableObjectives = new javax.swing.JTable();
+        comboMetrics = new javax.swing.JComboBox();
+        panelShowMetrics = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tableMetrics = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -307,20 +309,6 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        checkRelationship.setText("Relationship");
-        checkRelationship.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkRelationshipActionPerformed(evt);
-            }
-        });
-
-        checkPatterns.setText("Patterns");
-        checkPatterns.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkPatternsActionPerformed(evt);
-            }
-        });
-
         jLabel1.setText("SMarty Profile:");
 
         fieldSmartyProfile.setName("pathToSmarty"); // NOI18N
@@ -334,21 +322,6 @@ public class main extends javax.swing.JFrame {
         btnSmartyProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSmartyProfileActionPerformed(evt);
-            }
-        });
-
-        btnPatternProfile.setText("Browser...");
-        btnPatternProfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPatternProfileActionPerformed(evt);
-            }
-        });
-
-        jLabel9.setText("Patterns Profile:");
-
-        fieldPatterns.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                fieldPatternsActionPerformed(evt);
             }
         });
 
@@ -368,15 +341,6 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setText("Relationships Profile:");
-
-        btnRelationshipProfile.setText("Browser...");
-        btnRelationshipProfile.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRelationshipProfileActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -391,35 +355,14 @@ public class main extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(checkSmarty)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkConcerns)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkRelationship)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(checkPatterns))
+                        .addComponent(checkConcerns))
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(fieldConcernProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnConcernProfile)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(fieldPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnPatternProfile)))
-                        .addContainerGap(26, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(fieldRelationships, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRelationshipProfile)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -427,29 +370,19 @@ public class main extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(checkSmarty)
-                    .addComponent(checkConcerns)
-                    .addComponent(checkRelationship)
-                    .addComponent(checkPatterns))
+                    .addComponent(checkConcerns))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel9))
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldSmartyProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSmartyProfile)
-                    .addComponent(fieldPatterns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnPatternProfile))
+                    .addComponent(btnSmartyProfile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel10))
+                .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldConcernProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConcernProfile)
-                    .addComponent(fieldRelationships, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRelationshipProfile))
+                    .addComponent(btnConcernProfile))
                 .addContainerGap())
         );
 
@@ -555,11 +488,11 @@ public class main extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(70, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(558, Short.MAX_VALUE))
         );
         ApplicationConfsLayout.setVerticalGroup(
             ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -572,7 +505,7 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(369, Short.MAX_VALUE))
+                .addContainerGap(594, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("General Configurations", ApplicationConfs);
@@ -889,16 +822,13 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                        .addComponent(labelAlgorithms)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel12)
-                        .addGap(163, 163, 163))
+                        .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelMutationProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(638, Short.MAX_VALUE))
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                         .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(panelMutationProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(labelAlgorithms)
                             .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(labelOperators)
@@ -929,7 +859,9 @@ public class main extends javax.swing.JFrame {
                                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(484, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12)
+                        .addGap(84, 84, 84))))
         );
         panelExperimentSettingsLayout.setVerticalGroup(
             panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -937,9 +869,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(labelAlgorithms))
+                        .addComponent(labelAlgorithms)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comboAlgorithms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -973,6 +903,9 @@ public class main extends javax.swing.JFrame {
                     .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelMutationProb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(113, 113, 113))
+            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                .addComponent(jLabel12)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Architecture(s)", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
@@ -1102,7 +1035,7 @@ public class main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRun, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(185, Short.MAX_VALUE))
+                .addContainerGap(410, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Experiment Configurations", algorithms);
@@ -1205,6 +1138,11 @@ public class main extends javax.swing.JFrame {
                 comboSolutionsItemStateChanged(evt);
             }
         });
+        comboSolutions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboSolutionsActionPerformed(evt);
+            }
+        });
         comboSolutions.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 comboSolutionsFocusLost(evt);
@@ -1235,6 +1173,17 @@ public class main extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(tableObjectives);
 
+        comboMetrics.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboMetricsItemStateChanged(evt);
+            }
+        });
+        comboMetrics.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboMetricsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelObjectivesLayout = new javax.swing.GroupLayout(panelObjectives);
         panelObjectives.setLayout(panelObjectivesLayout);
         panelObjectivesLayout.setHorizontalGroup(
@@ -1242,13 +1191,49 @@ public class main extends javax.swing.JFrame {
             .addGroup(panelObjectivesLayout.createSequentialGroup()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 59, Short.MAX_VALUE))
+            .addGroup(panelObjectivesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelObjectivesLayout.setVerticalGroup(
             panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelObjectivesLayout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelObjectivesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        tableMetrics.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane5.setViewportView(tableMetrics);
+
+        javax.swing.GroupLayout panelShowMetricsLayout = new javax.swing.GroupLayout(panelShowMetrics);
+        panelShowMetrics.setLayout(panelShowMetricsLayout);
+        panelShowMetricsLayout.setHorizontalGroup(
+            panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelShowMetricsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 767, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(60, Short.MAX_VALUE))
+        );
+        panelShowMetricsLayout.setVerticalGroup(
+            panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelShowMetricsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
@@ -1269,7 +1254,9 @@ public class main extends javax.swing.JFrame {
                                 .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(experimentsLayout.createSequentialGroup()
                         .addGap(12, 12, 12)
-                        .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(207, Short.MAX_VALUE))
         );
         experimentsLayout.setVerticalGroup(
@@ -1286,7 +1273,9 @@ public class main extends javax.swing.JFrame {
                 .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(243, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(323, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Executed Experiments", experiments);
@@ -1314,482 +1303,547 @@ public class main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcernProfileActionPerformed
-        String newPath = fileChooser(fieldConcernProfile, "uml");
-        if (newPath.equals("")) {
-            this.config.updatePathToProfileConcerns(fieldConcernProfile.getText());
-        } else {
-            this.config.updatePathToProfileConcerns(newPath);
-        }
+      String newPath = fileChooser(fieldConcernProfile, "uml");
+      if (newPath.equals("")) {
+        this.config.updatePathToProfileConcerns(fieldConcernProfile.getText());
+      } else {
+        this.config.updatePathToProfileConcerns(newPath);
+      }
     }//GEN-LAST:event_btnConcernProfileActionPerformed
 
     private void btnSmartyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSmartyProfileActionPerformed
-        String newPath = fileChooser(fieldSmartyProfile, "uml");
-        if (newPath.equals("")) {
-            this.config.updatePathToProfileSmarty(fieldSmartyProfile.getText());
-        } else {
-            this.config.updatePathToProfileSmarty(newPath);
-        }
+      String newPath = fileChooser(fieldSmartyProfile, "uml");
+      if (newPath.equals("")) {
+        this.config.updatePathToProfileSmarty(fieldSmartyProfile.getText());
+      } else {
+        this.config.updatePathToProfileSmarty(newPath);
+      }
     }//GEN-LAST:event_btnSmartyProfileActionPerformed
 
     private void fieldConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldConcernProfileActionPerformed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_fieldConcernProfileActionPerformed
 
     private void fieldSmartyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldSmartyProfileActionPerformed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_fieldSmartyProfileActionPerformed
 
     private void btnTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplateActionPerformed
-        String path = dirChooser(fieldTemplate);
-        if ("".equals(path)) {
-            this.config.updatePathToTemplateFiles(fieldTemplate.getText()+UserHome.getFileSeparator());
-        } else {
-            this.config.updatePathToTemplateFiles(path+UserHome.getFileSeparator());
-        }
+      String path = dirChooser(fieldTemplate);
+      if ("".equals(path)) {
+        this.config.updatePathToTemplateFiles(fieldTemplate.getText() + UserHome.getFileSeparator());
+      } else {
+        this.config.updatePathToTemplateFiles(path + UserHome.getFileSeparator());
+      }
     }//GEN-LAST:event_btnTemplateActionPerformed
 
-    private String dirChooser(JTextField field) throws HeadlessException {
-        JFileChooser c = new JFileChooser();
-        String path;
-        c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int rVal = c.showOpenDialog(this);
-        if (rVal == JFileChooser.APPROVE_OPTION) {
-            path = c.getSelectedFile().getAbsolutePath();
-            field.setText(path+UserHome.getFileSeparator());
-            field.updateUI();
-            return path;
-        }
-        return "";
+  private String dirChooser(JTextField field) throws HeadlessException {
+    JFileChooser c = new JFileChooser();
+    String path;
+    c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    int rVal = c.showOpenDialog(this);
+    if (rVal == JFileChooser.APPROVE_OPTION) {
+      path = c.getSelectedFile().getAbsolutePath();
+      field.setText(path + UserHome.getFileSeparator());
+      field.updateUI();
+      return path;
     }
-
-    private void btnRelationshipProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelationshipProfileActionPerformed
-        String newPath = fileChooser(fieldRelationships, "uml");
-        if (newPath.equals("")) {
-            this.config.updatePathToProfileRelationships(fieldRelationships.getText());
-        } else {
-            this.config.updatePathToProfileRelationships(newPath);
-        }
-    }//GEN-LAST:event_btnRelationshipProfileActionPerformed
-
-    private void fieldPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldPatternsActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_fieldPatternsActionPerformed
-
-    private void btnPatternProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatternProfileActionPerformed
-        String newPath = fileChooser(fieldPatterns, "uml");
-        if ("".equals(newPath)) {
-            this.config.updatePathToProfilePatterns(fieldPatterns.getText());
-        } else {
-            this.config.updatePathToProfilePatterns(newPath);
-        }
-    }//GEN-LAST:event_btnPatternProfileActionPerformed
+    return "";
+  }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        StringBuffer sb = new StringBuffer();
-        sb.append("Application.yml file content").append("\n\n");
-        sb.append("directoryToExportModels:").append(config.getConfig().getDirectoryToExportModels()).append("\n");
-        sb.append("pathToProfile:").append(config.getConfig().getPathToProfile()).append("\n");
-        sb.append("pathToProfileConcern:").append(config.getConfig().getPathToProfileConcern()).append("\n");
-        sb.append("pathToProfilePatterns").append(config.getConfig().getPathToProfilePatterns()).append("\n");
-        sb.append("pathToProfileRelationships").append(config.getConfig().getPathToProfileRelationships()).append("\n");
-        sb.append("pathToTemplateModelsDirectory").append(config.getConfig().getPathToTemplateModelsDirectory()).append("\n");
-        JOptionPane.showMessageDialog(null, sb);
+      StringBuffer sb = new StringBuffer();
+      sb.append("Application.yml file content").append("\n\n");
+      sb.append("directoryToExportModels:").append(config.getConfig().getDirectoryToExportModels()).append("\n");
+      sb.append("pathToProfile:").append(config.getConfig().getPathToProfile()).append("\n");
+      sb.append("pathToProfileConcern:").append(config.getConfig().getPathToProfileConcern()).append("\n");
+      sb.append("pathToProfilePatterns").append(config.getConfig().getPathToProfilePatterns()).append("\n");
+      sb.append("pathToProfileRelationships").append(config.getConfig().getPathToProfileRelationships()).append("\n");
+      sb.append("pathToTemplateModelsDirectory").append(config.getConfig().getPathToTemplateModelsDirectory()).append("\n");
+      JOptionPane.showMessageDialog(null, sb);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnManipulationDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManipulationDirActionPerformed
-        String path = dirChooser(fieldManipulationDir);
-        if ("".equals(path)) {
-            this.config.updatePathToSaveModels(fieldManipulationDir.getText()+UserHome.getFileSeparator());
-        } else {
-            this.config.updatePathToSaveModels(path+UserHome.getFileSeparator());
-        }
+      String path = dirChooser(fieldManipulationDir);
+      if ("".equals(path)) {
+        this.config.updatePathToSaveModels(fieldManipulationDir.getText() + UserHome.getFileSeparator());
+      } else {
+        this.config.updatePathToSaveModels(path + UserHome.getFileSeparator());
+      }
     }//GEN-LAST:event_btnManipulationDirActionPerformed
 
     private void checkSmartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSmartyActionPerformed
-        if (!checkSmarty.isSelected()) {
-            fieldSmartyProfile.setText(pathSmartyBck);
-            btnSmartyProfile.setEnabled(true);
-            this.config.updatePathToProfileSmarty(pathSmartyBck);
-        } else {
-            pathSmartyBck = fieldSmartyProfile.getText();
-            fieldSmartyProfile.setText("");
-            this.config.updatePathToProfileSmarty("");
-            btnSmartyProfile.setEnabled(false);
-        }
+      if (!checkSmarty.isSelected()) {
+        fieldSmartyProfile.setText(pathSmartyBck);
+        btnSmartyProfile.setEnabled(true);
+        this.config.updatePathToProfileSmarty(pathSmartyBck);
+      } else {
+        pathSmartyBck = fieldSmartyProfile.getText();
+        fieldSmartyProfile.setText("");
+        this.config.updatePathToProfileSmarty("");
+        btnSmartyProfile.setEnabled(false);
+      }
     }//GEN-LAST:event_checkSmartyActionPerformed
 
     private void checkConcernsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConcernsActionPerformed
-        if (!checkConcerns.isSelected()) {
-            fieldConcernProfile.setText(pathConcernBck);
-            btnConcernProfile.setEnabled(true);
-            this.config.updatePathToProfileConcerns(pathConcernBck);
-        } else {
-            pathConcernBck = fieldConcernProfile.getText();
-            fieldConcernProfile.setText("");
-            this.config.updatePathToProfileConcerns("");
-            btnConcernProfile.setEnabled(false);
-        }
+      if (!checkConcerns.isSelected()) {
+        fieldConcernProfile.setText(pathConcernBck);
+        btnConcernProfile.setEnabled(true);
+        this.config.updatePathToProfileConcerns(pathConcernBck);
+      } else {
+        pathConcernBck = fieldConcernProfile.getText();
+        fieldConcernProfile.setText("");
+        this.config.updatePathToProfileConcerns("");
+        btnConcernProfile.setEnabled(false);
+      }
     }//GEN-LAST:event_checkConcernsActionPerformed
 
-    private void checkRelationshipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRelationshipActionPerformed
-        if (!checkRelationship.isSelected()) {
-            fieldRelationships.setText(pathRelationchipBck);
-            btnRelationshipProfile.setEnabled(true);
-            this.config.updatePathToProfileRelationships(pathRelationchipBck);
-        } else {
-            pathRelationchipBck = fieldRelationships.getText();
-            fieldRelationships.setText("");
-            this.config.updatePathToProfileRelationships("");
-            btnRelationshipProfile.setEnabled(false);
-        }
-    }//GEN-LAST:event_checkRelationshipActionPerformed
-
-    private void checkPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPatternsActionPerformed
-        if (!checkPatterns.isSelected()) {
-            fieldPatterns.setText(pathPatternBck);
-            btnPatternProfile.setEnabled(true);
-            this.config.updatePathToProfilePatterns(pathPatternBck);
-        } else {
-            pathPatternBck = fieldPatterns.getText();
-            fieldPatterns.setText("");
-            this.config.updatePathToProfilePatterns("");
-            btnPatternProfile.setEnabled(false);
-        }
-    }//GEN-LAST:event_checkPatternsActionPerformed
-
     private void comboAlgorithmsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAlgorithmsActionPerformed
-       
     }//GEN-LAST:event_comboAlgorithmsActionPerformed
 
     private void checkMutationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMutationActionPerformed
-        if(!checkMutation.isSelected()){
-            panelOperatorsMutation.setVisible(false);
-            panelMutationProb.setVisible(false);
-        }else{
-            panelOperatorsMutation.setVisible(true);
-            if(crossoverProbabilityBck != null)
-                fieldCrossoverProbability.setText(crossoverProbabilityBck);
-            panelMutationProb.setVisible(true);
+      if (!checkMutation.isSelected()) {
+        panelOperatorsMutation.setVisible(false);
+        panelMutationProb.setVisible(false);
+      } else {
+        panelOperatorsMutation.setVisible(true);
+        if (crossoverProbabilityBck != null) {
+          fieldCrossoverProbability.setText(crossoverProbabilityBck);
         }
+        panelMutationProb.setVisible(true);
+      }
     }//GEN-LAST:event_checkMutationActionPerformed
 
     private void checkAddClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAddClassActionPerformed
-                addOrRemoveOperatorMutation(FeatureMutationOperators
-                .ADD_CLASS_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_CLASS_MUTATION.getOperatorName());
     }//GEN-LAST:event_checkAddClassActionPerformed
 
     private void checkMoveAttributeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMoveAttributeActionPerformed
-                addOrRemoveOperatorMutation(FeatureMutationOperators
-                .MOVE_ATTRIBUTE_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_ATTRIBUTE_MUTATION.getOperatorName());
     }//GEN-LAST:event_checkMoveAttributeActionPerformed
 
     private void checkFeatureMutationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFeatureMutationActionPerformed
-        addOrRemoveOperatorMutation(FeatureMutationOperators
-                .FEATURE_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.FEATURE_MUTATION.getOperatorName());
     }//GEN-LAST:event_checkFeatureMutationActionPerformed
 
     private void checkMoveMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMoveMethodActionPerformed
-        addOrRemoveOperatorMutation(FeatureMutationOperators
-                .MOVE_METHOD_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_METHOD_MUTATION.getOperatorName());
     }//GEN-LAST:event_checkMoveMethodActionPerformed
 
     private void checkMoveOperationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMoveOperationActionPerformed
-        addOrRemoveOperatorMutation(FeatureMutationOperators
-                .MOVE_OPERATION_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_OPERATION_MUTATION.getOperatorName());
     }//GEN-LAST:event_checkMoveOperationActionPerformed
 
     private void crossProbSliderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_crossProbSliderMouseDragged
-        double a = (double) crossProbSlider.getValue() / 10;
-        fieldCrossoverProbability.setText(String.valueOf(a));
+      double a = (double) crossProbSlider.getValue() / 10;
+      fieldCrossoverProbability.setText(String.valueOf(a));
     }//GEN-LAST:event_crossProbSliderMouseDragged
 
     private void checkCrossoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkCrossoverActionPerformed
-        if(checkCrossover.isSelected()){
-            if(crossoverProbabilityBck != null)
-                fieldCrossoverProbability.setText(crossoverProbabilityBck);
-            panelCrossProb.setVisible(true);
-        }else{
-            crossoverProbabilityBck = fieldCrossoverProbability.getText();
-            fieldCrossoverProbability.setText("0");
-            panelCrossProb.setVisible(false);
-        }  
+      if (checkCrossover.isSelected()) {
+        if (crossoverProbabilityBck != null) {
+          fieldCrossoverProbability.setText(crossoverProbabilityBck);
+        }
+        panelCrossProb.setVisible(true);
+      } else {
+        crossoverProbabilityBck = fieldCrossoverProbability.getText();
+        fieldCrossoverProbability.setText("0");
+        panelCrossProb.setVisible(false);
+      }
     }//GEN-LAST:event_checkCrossoverActionPerformed
 
     private void mutatinProbSliderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mutatinProbSliderMouseDragged
-        double a = (double) mutatinProbSlider.getValue() / 10;
-        fieldMutationProb.setText(String.valueOf(a));
+      double a = (double) mutatinProbSlider.getValue() / 10;
+      fieldMutationProb.setText(String.valueOf(a));
     }//GEN-LAST:event_mutatinProbSliderMouseDragged
 
     private void btnCleanListArchs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCleanListArchs1ActionPerformed
-        fieldArchitectureInput.setText("");
-        VolatileConfs.setArchitectureInputPath(null);
+      fieldArchitectureInput.setText("");
+      VolatileConfs.setArchitectureInputPath(null);
     }//GEN-LAST:event_btnCleanListArchs1ActionPerformed
 
     private void btnInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInput1ActionPerformed
 
-        Validators.validateEntries(fieldArchitectureInput.getText());
+      Validators.validateEntries(fieldArchitectureInput.getText());
     }//GEN-LAST:event_btnInput1ActionPerformed
 
     private void fieldOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldOutputActionPerformed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_fieldOutputActionPerformed
 
     private void btnOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutputActionPerformed
-        String path = dirChooser(fieldOutput);
-        if ("".equals(path)) {
-            this.config.updatePathToExportModels(fieldOutput.getText()+UserHome.getFileSeparator());
-        } else {
-            this.config.updatePathToExportModels(path+UserHome.getFileSeparator());
-        }
+      String path = dirChooser(fieldOutput);
+      if ("".equals(path)) {
+        this.config.updatePathToExportModels(fieldOutput.getText() + UserHome.getFileSeparator());
+      } else {
+        this.config.updatePathToExportModels(path + UserHome.getFileSeparator());
+      }
     }//GEN-LAST:event_btnOutputActionPerformed
 
     private void comboAlgorithmsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboAlgorithmsItemStateChanged
-        if(comboAlgorithms.getSelectedItem() != null && comboAlgorithms.getSelectedIndex() != 0){
-            String algorithmName = comboAlgorithms.getSelectedItem().toString();
-            VolatileConfs.setAlgorithmName(algorithmName);
-            if("Paes".equalsIgnoreCase(algorithmName)){
-               enableFieldForPaes();
-               hideFieldsForNSGAII();
-            }
-            if("NSGA-II".equalsIgnoreCase(algorithmName)){
-             enableFieldsForNSGAII();
-             hideFieldsForPases();
-            }
-            
-            Logger.getLogger(main.class.getName()).log(Level.INFO, "Selected: " + comboAlgorithms.getSelectedItem().toString());
-        }else{
-            VolatileConfs.setAlgorithmName(null);
+      if (comboAlgorithms.getSelectedItem() != null && comboAlgorithms.getSelectedIndex() != 0) {
+        String algorithmName = comboAlgorithms.getSelectedItem().toString();
+        VolatileConfs.setAlgorithmName(algorithmName);
+        if ("Paes".equalsIgnoreCase(algorithmName)) {
+          enableFieldForPaes();
+          hideFieldsForNSGAII();
         }
+        if ("NSGA-II".equalsIgnoreCase(algorithmName)) {
+          enableFieldsForNSGAII();
+          hideFieldsForPases();
+        }
+
+        Logger.getLogger(main.class.getName()).log(Level.INFO, "Selected: " + comboAlgorithms.getSelectedItem().toString());
+      } else {
+        VolatileConfs.setAlgorithmName(null);
+      }
     }//GEN-LAST:event_comboAlgorithmsItemStateChanged
 
     private void checkEleganceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEleganceActionPerformed
-        final String metric = Metrics.ELEGANCE.getName();
-        addToMetrics(checkElegance, metric);
+      final String metric = Metrics.ELEGANCE.getName();
+      addToMetrics(checkElegance, metric);
     }//GEN-LAST:event_checkEleganceActionPerformed
 
     private void checkConventionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConventionalActionPerformed
-        final String metric = Metrics.CONVENTIONAL.getName();
-        addToMetrics(checkConventional, metric);
+      final String metric = Metrics.CONVENTIONAL.getName();
+      addToMetrics(checkConventional, metric);
     }//GEN-LAST:event_checkConventionalActionPerformed
 
     private void checkPLAExtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPLAExtActionPerformed
-        final String metric = Metrics.PLA_EXTENSIBILIY.getName();
-        addToMetrics(checkPLAExt, metric);
+      final String metric = Metrics.PLA_EXTENSIBILIY.getName();
+      addToMetrics(checkPLAExt, metric);
     }//GEN-LAST:event_checkPLAExtActionPerformed
 
     private void checkFeatureDrivenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFeatureDrivenActionPerformed
-        final String metric = Metrics.FEATURE_DRIVEN.getName();
-        addToMetrics(checkFeatureDriven, metric);
+      final String metric = Metrics.FEATURE_DRIVEN.getName();
+      addToMetrics(checkFeatureDriven, metric);
     }//GEN-LAST:event_checkFeatureDrivenActionPerformed
 
     private void numberOfRunsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numberOfRunsFocusLost
-        if(isDigit(fieldNumberOfRuns.getText())){
-            Logger.getLogger(main.class.getName()).log(Level.INFO, "Number Of Runs: {0}", fieldNumberOfRuns.getText());
-            VolatileConfs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
-        }
+      if (isDigit(fieldNumberOfRuns.getText())) {
+        Logger.getLogger(main.class.getName()).log(Level.INFO, "Number Of Runs: {0}", fieldNumberOfRuns.getText());
+        VolatileConfs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
+      }
     }//GEN-LAST:event_numberOfRunsFocusLost
 
     private void fieldNumberOfRunsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldNumberOfRunsActionPerformed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_fieldNumberOfRunsActionPerformed
 
     private void fieldMaxEvaluationsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldMaxEvaluationsFocusLost
-       if(isDigit(fieldMaxEvaluations.getText())){
+      if (isDigit(fieldMaxEvaluations.getText())) {
         Logger.getLogger(main.class.getName()).log(Level.INFO, "Max Evaluations: {0}", fieldMaxEvaluations.getText());
         VolatileConfs.setMaxEvaluations(Integer.parseInt(fieldMaxEvaluations.getText()));
-        }
+      }
     }//GEN-LAST:event_fieldMaxEvaluationsFocusLost
 
     private void fieldPopulationSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPopulationSizeFocusLost
-        if(isDigit(fieldPopulationSize.getText())){
-            Logger.getLogger(main.class.getName()).log(Level.INFO, "Population Size: {0}", fieldPopulationSize.getText());
-            VolatileConfs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
-        }
+      if (isDigit(fieldPopulationSize.getText())) {
+        Logger.getLogger(main.class.getName()).log(Level.INFO, "Population Size: {0}", fieldPopulationSize.getText());
+        VolatileConfs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
+      }
     }//GEN-LAST:event_fieldPopulationSizeFocusLost
 
     private void fieldNumberOfRunsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldNumberOfRunsKeyTyped
-        onlyDigit(evt);
-    }
+    onlyDigit(evt);
+  }
 
-    private boolean onlyDigit(KeyEvent evt) {
-        char c = evt.getKeyChar();
-        if(!(Character.isDigit(c) || (c==KeyEvent.VK_BACK_SPACE) || c==KeyEvent.VK_DELETE)){
-            getToolkit().beep();
-            evt.consume(); 
-            return false;
-        }
-        return true;
+  private boolean onlyDigit(KeyEvent evt) {
+    char c = evt.getKeyChar();
+    if (!(Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || c == KeyEvent.VK_DELETE)) {
+      getToolkit().beep();
+      evt.consume();
+      return false;
+    }
+    return true;
     }//GEN-LAST:event_fieldNumberOfRunsKeyTyped
 
     private void fieldMaxEvaluationsKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldMaxEvaluationsKeyTyped
-        onlyDigit(evt);
+      onlyDigit(evt);
     }//GEN-LAST:event_fieldMaxEvaluationsKeyTyped
 
     private void fieldPopulationSizeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fieldPopulationSizeKeyTyped
-        onlyDigit(evt);
+      onlyDigit(evt);
     }//GEN-LAST:event_fieldPopulationSizeKeyTyped
 
-    /**
-     * Rodar experimento
-     * 
-     * @param evt 
-     */
+  /**
+   * Rodar experimento
+   *
+   * @param evt
+   */
     private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRunActionPerformed
 
-        //Validacoes inicias
-        //Verifica se as entradas sao validas. Caso contrario finaliza
-        if(!Validators.validateEntries(fieldArchitectureInput.getText()))
-            return;
-        
-        //Recupera o algoritmo selecionado pelo usuário
-        String algoritmToRun = VolatileConfs.getAlgorithmName();
+      //Validacoes inicias
+      //Verifica se as entradas sao validas. Caso contrario finaliza
+      if (!Validators.validateEntries(fieldArchitectureInput.getText())) {
+        return;
+      }
 
-        //Caso nenhum for selecionado, informa o usuario
-        if(comboAlgorithms.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(this, "You need select a algorithm");
-        } else {
-            //Pede confirmacao para o usuario para de fato executar o
-            //experimento.
-            int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog(this, "You have sure than"
-                    + " want execute this experiement? This will take a time."
-                    + " Meanwhile the UI will be blocked",
-                    "You have sure?", dialogButton);
-            //Caso usuário aceite, verifica qual algoritmo executar
-            //E invoca a classe responsável.
-            if (dialogResult == 0) {
-                if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
-                    jLabel12.setText("Executando....");
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            executeNSGAII();
-                            jLabel12.setText("Finished....");
-                            db.Database.reloadContent();
-                        }
-                    });
-                }
-                if("PAES".equalsIgnoreCase(algoritmToRun)){
-                    jLabel12.setText("Executando....");
-                    java.awt.EventQueue.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            executePAES();
-                            jLabel12.setText("Finished....");
-                            db.Database.reloadContent();
-                        }
-                    });
-                }
-            }
+      //Recupera o algoritmo selecionado pelo usuário
+      String algoritmToRun = VolatileConfs.getAlgorithmName();
+
+      //Caso nenhum for selecionado, informa o usuario
+      if (comboAlgorithms.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(this, "You need select a algorithm");
+      } else {
+        //Pede confirmacao para o usuario para de fato executar o
+        //experimento.
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog(this, "You have sure than"
+                + " want execute this experiement? This will take a time."
+                + " Meanwhile the UI will be blocked",
+                "You have sure?", dialogButton);
+        //Caso usuário aceite, verifica qual algoritmo executar
+        //E invoca a classe responsável.
+        if (dialogResult == 0) {
+          if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
+            jLabel12.setText("Executando....");
+            java.awt.EventQueue.invokeLater(new Runnable() {
+
+              @Override
+              public void run() {
+                executeNSGAII();
+                jLabel12.setText("Finished....");
+                db.Database.reloadContent();
+              }
+            });
+          }
+          if ("PAES".equalsIgnoreCase(algoritmToRun)) {
+            jLabel12.setText("Executando....");
+            java.awt.EventQueue.invokeLater(new Runnable() {
+
+              @Override
+              public void run() {
+                executePAES();
+                jLabel12.setText("Finished....");
+                db.Database.reloadContent();
+              }
+            });
+          }
         }
+      }
     }//GEN-LAST:event_btnRunActionPerformed
 
     private void tableExpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExpMouseClicked
-        if (evt.getClickCount() == 2) {
-            JTable target = (JTable)evt.getSource();
-            int rowIndex = target.getSelectedRow();
-            
-            String idExperiment = target.getModel().getValueAt(rowIndex, 0).toString();
-            
-            GuiUtils.hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
-                    this.selectedExperiment, idExperiment, panelSolutions,
-                    panelObjectives);
-            
-            this.selectedExperiment = idExperiment;
-            createTableExecutions(idExperiment);
-        }
+      if (evt.getClickCount() == 2) {
+        panelShowMetrics.setVisible(false);
+        JTable target = (JTable) evt.getSource();
+        int rowIndex = target.getSelectedRow();
+
+
+        String idExperiment = target.getModel().getValueAt(rowIndex, 0).toString();
+
+        GuiUtils.hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
+                this.selectedExperiment, idExperiment, panelSolutions,
+                panelObjectives);
+
+        this.selectedExperiment = idExperiment;
+        createTableExecutions(idExperiment);
+        
+      }
     }//GEN-LAST:event_tableExpMouseClicked
 
     private void tableExpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableExpKeyPressed
-        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_tableExpKeyPressed
 
     private void tableExecutionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExecutionsMouseClicked
-        if (evt.getClickCount() == 2) {
-            panelSolutions.setVisible(true);
+      if (evt.getClickCount() == 2) {
+        panelSolutions.setVisible(true);
 
-            JTable target = (JTable) evt.getSource();
-            int rowIndex = target.getSelectedRow();
-            String idExecution = target.getModel().getValueAt(rowIndex, 0).toString();
+        JTable target = (JTable) evt.getSource();
+        int rowIndex = target.getSelectedRow();
+        String idExecution = target.getModel().getValueAt(rowIndex, 0).toString();
+        this.selectedExecution = idExecution;
+        List<File> solutions = ReadSolutionsFiles.read(this.selectedExperiment,
+                idExecution,
+                this.config.getConfig().getDirectoryToExportModels());
 
-            List<File> solutions = ReadSolutionsFiles.read(this.selectedExperiment,
-                    idExecution,
-                    this.config.getConfig().getDirectoryToExportModels());
-
-            comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
-        }
+        comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
+      }
     }//GEN-LAST:event_tableExecutionsMouseClicked
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-    
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void experimentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_experimentsMouseClicked
-         if(db.Database.getContent().isEmpty()){
-            JOptionPane.showMessageDialog(null, "No experiment executed yet. ");
-        }
+      if (db.Database.getContent().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "No experiment executed yet. ");
+      }
     }//GEN-LAST:event_experimentsMouseClicked
 
     private void comboSolutionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboSolutionsItemStateChanged
-
-        Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
-
-        String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
-        String objectiveId = FileUtil.extractObjectiveIdFromFile(fileName);
-
-        Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
-
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Metric");
-        model.addColumn("Value");
-
-        GuiUtils.makeTableNotEditable(tableObjectives);
-
-        tableObjectives.setModel(model);
-
-        Iterator<Entry<String, String>> it = r.entrySet().iterator();
-        while(it.hasNext()){
-            Object[] row = new Object[2];
-            Map.Entry pairs = (Map.Entry<String, String>)it.next();
-            row[0] = pairs.getKey();
-            row[1] = pairs.getValue();
-            it.remove(); // evitar ConcurrentModificationException
-            model.addRow(row);
-        }
-        
-        panelObjectives.setVisible(true);
     }//GEN-LAST:event_comboSolutionsItemStateChanged
 
     private void comboSolutionsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_comboSolutionsFocusLost
-        // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_comboSolutionsFocusLost
 
-    private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
-        JFileChooser c = new JFileChooser();
-        int rVal = c.showOpenDialog(this);
-        if (rVal == JFileChooser.APPROVE_OPTION) {
+  private void comboSolutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSolutionsActionPerformed
+    panelShowMetrics.setVisible(false);
+    initiComboMetrics();
+    Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
 
-            File f = new File(c.getCurrentDirectory() + c.getSelectedFile().getName());
-            String ext = FileUtil.getExtension(f);
+    String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
+    String objectiveId = Utils.extractObjectiveIdFromFile(fileName);
 
-            if (!ext.equalsIgnoreCase(allowExtension)) {
-                JOptionPane.showMessageDialog(null, "The selected file is not allowed. You need selects a file with extension .uml, but you selects a ." + ext + " file");
-                return "";
-            } else {
-                final String path = c.getCurrentDirectory() + "/" + c.getSelectedFile().getName();
-                fieldToSet.setText(path);
-                fieldToSet.updateUI();
-                return path;
+    Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
 
-            }
+    DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("Metric");
+    model.addColumn("Value");
+
+    GuiUtils.makeTableNotEditable(tableObjectives);
+
+    tableObjectives.setModel(model);
+
+    Iterator<Entry<String, String>> it = r.entrySet().iterator();
+    while (it.hasNext()) {
+      Object[] row = new Object[2];
+      Map.Entry pairs = (Map.Entry<String, String>) it.next();
+      row[0] = pairs.getKey();
+      row[1] = pairs.getValue();
+      it.remove(); // evitar ConcurrentModificationException
+      model.addRow(row);
+    }
+
+    panelObjectives.setVisible(true);
+
+  }//GEN-LAST:event_comboSolutionsActionPerformed
+
+  private void comboMetricsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMetricsActionPerformed
+    
+  }//GEN-LAST:event_comboMetricsActionPerformed
+
+  private void comboMetricsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboMetricsItemStateChanged
+       String selectedMetric = comboMetrics.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
+
+    Map<String, String[]> mapColumns = new HashMap<>();
+    String[] plaExtColumns = {"PLA Extensibility"};
+    String[] eleganceColumns = {"NAC", "ATMR", "EC"};
+    String[] conventionalsColumns = {"macAggregation", "choesion", "meanDepComps", "meanNumOps", "sumClassesDepIn", "sumClassesDepOut", "sumDepIn", "sumDepOut"};
+    String[] featureColumns = {"msiAggregation", "cdac ", "cdai", "cdao", "cibc", "iibc", "oobc", "lcc", "lccClass", "cdaClass", "cibClass"};
+
+    mapColumns.put("plaextensibility", plaExtColumns);
+    mapColumns.put("elegance", eleganceColumns);
+    mapColumns.put("conventional", conventionalsColumns);
+    mapColumns.put("feature", featureColumns);
+
+    DefaultTableModel model = new DefaultTableModel();
+    tableMetrics.setModel(model);
+    int numberOfColumns = 0;
+
+    if (comboSolutions.getSelectedItem() != null) {
+      String idSolution = Utils.extractSolutionIdFromSolutionFileName(comboSolutions.getSelectedItem().toString());
+
+      if (selectedMetric.equalsIgnoreCase("plaextensibility")) {
+        PLAExtensibility plaExt = db.Database.getPlaExtMetricsForSolution(idSolution, this.selectedExperiment);
+
+        for (int i = 0; i < mapColumns.get(selectedMetric).length; i++) {
+          model.addColumn(mapColumns.get("plaextensibility")[i]);
+          numberOfColumns++;
+        }
+        GuiUtils.addComomColumnsToTable(model);
+
+        Object[] row = new Object[numberOfColumns + 2];
+        row[0] = plaExt.getPlaExtensibility();
+        row[1] = this.selectedExperiment;
+        row[2] = this.selectedExecution;
+        model.addRow(row);
+      } else if (selectedMetric.equalsIgnoreCase("elegance")) {
+
+        Elegance elegance = db.Database.getEleganceMetricsForSolution(idSolution, this.selectedExperiment);
+
+        for (int i = 0; i < mapColumns.get(selectedMetric).length; i++) {
+          model.addColumn(mapColumns.get("elegance")[i]);
+          numberOfColumns++;
+        }
+        GuiUtils.addComomColumnsToTable(model);
+
+        Object[] row = new Object[numberOfColumns + 2];
+        row[0] = elegance.getNac();
+        row[1] = elegance.getAtmr();
+        row[2] = elegance.getEc();
+        row[3] = this.selectedExperiment;
+        row[4] = this.selectedExecution;
+        model.addRow(row);
+      } else if (selectedMetric.equalsIgnoreCase("conventional")) {
+        Conventional conventional = db.Database.getConventionalsMetricsForSolution(idSolution, this.selectedExperiment);
+
+        for (int i = 0; i < mapColumns.get(selectedMetric).length; i++) {
+          model.addColumn(mapColumns.get("conventional")[i]);
+          numberOfColumns++;
         }
 
-        return "";
+        GuiUtils.addComomColumnsToTable(model);
+        Object[] row = new Object[numberOfColumns + 2];
+        row[0] = conventional.getMacAggregation();
+        row[1] = conventional.getChoesion();
+        row[2] = conventional.getMeanDepComps();
+        row[3] = conventional.getMeanNumOps();
+        row[4] = conventional.getSumClassesDepIn();
+        row[5] = conventional.getSumClassesDepOut();
+        row[6] = conventional.getSumDepIn();
+        row[7] = conventional.getSumDepOut();
+        row[8] = this.selectedExperiment;
+        row[9] = this.selectedExecution;
+        model.addRow(row);
+      } else if (selectedMetric.equalsIgnoreCase("featuredriven")) {
+        FeatureDriven f = db.Database.getFeatureDrivenMetricsForSolution(idSolution, this.selectedExperiment);
+
+        for (int i = 0; i < mapColumns.get("feature").length; i++) {
+          model.addColumn(mapColumns.get("feature")[i]);
+          numberOfColumns++;
+        }
+        GuiUtils.addComomColumnsToTable(model);
+        Object[] row = new Object[numberOfColumns + 2];
+        row[0] = f.getMsiAggregation();
+        row[1] = f.getCdac();
+        row[2] = f.getCdai();
+        row[3] = f.getCdao();
+        row[4] = f.getCibc();
+        row[5] = f.getIibc();
+        row[6] = f.getOobc();
+        row[7] = f.getLcc();
+        row[8] = f.getLccClass();
+        row[9] = f.getCdaClass();
+        row[10] = f.getCibClass();
+        row[11] = this.selectedExperiment;
+        row[12] = this.selectedExecution;
+        model.addRow(row);
+
+      }
+      panelShowMetrics.setVisible(true);
 
     }
-    /**
-     * @param args the command line arguments
-     */
+  }//GEN-LAST:event_comboMetricsItemStateChanged
+
+  private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
+    JFileChooser c = new JFileChooser();
+    int rVal = c.showOpenDialog(this);
+    if (rVal == JFileChooser.APPROVE_OPTION) {
+
+      File f = new File(c.getCurrentDirectory() + c.getSelectedFile().getName());
+      String ext = Utils.getExtension(f);
+
+      if (!ext.equalsIgnoreCase(allowExtension)) {
+        JOptionPane.showMessageDialog(null, "The selected file is not allowed. You need selects a file with extension .uml, but you selects a ." + ext + " file");
+        return "";
+      } else {
+        final String path = c.getCurrentDirectory() + "/" + c.getSelectedFile().getName();
+        fieldToSet.setText(path);
+        fieldToSet.updateUI();
+        return path;
+
+      }
+    }
+
+    return "";
+
+  }
+  /**
+   * @param args the command line arguments
+   */
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ApplicationConfs;
     private javax.swing.JPanel algorithms;
@@ -1798,8 +1852,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnInput1;
     private javax.swing.JButton btnManipulationDir;
     private javax.swing.JButton btnOutput;
-    private javax.swing.JButton btnPatternProfile;
-    private javax.swing.JButton btnRelationshipProfile;
     private javax.swing.JButton btnRun;
     private javax.swing.JButton btnSmartyProfile;
     private javax.swing.JButton btnTemplate;
@@ -1816,10 +1868,9 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkMoveOperation;
     private javax.swing.JCheckBox checkMutation;
     private javax.swing.JCheckBox checkPLAExt;
-    private javax.swing.JCheckBox checkPatterns;
-    private javax.swing.JCheckBox checkRelationship;
     private javax.swing.JCheckBox checkSmarty;
     private javax.swing.JComboBox comboAlgorithms;
+    private javax.swing.JComboBox comboMetrics;
     private javax.swing.JComboBox comboSolutions;
     private javax.swing.JSlider crossProbSlider;
     private javax.swing.JPanel experiments;
@@ -1832,14 +1883,11 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldNumberOfRuns;
     private javax.swing.JTextField fieldOutput;
     private javax.swing.JTextField fieldPaesArchiveSize;
-    private javax.swing.JTextField fieldPatterns;
     private javax.swing.JTextField fieldPopulationSize;
-    private javax.swing.JTextField fieldRelationships;
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1854,7 +1902,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1864,6 +1911,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelAlgorithms;
     private javax.swing.JLabel labelArchivePAES;
@@ -1876,145 +1924,164 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel panelMutationProb;
     private javax.swing.JPanel panelObjectives;
     private javax.swing.JPanel panelOperatorsMutation;
+    private javax.swing.JPanel panelShowMetrics;
     private javax.swing.JPanel panelSolutions;
     private javax.swing.JTable tableExecutions;
     private javax.swing.JTable tableExp;
+    private javax.swing.JTable tableMetrics;
     private javax.swing.JTable tableObjectives;
     // End of variables declaration//GEN-END:variables
 
+  private void hidePanelMutationOperatorsByDefault() {
+    panelOperatorsMutation.setVisible(false);
+  }
+
+  private void checkAllMutationOperatorsByDefault() {
+    checkAddClass.setSelected(true);
+    checkFeatureMutation.setSelected(true);
+    checkManagerClass.setSelected(true);
+    checkMoveAttribute.setSelected(true);
+    checkMoveMethod.setSelected(true);
+    checkMoveOperation.setSelected(true);
+
+    FeatureMutationOperators[] operators = FeatureMutationOperators.values();
+    for (FeatureMutationOperators operator : operators) {
+      MutationOperatorsSelected.getSelectedMutationOperators().add(operator.getOperatorName());
+    }
+  }
+
+  private void hidePanelCrossoverProbabilityByDefault() {
+    panelCrossProb.setVisible(false);
+  }
+
+  private void hidePanelMutationProbabilityByDefault() {
+    panelMutationProb.setVisible(false);
+  }
+
+  private void checkAllMetricsByDefault() {
+    for (Metrics m : Metrics.values()) {
+      VolatileConfs.getMetricsSelecteds().add(m.getName());
+    }
+
+    checkElegance.setSelected(true);
+    checkPLAExt.setSelected(true);
+    checkConventional.setSelected(true);
+    checkFeatureDriven.setSelected(true);
+  }
+
+  private boolean isDigit(String text) {
+    try {
+      Integer.parseInt(text);
+    } catch (Exception e) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Somente faz uma copia do banco de dados vazio para a pasta da oplatool no
+   * diretorio do usaurio se o mesmo nao existir.
+     *
+   */
+  private void configureDb() {
+    final String pathDb = UserHome.getPathToDb();
+
+    if (!(new File(pathDb).exists())) {
+      File dirDb = new File(UserHome.getOplaUserHome() + "db");
+      if (!dirDb.exists()) {
+        dirDb.mkdirs();
+      }
+
+      Utils.copy("oplatool.db", pathDb);
+    }
+    try {
+      db.Database.setContent(results.Experiment.all());
+    } catch (SQLException ex) {
+      Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (Exception ex) {
+      Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+  }
+
+  private void initiExecutedExperiments() {
+    try {
+      DefaultTableModel model = new DefaultTableModel();
+      model.addColumn("ID");
+      model.addColumn("Name");
+      model.addColumn("Algorithm");
+      model.addColumn("Created at");
+
+      GuiUtils.makeTableNotEditable(tableExp);
+
+      tableExp.setModel(model);
+
+      List<results.Experiment> allExp = db.Database.getContent();
+
+
+      for (results.Experiment exp : allExp) {
+        Object[] row = new Object[4];
+        row[0] = exp.getId();
+        row[1] = exp.getName();
+        row[2] = exp.getAlgorithm();
+        row[3] = exp.getCreatedAt();
+        model.addRow(row);
+      }
+    } catch (Exception ex) {
+      Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+  private void hidePanelSolutionsByDefault() {
+    panelSolutions.setVisible(false);
+    panelObjectives.setVisible(false);
+  }
+
+  private void disableFieldsOnStart() {
+    fieldNumberOfRuns.setEnabled(false);
+    fieldMaxEvaluations.setEnabled(false);
+    fieldPopulationSize.setEnabled(false);
+    fieldPaesArchiveSize.setEnabled(false);
+  }
+
+  private void enableFieldForPaes() {
+    fieldNumberOfRuns.setEnabled(true);
+    fieldMaxEvaluations.setEnabled(true);
+    fieldPaesArchiveSize.setEnabled(true);
+  }
+
+  private void hideFieldsForNSGAII() {
+    fieldPopulationSize.setEnabled(false);
+  }
+
+  private void enableFieldsForNSGAII() {
+    fieldNumberOfRuns.setEnabled(true);
+    fieldMaxEvaluations.setEnabled(true);
+    fieldPopulationSize.setEnabled(true);
+  }
+
+  private void hideFieldsForPases() {
+    fieldPaesArchiveSize.setEnabled(false);
+  }
+
+  private void initiComboMetrics() {
    
-    private void hidePanelMutationOperatorsByDefault() {
-        panelOperatorsMutation.setVisible(false);
-    }
-
-    private void checkAllMutationOperatorsByDefault() {
-       checkAddClass.setSelected(true);
-       checkFeatureMutation.setSelected(true);
-       checkManagerClass.setSelected(true);
-       checkMoveAttribute.setSelected(true);
-       checkMoveMethod.setSelected(true);
-       checkMoveOperation.setSelected(true);
-       
-       FeatureMutationOperators[] operators = FeatureMutationOperators.values();
-       for (FeatureMutationOperators operator : operators) {
-            MutationOperatorsSelected.getSelectedMutationOperators() 
-               .add(operator.getOperatorName());
-        }
-    }
-
-    private void hidePanelCrossoverProbabilityByDefault() {
-        panelCrossProb.setVisible(false);
-    }
-
-    private void hidePanelMutationProbabilityByDefault() {
-        panelMutationProb.setVisible(false);
-    }
-
-    private void checkAllMetricsByDefault() {       
-        for (Metrics m : Metrics.values())
-            VolatileConfs.getMetricsSelecteds().add(m.getName());
-            
-        checkElegance.setSelected(true);
-        checkPLAExt.setSelected(true);
-        checkConventional.setSelected(true);
-        checkFeatureDriven.setSelected(true);
-    }
-
-    private boolean isDigit(String text) {
-        try{
-            Integer.parseInt(text);
-        }catch(Exception e){
-            return false;
-        }   
-        return true;
-    }
-
-    /**
-     * Somente faz uma copia do banco de dados vazio para a pasta
-     * da oplatool no diretorio do usaurio se o mesmo nao existir.
-     **/
-    private void configureDb() {
-        final String pathDb = UserHome.getPathToDb();
-        
-        if(!(new File(pathDb).exists())){
-            File dirDb = new File(UserHome.getOplaUserHome() + "db");
-            if(!dirDb.exists())
-                dirDb.mkdirs();
-            
-            FileUtil.copy("oplatool.db", pathDb);
-        }
-        try {
-           db.Database.setContent(results.Experiment.all());
-        } catch (SQLException ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-      
-    }
-
-    private void initiExecutedExperiments() {
-        try {
-            DefaultTableModel model = new DefaultTableModel(); 
-            model.addColumn("ID");
-            model.addColumn("Name");
-            model.addColumn("Algorithm");
-            model.addColumn("Created at");
-            
-            GuiUtils.makeTableNotEditable(tableExp);
-            
-            tableExp.setModel(model);
-            
-            List<results.Experiment> allExp = db.Database.getContent();
-            
-            
-            for(results.Experiment exp : allExp){
-                Object[] row = new Object[4];
-                row[0] = exp.getId();
-                row[1] = exp.getName();
-                row[2] = exp.getAlgorithm();
-                row[3] = exp.getCreatedAt();
-                model.addRow(row);
-            }                  
-        } catch (Exception ex) {
-            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    private void hidePanelSolutionsByDefault() {
-        panelSolutions.setVisible(false);
-        panelObjectives.setVisible(false);
-    }
-
-    private void disableFieldsOnStart() {
-        fieldNumberOfRuns.setEnabled(false);
-        fieldMaxEvaluations.setEnabled(false);
-        fieldPopulationSize.setEnabled(false);
-        fieldPaesArchiveSize.setEnabled(false);
-    }
-
-    private void enableFieldForPaes() {
-        fieldNumberOfRuns.setEnabled(true);
-        fieldMaxEvaluations.setEnabled(true);
-        fieldPaesArchiveSize.setEnabled(true);
-    }
-
-    private void hideFieldsForNSGAII() {
-        fieldPopulationSize.setEnabled(false);
-    }
-
-    private void enableFieldsForNSGAII() {
-        fieldNumberOfRuns.setEnabled(true);
-        fieldMaxEvaluations.setEnabled(true);
-        fieldPopulationSize.setEnabled(true);
-    }
-
-    private void hideFieldsForPases() {
-        fieldPaesArchiveSize.setEnabled(false);
-    }
-
-  
+    String metricsSelectedForCurrentExperiment[] =
+            db.Database.getOrdenedObjectives(this.selectedExperiment).split(" ");
     
+   
+    comboMetrics.setModel(new DefaultComboBoxModel());
+
+    for (int i = 0; i < metricsSelectedForCurrentExperiment.length; i++) {
+      comboMetrics.addItem(Utils.capitalize(metricsSelectedForCurrentExperiment[i]));
+    }
+
+    comboMetrics.updateUI();
 
 
+  }
+
+  private void hidePanelShowMetricsByDefault() {
+    panelShowMetrics.setVisible(false);
+  }
 }

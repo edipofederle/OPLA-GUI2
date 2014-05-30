@@ -21,7 +21,7 @@ public class UserHome {
         String a = Thread.currentThread().getContextClassLoader().
                 getResource("config/application.yaml").getFile();
         
-        FileUtil.copy(a, home + "application.yaml");
+        Utils.copy(a, home + "application.yaml");
     }
     
     public static String getOplaUserHome(){
@@ -39,19 +39,19 @@ public class UserHome {
     }
 
     public static void createProfilesPath() {
-      FileUtil.createPath(home + "profiles/");
+      Utils.createPath(home + "profiles/");
     }
 
    public static void createTemplatePath() {
-     FileUtil.createPath(home + "templates/");
+     Utils.createPath(home + "templates/");
    }
 
    public static void createOutputPath() {
-    FileUtil.createPath(home + "output/");
+    Utils.createPath(home + "output/");
    }
 
    public static void createTempPath() {
-    FileUtil.createPath(home + "temp/");
+    Utils.createPath(home + "temp/");
    }
    
    public static String getFileSeparator(){
