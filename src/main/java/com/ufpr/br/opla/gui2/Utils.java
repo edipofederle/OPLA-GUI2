@@ -81,4 +81,10 @@ public class Utils {
 
     return a;
   }
+
+  public static boolean selectedSolutionIsNonDominated(String fileName) {
+    if(fileName.startsWith("VAR_All"))
+      return true;
+    return false;
+  }
 }

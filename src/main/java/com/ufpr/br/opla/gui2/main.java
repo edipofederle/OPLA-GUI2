@@ -245,7 +245,6 @@ public class main extends javax.swing.JFrame {
         checkAddClass = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         fieldPopulationSize = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
         labelArchivePAES = new javax.swing.JLabel();
         fieldPaesArchiveSize = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
@@ -258,6 +257,7 @@ public class main extends javax.swing.JFrame {
         fieldOutput = new javax.swing.JTextField();
         btnOutput = new javax.swing.JButton();
         btnRun = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
         experiments = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableExp = new javax.swing.JTable();
@@ -269,11 +269,15 @@ public class main extends javax.swing.JFrame {
         panelSolutions = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         comboSolutions = new javax.swing.JComboBox();
+        jLabel10 = new javax.swing.JLabel();
+        labelED = new javax.swing.JLabel();
         panelObjectives = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         tableObjectives = new javax.swing.JTable();
         comboMetrics = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
         panelShowMetrics = new javax.swing.JPanel();
+        labelSelectedMetricTitle = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableMetrics = new javax.swing.JTable();
 
@@ -492,7 +496,7 @@ public class main extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(558, Short.MAX_VALUE))
+                .addContainerGap(354, Short.MAX_VALUE))
         );
         ApplicationConfsLayout.setVerticalGroup(
             ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -505,7 +509,7 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
-                .addContainerGap(594, Short.MAX_VALUE))
+                .addContainerGap(254, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("General Configurations", ApplicationConfs);
@@ -810,8 +814,6 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setText("Status:");
-
         labelArchivePAES.setText("Archive Size:");
 
         javax.swing.GroupLayout panelExperimentSettingsLayout = new javax.swing.GroupLayout(panelExperimentSettings);
@@ -824,44 +826,39 @@ public class main extends javax.swing.JFrame {
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                         .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelMutationProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(638, Short.MAX_VALUE))
+                        .addComponent(panelMutationProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelAlgorithms)
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                         .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelAlgorithms)
+                            .addComponent(labelOperators)
+                            .addComponent(comboAlgorithms, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(fieldNumberOfRuns, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                                .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel5))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(fieldMaxEvaluations, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                                        .addComponent(fieldPopulationSize))))
                             .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(labelOperators)
-                                    .addComponent(comboAlgorithms, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                            .addComponent(jLabel3)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addComponent(fieldNumberOfRuns, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
-                                        .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                            .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(jLabel4)
-                                                .addComponent(jLabel5))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(fieldMaxEvaluations, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                                                .addComponent(fieldPopulationSize))))
-                                    .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                        .addComponent(labelArchivePAES)
-                                        .addGap(30, 30, 30)
-                                        .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(checkMutation)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(checkCrossover)))
-                                .addGap(26, 26, 26)
-                                .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel12)
-                        .addGap(84, 84, 84))))
+                                .addComponent(labelArchivePAES)
+                                .addGap(30, 30, 30)
+                                .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(checkMutation)
+                                .addGap(18, 18, 18)
+                                .addComponent(checkCrossover)))
+                        .addGap(26, 26, 26)
+                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
         panelExperimentSettingsLayout.setVerticalGroup(
             panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -903,9 +900,6 @@ public class main extends javax.swing.JFrame {
                     .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelMutationProb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(113, 113, 113))
-            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                .addComponent(jLabel12)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Architecture(s)", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
@@ -1005,29 +999,38 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setText("Status:");
+
         javax.swing.GroupLayout algorithmsLayout = new javax.swing.GroupLayout(algorithms);
         algorithms.setLayout(algorithmsLayout);
         algorithmsLayout.setHorizontalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addGap(2, 2, 2)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRun)))
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(8, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
+                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12)
+                        .addGap(9, 9, 9)))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel12)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
@@ -1035,7 +1038,7 @@ public class main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRun, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(410, Short.MAX_VALUE))
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Experiment Configurations", algorithms);
@@ -1130,8 +1133,8 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel17.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
-        jLabel17.setText("Select a Solution");
+        jLabel17.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel17.setText("Solution:");
 
         comboSolutions.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1149,26 +1152,32 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setText("Distance Euclidean:");
+
+        labelED.setText("--");
+
         javax.swing.GroupLayout panelSolutionsLayout = new javax.swing.GroupLayout(panelSolutions);
         panelSolutions.setLayout(panelSolutionsLayout);
         panelSolutionsLayout.setHorizontalGroup(
             panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelSolutionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSolutionsLayout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(comboSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel17))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(comboSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelED, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         panelSolutionsLayout.setVerticalGroup(
             panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelSolutionsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelSolutionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jLabel17)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(comboSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(comboSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel10)
+                .addComponent(labelED))
         );
 
         jScrollPane4.setViewportView(tableObjectives);
@@ -1184,27 +1193,39 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel9.setText("Metrics:");
+
         javax.swing.GroupLayout panelObjectivesLayout = new javax.swing.GroupLayout(panelObjectives);
         panelObjectives.setLayout(panelObjectivesLayout);
         panelObjectivesLayout.setHorizontalGroup(
             panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelObjectivesLayout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 59, Short.MAX_VALUE))
-            .addGroup(panelObjectivesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelObjectivesLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelObjectivesLayout.createSequentialGroup()
+                        .addGap(0, 6, Short.MAX_VALUE)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         panelObjectivesLayout.setVerticalGroup(
             panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelObjectivesLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        labelSelectedMetricTitle.setFont(new java.awt.Font("Monaco", 1, 12)); // NOI18N
 
         tableMetrics.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1225,15 +1246,21 @@ public class main extends javax.swing.JFrame {
             panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelShowMetricsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 767, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addGroup(panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelShowMetricsLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labelSelectedMetricTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         panelShowMetricsLayout.setVerticalGroup(
             panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelShowMetricsLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelShowMetricsLayout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(labelSelectedMetricTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
@@ -1241,23 +1268,21 @@ public class main extends javax.swing.JFrame {
         experimentsLayout.setHorizontalGroup(
             experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(experimentsLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(experimentsLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(experimentsLayout.createSequentialGroup()
-                                .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel13))
-                                .addGap(18, 18, 18)
-                                .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(experimentsLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addGap(6, 6, 6)
                         .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(207, Short.MAX_VALUE))
+                            .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         experimentsLayout.setVerticalGroup(
             experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1269,13 +1294,13 @@ public class main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(323, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Executed Experiments", experiments);
@@ -1284,10 +1309,10 @@ public class main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 977, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1650,6 +1675,8 @@ public class main extends javax.swing.JFrame {
     private void tableExecutionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExecutionsMouseClicked
       if (evt.getClickCount() == 2) {
         panelSolutions.setVisible(true);
+        labelED.setText("--");
+        
 
         JTable target = (JTable) evt.getSource();
         int rowIndex = target.getSelectedRow();
@@ -1660,6 +1687,8 @@ public class main extends javax.swing.JFrame {
                 this.config.getConfig().getDirectoryToExportModels());
 
         comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
+        
+        comboSolutions.setSelectedIndex(0);
       }
     }//GEN-LAST:event_tableExecutionsMouseClicked
 
@@ -1685,6 +1714,16 @@ public class main extends javax.swing.JFrame {
     Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
 
     String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
+    
+    if(Utils.selectedSolutionIsNonDominated(fileName)){
+      String ed = Indicadores.getEdForSelectedSolution(fileName, selectedExperiment);
+      labelED.setText(ed);
+      labelED.updateUI();
+    }else{
+      labelED.setText("--");
+      labelED.updateUI();
+    }
+    
     String objectiveId = Utils.extractObjectiveIdFromFile(fileName);
 
     Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
@@ -1716,7 +1755,11 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_comboMetricsActionPerformed
 
   private void comboMetricsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboMetricsItemStateChanged
-       String selectedMetric = comboMetrics.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
+    
+    
+    
+    String selectedMetric = comboMetrics.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
+    labelSelectedMetricTitle.setText(comboMetrics.getSelectedItem().toString());
 
     Map<String, String[]> mapColumns = new HashMap<>();
     String[] plaExtColumns = {"PLA Extensibility"};
@@ -1888,6 +1931,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldTemplate;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1902,6 +1946,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1915,7 +1960,9 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelAlgorithms;
     private javax.swing.JLabel labelArchivePAES;
+    private javax.swing.JLabel labelED;
     private javax.swing.JLabel labelOperators;
+    private javax.swing.JLabel labelSelectedMetricTitle;
     private javax.swing.JSlider mutatinProbSlider;
     private javax.swing.JPanel panelCrossProb;
     private javax.swing.JPanel panelExecutions;
