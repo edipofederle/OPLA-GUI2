@@ -90,7 +90,8 @@ public class Database {
             query.append(experimentId);
             
             ResultSet r = statement.executeQuery(query.toString());
-            return r.getString("names");
+            return  r.getString("names");
+
             
         } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
