@@ -1667,25 +1667,25 @@ public class main extends javax.swing.JFrame {
         //E invoca a classe responsável.
         if (dialogResult == 0) {
           if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
-            jLabel12.setText("Executando....");
+            jLabel12.setText("Working....");
             java.awt.EventQueue.invokeLater(new Runnable() {
 
               @Override
               public void run() {
                 executeNSGAII();
-                jLabel12.setText("Finished....");
+                jLabel12.setText("Done");
                 db.Database.reloadContent();
               }
             });
           }
           if ("PAES".equalsIgnoreCase(algoritmToRun)) {
-            jLabel12.setText("Executando....");
+            jLabel12.setText("Working....");
             java.awt.EventQueue.invokeLater(new Runnable() {
 
               @Override
               public void run() {
                 executePAES();
-                jLabel12.setText("Finished....");
+                jLabel12.setText("Done");
                 db.Database.reloadContent();
               }
             });
@@ -1756,6 +1756,9 @@ public class main extends javax.swing.JFrame {
     private void experimentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_experimentsMouseClicked
       if (db.Database.getContent().isEmpty()) {
         JOptionPane.showMessageDialog(null, "No experiment executed yet. ");
+      }else{
+        //reload content
+        db.Database.reloadContent();
       }
     }//GEN-LAST:event_experimentsMouseClicked
 
