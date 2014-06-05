@@ -21,6 +21,8 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import jmetal.experiments.*;
 import metrics.Conventional;
@@ -193,6 +195,7 @@ public class main extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jTabbedPane1.addChangeListener(changeListener);
         ApplicationConfs = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -1050,6 +1053,14 @@ public class main extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 experimentsMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                experimentsMouseEntered(evt);
+            }
+        });
+        experiments.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                experimentsFocusGained(evt);
+            }
         });
 
         tableExp.setModel(new javax.swing.table.DefaultTableModel(
@@ -1754,12 +1765,7 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void experimentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_experimentsMouseClicked
-      if (db.Database.getContent().isEmpty()) {
-        JOptionPane.showMessageDialog(null, "No experiment executed yet. ");
-      }else{
-        //reload content
-        db.Database.reloadContent();
-      }
+
     }//GEN-LAST:event_experimentsMouseClicked
 
     private void comboSolutionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboSolutionsItemStateChanged
@@ -1921,6 +1927,14 @@ public class main extends javax.swing.JFrame {
   private void tableExecutionsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExecutionsMouseEntered
     // TODO add your handling code here:
   }//GEN-LAST:event_tableExecutionsMouseEntered
+
+  private void experimentsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_experimentsFocusGained
+
+  }//GEN-LAST:event_experimentsFocusGained
+
+  private void experimentsMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_experimentsMouseEntered
+    // TODO add your handling code here:
+  }//GEN-LAST:event_experimentsMouseEntered
 
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
@@ -2123,7 +2137,7 @@ public class main extends javax.swing.JFrame {
       model.addColumn("Created at");
 
       GuiUtils.makeTableNotEditable(tableExp);
-
+         
       tableExp.setModel(model);
 
       List<results.Experiment> allExp = db.Database.getContent();
@@ -2194,4 +2208,24 @@ public class main extends javax.swing.JFrame {
   private void hidePanelShowMetricsByDefault() {
     panelShowMetrics.setVisible(false);
   }
+  
+  ChangeListener changeListener = new ChangeListener() {
+
+    @Override
+    public void stateChanged(ChangeEvent changeEvent) {
+      JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
+      int index = sourceTabbedPane.getSelectedIndex();
+      String tabName = sourceTabbedPane.getTitleAt(index);
+      if ("Executed Experiments".equalsIgnoreCase(tabName)) {
+        if (db.Database.getContent().isEmpty()) {
+          JOptionPane.showMessageDialog(null, "No experiment executed yet. ", "OPLA-Tool", 0);
+        } else {
+          db.Database.reloadContent();
+          initiExecutedExperiments();
+        }
+      }
+
+    }
+  };
+    
 }
