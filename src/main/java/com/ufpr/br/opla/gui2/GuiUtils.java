@@ -4,6 +4,7 @@
  */
 package com.ufpr.br.opla.gui2;
 
+import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JPanel;
@@ -54,5 +55,7 @@ public class GuiUtils {
     model.addColumn("Experiment");
     model.addColumn("Execution");
   }
+  
+ 
 
 }

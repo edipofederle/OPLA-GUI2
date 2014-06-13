@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -73,5 +75,22 @@ class Indicadores {
 
     return "0.0";
 
+  }
+  
+  public static Entry<String, String> getSolutionWithBestTradeOff(String experimentId) {
+
+    HashMap<String, String> eds = getEdsForExperiment(experimentId);
+    Double ed = Double.MAX_VALUE;
+    Entry<String, String> solution = null;
+    
+    for(Map.Entry<String, String> entry : eds.entrySet()){
+     if(Double.parseDouble(entry.getValue()) < ed){
+       ed = Double.parseDouble(entry.getValue());
+        solution = entry;
+        
+     }
+    }  
+    
+    return solution;
   }
 }

@@ -8,6 +8,8 @@ package com.ufpr.br.opla.gui2;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.experiementsUtils.MutationOperatorsSelected;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -24,6 +26,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.Metrics;
 import metrics.Conventional;
@@ -196,7 +199,6 @@ public class main extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jTabbedPane1.addChangeListener(changeListener);
         ApplicationConfs = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -280,13 +282,15 @@ public class main extends javax.swing.JFrame {
         comboMetrics = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         panelShowMetrics = new javax.swing.JPanel();
-        labelSelectedMetricTitle = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableMetrics = new javax.swing.JTable();
         panelEds = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         edTable = new javax.swing.JTable();
+        jLabel10 = new javax.swing.JLabel();
+        textFieldBestEDVName = new javax.swing.JTextField();
+        textFieldBestEDValue = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -1231,8 +1235,6 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        labelSelectedMetricTitle.setFont(new java.awt.Font("Monaco", 1, 12)); // NOI18N
-
         tableMetrics.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -1253,21 +1255,14 @@ public class main extends javax.swing.JFrame {
             .addGroup(panelShowMetricsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelSelectedMetricTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         panelShowMetricsLayout.setVerticalGroup(
             panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelShowMetricsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelShowMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelShowMetricsLayout.createSequentialGroup()
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(panelShowMetricsLayout.createSequentialGroup()
-                        .addComponent(labelSelectedMetricTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 12, Short.MAX_VALUE)
-                        .addGap(95, 95, 95))))
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jLabel18.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
@@ -1291,25 +1286,43 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane6.setViewportView(edTable);
 
+        jLabel10.setText("Best Tread  Off:");
+
         javax.swing.GroupLayout panelEdsLayout = new javax.swing.GroupLayout(panelEds);
         panelEds.setLayout(panelEdsLayout);
         panelEdsLayout.setHorizontalGroup(
             panelEdsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEdsLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelEdsLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(panelEdsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel18)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEdsLayout.createSequentialGroup()
+                        .addComponent(jLabel18)
+                        .addGap(37, 37, 37))
+                    .addGroup(panelEdsLayout.createSequentialGroup()
+                        .addGroup(panelEdsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelEdsLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelEdsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(textFieldBestEDVName, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+                                    .addComponent(textFieldBestEDValue))))
+                        .addContainerGap())))
         );
         panelEdsLayout.setVerticalGroup(
             panelEdsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelEdsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel18)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelEdsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textFieldBestEDVName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(textFieldBestEDValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
@@ -1328,7 +1341,7 @@ public class main extends javax.swing.JFrame {
                     .addGroup(experimentsLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, 751, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(experimentsLayout.createSequentialGroup()
                                 .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1346,18 +1359,17 @@ public class main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(experimentsLayout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(panelEds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(experimentsLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 2, Short.MAX_VALUE))
+                    .addComponent(panelEds, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Executed Experiments", experiments);
@@ -1712,9 +1724,12 @@ public class main extends javax.swing.JFrame {
         panelShowMetrics.setVisible(false);
         JTable target = (JTable) evt.getSource();
         int rowIndex = target.getSelectedRow();
-    
+       
 
         String idExperiment = target.getModel().getValueAt(rowIndex, 0).toString();
+        Entry<String, String> bestTradeOffSolutionName = Indicadores.getSolutionWithBestTradeOff(idExperiment);
+        textFieldBestEDVName.setText(bestTradeOffSolutionName.getKey());
+        textFieldBestEDValue.setText(bestTradeOffSolutionName.getValue());
 
         GuiUtils.hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
                 this.selectedExperiment, idExperiment, panelSolutions,
@@ -1732,14 +1747,18 @@ public class main extends javax.swing.JFrame {
         
         for (Map.Entry<String, String> entry : resultsEds.entrySet()) {
             Object[] row = new Object[2];
+            
             row[0] =entry.getKey();
             row[1] =entry.getValue();
             modelTableEds.addRow(row);
         }
+          
         
       }
     }//GEN-LAST:event_tableExpMouseClicked
 
+    
+    
     private void tableExpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableExpKeyPressed
       // TODO add your handling code here:
     }//GEN-LAST:event_tableExpKeyPressed
@@ -1819,7 +1838,7 @@ public class main extends javax.swing.JFrame {
     
     
     String selectedMetric = comboMetrics.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
-    labelSelectedMetricTitle.setText(comboMetrics.getSelectedItem().toString());
+  
 
     Map<String, String[]> mapColumns = new HashMap<>();
     String[] plaExtColumns = {"PLA Extensibility"};
@@ -2008,6 +2027,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldTemplate;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -2039,7 +2059,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel labelAlgorithms;
     private javax.swing.JLabel labelArchivePAES;
     private javax.swing.JLabel labelOperators;
-    private javax.swing.JLabel labelSelectedMetricTitle;
     private javax.swing.JSlider mutatinProbSlider;
     private javax.swing.JPanel panelCrossProb;
     private javax.swing.JPanel panelEds;
@@ -2055,6 +2074,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTable tableExp;
     private javax.swing.JTable tableMetrics;
     private javax.swing.JTable tableObjectives;
+    private javax.swing.JTextField textFieldBestEDVName;
+    private javax.swing.JTextField textFieldBestEDValue;
     // End of variables declaration//GEN-END:variables
 
   private void hidePanelMutationOperatorsByDefault() {
