@@ -55,6 +55,18 @@ public class GuiUtils {
     model.addColumn("Experiment");
     model.addColumn("Execution");
   }
+
+  static void fontSize(int fontSize) {
+    for (Map.Entry<Object, Object> entry : javax.swing.UIManager.getDefaults().entrySet()) {
+    Object key = entry.getKey();
+    Object value = javax.swing.UIManager.get(key);
+    if (value != null && value instanceof javax.swing.plaf.FontUIResource) {
+        javax.swing.plaf.FontUIResource fr=(javax.swing.plaf.FontUIResource)value;
+        javax.swing.plaf.FontUIResource f = new javax.swing.plaf.FontUIResource(fr.getFamily(), fr.getStyle(), fontSize);
+        javax.swing.UIManager.put(key, f);
+    }
+}
+  }
   
  
 

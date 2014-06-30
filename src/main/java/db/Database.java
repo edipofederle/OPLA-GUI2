@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package db;
 
 import exceptions.MissingConfigurationException;
@@ -18,147 +14,244 @@ import metrics.PLAExtensibility;
 import results.Execution;
 import results.Experiment;
 
-/**
- *
- * @author elf
- */
+
 public class Database {
 
-    private static List<Experiment> content;
+  private static List<Experiment> content;
 
-    public static void getAllExperiments() {
-        try {
-            Statement statement = database.Database.getConnection().createStatement();
-            ResultSet r = statement.executeQuery("select * from experiments");
+  public static void setContent(List<Experiment> all) {
+    content = all;
+  }
 
+  public static List<Experiment> getContent() {
+    return content;
+  }
 
-        } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        }
+  public static List<Execution> getAllExecutionsByExperimentId(String experimentId) {
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        return exp.getExecutions();
+      }
     }
+    return Collections.emptyList();
+  }
+  
+  public static HashMap<String, String> getObjectivesBySolutionId(String solutionId, String experimentId) {
+    StringBuilder query = new StringBuilder();
+    query.append("SELECT * FROM objectives WHERE solution_name LIKE '%");
+    query.append(solutionId);
+    query.append("'");
 
-    public static void setContent(List<Experiment> all) {
-        content = all;
-    }
+    String ordenedObjectives[] = db.Database.getOrdenedObjectives(experimentId).split(" ");
 
-    public static List<Experiment> getContent() {
-        return content;
-    }
-
-    public static List<Execution> getAllExecutionsByExperimentId(String experiementId) {
-        for (Experiment exp : content) {
-            if (exp.getId().equals(experiementId))
-                return exp.getExecutions();
-        }
-        return Collections.emptyList();
-    }
-
-    public static Map<String, String> getAllObjectivesByExecution(String idExecution, String idExperiment) {
-        Map<String, String> funs = new HashMap<>();
-
-        try {
-            try (Statement statement = database.Database.getConnection().createStatement()) {
-                StringBuilder query = new StringBuilder();
-                
-                query.append("SELECT * FROM objectives where execution_id = ");
-                query.append(idExecution);
-                query.append(" OR experiement_id= ");
-                query.append(idExperiment);
-                
-                ResultSet r = statement.executeQuery(query.toString());
-                while (r.next()) {
-                    funs.put(r.getString("id"), r.getString("objectives"));
-                }
-                statement.close();
-            }
-
-        } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
-        return funs;
-    }
-    
-    public static String getOrdenedObjectives(String experimentId){
-        Statement statement = null;
-        try {
-            statement = database.Database.getConnection().createStatement();
-            
-            StringBuilder query = new StringBuilder();
-            query.append("SELECT names FROM map_objectives_names WHERE experiment_id=");
-            query.append(experimentId);
-            
-            ResultSet r = statement.executeQuery(query.toString());
-            return  r.getString("names");
-
-            
-        } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
-            try {
-                statement.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+    try {
+      try (Statement statement = database.Database.getConnection().createStatement()) {
+        ResultSet r = statement.executeQuery(query.toString());
+        String objectives[] = r.getString("objectives").split("\\|");
+        HashMap<String, String> map = new HashMap<>();
         
-        return "";       
-         
+        for (int i = 0; i < objectives.length; i++)
+          map.put(ordenedObjectives[i], objectives[i]);
+
+        statement.close();
+        return map;
+      }
+
+    } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
     }
-
-    public static void reloadContent() {
-        try {
-            content = results.Experiment.all();
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-  public static PLAExtensibility getPlaExtMetricsForSolution(String idSolution, String idExperiement) {
-    for(Experiment exp : content)
-      if(exp.getId().equals(idExperiement))
-        for(Execution exec : exp.getExecutions())
-          for(PLAExtensibility plaExt : exec.getAllMetrics().getPlaExtensibility())
-            if(plaExt.getIdSolution().equals(idSolution))
-              return plaExt;
-
-    return null;
+    
+    return (HashMap<String, String>) Collections.EMPTY_MAP;
     
   }
 
-  public static Elegance getEleganceMetricsForSolution(String idSolution, String idExperiement) {
-    for (Experiment exp : content) 
-      if (exp.getId().equals(idExperiement)) 
-        for (Execution exec : exp.getExecutions()) 
-          for (Elegance elegance : exec.getAllMetrics().getElegance()) 
-            if (elegance.getIdSolution().equals(idSolution)) 
+  public static Map<String, String> getAllObjectivesByExecution(String idExecution, String experimentId) {
+    Map<String, String> funs = new HashMap<>();
+
+    try {
+      try (Statement statement = database.Database.getConnection().createStatement()) {
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT * FROM objectives where execution_id = ");
+        query.append(idExecution);
+        query.append(" OR experiement_id= ");
+        query.append(experimentId);
+
+        ResultSet r = statement.executeQuery(query.toString());
+        while (r.next())
+          funs.put(r.getString("id"), r.getString("objectives"));
+        
+        statement.close();
+      }
+
+    } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+
+    return funs;
+  }
+  
+  /**
+   * 
+   * @param experimentId
+   * @return elegance,conventional, PLAExtensibility, featureDriven
+   */
+  public static String getOrdenedObjectives(String experimentId) {
+    Statement statement = null;
+    try {
+      statement = database.Database.getConnection().createStatement();
+
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT names FROM map_objectives_names WHERE experiment_id=");
+      query.append(experimentId);
+
+      ResultSet r = statement.executeQuery(query.toString());
+      return r.getString("names");
+
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+
+    return "";
+
+  }
+
+  public static void reloadContent() {
+    try {
+      content = results.Experiment.all();
+    } catch (SQLException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (Exception ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+  public static PLAExtensibility getPlaExtMetricsForSolution(String idSolution, String experimentId) {
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()) {
+          for (PLAExtensibility plaExt : exec.getAllMetrics().getPlaExtensibility()) {
+            if (plaExt.getIdSolution().equals(idSolution))
+              return plaExt;
+          }
+        }
+      }
+    }
+
+    return null;
+
+  }
+
+  public static Elegance getEleganceMetricsForSolution(String idSolution, String experimentId) {
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()) {
+          for (Elegance elegance : exec.getAllMetrics().getElegance()) {
+            if (elegance.getIdSolution().equals(idSolution))
               return elegance;
+          }
+        }
+      }
+    }
 
     return null;
   }
 
-  public static Conventional getConventionalsMetricsForSolution(String idSolution, String idExperiement) {
-    for (Experiment exp : content) 
-      if (exp.getId().equals(idExperiement)) 
-        for (Execution exec : exp.getExecutions()) 
-          for (Conventional con : exec.getAllMetrics().getConventional()) 
-            if (con.getIdSolution().equals(idSolution)) 
+  public static Conventional getConventionalsMetricsForSolution(String idSolution, String experimentId) {
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()) {
+          for (Conventional con : exec.getAllMetrics().getConventional()) {
+            if (con.getIdSolution().equals(idSolution))
               return con;
+          }
+        }
+      }
+    }
 
     return null;
   }
 
-  public static FeatureDriven getFeatureDrivenMetricsForSolution(String idSolution, String idExperiement) {
-     for (Experiment exp : content) 
-      if (exp.getId().equals(idExperiement)) 
-        for (Execution exec : exp.getExecutions()) 
-          for (FeatureDriven f : exec.getAllMetrics().getFeatureDriven()) 
-            if (f.getIdSolution().equals(idSolution)) 
+  public static FeatureDriven getFeatureDrivenMetricsForSolution(String idSolution, String experimentId) {
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()) {
+          for (FeatureDriven f : exec.getAllMetrics().getFeatureDriven()) {
+            if (f.getIdSolution().equals(idSolution)){
               return f;
+            }
+          }
+        }
+      }
+    }
 
     return null;
   }
+
+
+
+  public static List<Elegance> getAllEleganceMetricsForExperimentId(String experimentId) {
+    List<Elegance> listFd = new ArrayList<>();
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()) {
+          listFd.addAll(exec.getAllMetrics().getElegance());
+        }
+      }
+
+    }
+
+    return listFd;
+  }
+  
+  public static List<FeatureDriven> getAllFeatureDrivenMetricsForExperimentId(String experimentId) {
+    List<FeatureDriven> listFd = new ArrayList<>();
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()) {
+          listFd.addAll(exec.getAllMetrics().getFeatureDriven());
+        }
+      }
+    }
+
+    return listFd;
+  }
+
+  public static List<Conventional> getAllConventionalMetricsForExperimentId(String experimentId) {
+    List<Conventional> listCons = new ArrayList<>();
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()){
+          listCons.addAll(exec.getAllMetrics().getConventional());
+        }
+      }
+
+    }
+
+    return listCons;
+  }
+
+  public static List<PLAExtensibility> getAllPLAExtMetricsForExperimentId(String experimentId) {
+    List<PLAExtensibility> listCons = new ArrayList<>();
+    for (Experiment exp : content) {
+      if (exp.getId().equals(experimentId)) {
+        for (Execution exec : exp.getExecutions()){
+          listCons.addAll(exec.getAllMetrics().getPlaExtensibility());
+        }
+      }
+
+    }
+
+    return listCons;
+  }
+  
+  
+  
 }
