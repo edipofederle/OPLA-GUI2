@@ -405,6 +405,9 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
 
   private void tableEleganceBestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableEleganceBestMouseClicked
     updateTableObjectives(evt);
+    tableConventionalBest.clearSelection();
+    tableFeatureDrivenBest.clearSelection();
+    tablePLAExtBest.clearSelection();
   }
 
   private void updateTableObjectives(MouseEvent evt) {
@@ -417,14 +420,23 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
 
   private void tableConventionalBestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableConventionalBestMouseClicked
     updateTableObjectives(evt);
+    tableEleganceBest.clearSelection();
+    tableFeatureDrivenBest.clearSelection();
+    tablePLAExtBest.clearSelection();
   }//GEN-LAST:event_tableConventionalBestMouseClicked
 
   private void tablePLAExtBestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePLAExtBestMouseClicked
     updateTableObjectives(evt);
+    tableEleganceBest.clearSelection();
+    tableFeatureDrivenBest.clearSelection();
+    tableConventionalBest.clearSelection();
   }//GEN-LAST:event_tablePLAExtBestMouseClicked
 
   private void tableFeatureDrivenBestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableFeatureDrivenBestMouseClicked
     updateTableObjectives(evt);
+    tableConventionalBest.clearSelection();
+    tableEleganceBest.clearSelection();
+    tablePLAExtBest.clearSelection();
   }//GEN-LAST:event_tableFeatureDrivenBestMouseClicked
 
   private void edTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edTableMouseClicked
