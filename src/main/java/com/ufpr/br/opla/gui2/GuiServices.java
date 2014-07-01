@@ -1,5 +1,8 @@
 package com.ufpr.br.opla.gui2;
 
+import com.ufpr.br.opla.utils.Utils;
+import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import javax.swing.*;
 
 public class GuiServices {

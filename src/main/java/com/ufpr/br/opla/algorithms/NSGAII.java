@@ -5,9 +5,9 @@
 package com.ufpr.br.opla.algorithms;
 
 import arquitetura.io.ReaderConfig;
-import com.ufpr.br.opla.experiementsUtils.MutationOperatorsSelected;
-import com.ufpr.br.opla.gui2.UserHome;
-import com.ufpr.br.opla.gui2.VolatileConfs;
+import com.ufpr.br.opla.utils.MutationOperatorsSelected;
+import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.configuration.VolatileConfs;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;

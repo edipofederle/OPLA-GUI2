@@ -4,6 +4,9 @@
  */
 package com.ufpr.br.opla.gui2;
 
+import com.ufpr.br.opla.indicators.Indicators;
+import com.ufpr.br.opla.utils.GuiUtils;
+import db.BestSolutionBySelectedFitness;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.*;
@@ -34,9 +37,6 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     GuiUtils.makeTableNotEditable(tablePLAExtBest);
 
     panelTableObjectives.setVisible(false);
-
-
-
 
   }
 
@@ -557,6 +557,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
             BestSolutionBySelectedFitness.calculateBestFeatureDriven(selectedExperiment));
   }
 
+
   private void initializeContentForEleganceTable() {
     BestSolutionBySelectedFitness.buildTable(tableConventionalBest,
             BestSolutionBySelectedFitness.calculateBestConventional(selectedExperiment));
@@ -568,7 +569,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
   }
 
   public void loadEds() {
-    Map.Entry<String, Double> bestTradeOffSolutionName = Indicadores.getSolutionWithBestTradeOff(selectedExperiment);
+    Map.Entry<String, Double> bestTradeOffSolutionName = Indicators.getSolutionWithBestTradeOff(selectedExperiment);
     textFieldBestEDVName.setText(bestTradeOffSolutionName.getKey());
     textFieldBestEDValue.setText(String.valueOf(bestTradeOffSolutionName.getValue()));
 
@@ -577,7 +578,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     modelTableEds.addColumn("ED");
 
     edTable.setModel(modelTableEds);
-    SortedMap<String, Double> resultsEds = Indicadores.getEdsForExperiment(selectedExperiment);
+    SortedMap<String, Double> resultsEds = Indicators.getEdsForExperiment(selectedExperiment);
 
     for (Map.Entry<String, Double> entry : resultsEds.entrySet()) {
       Object[] row = new Object[2];
@@ -590,7 +591,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
   }
 
   private void selectBestEdSolution() {
-    String solution = Indicadores.getSolutionWithBestTradeOff(selectedExperiment).getKey();
+    String solution = Indicators.getSolutionWithBestTradeOff(selectedExperiment).getKey();
 
     int rows = tableEleganceBest.getRowCount();
 

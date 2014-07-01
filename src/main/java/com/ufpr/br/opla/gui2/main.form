@@ -522,7 +522,7 @@
                                   <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="panelMetrics" max="32767" attributes="0"/>
-                                      <Component id="panelOperatorsMutation" pref="0" max="32767" attributes="0"/>
+                                      <Component id="panelOperatorsMutation" pref="399" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -578,7 +578,6 @@
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="panelCrossProb" min="-2" max="-2" attributes="0"/>
                               <Component id="panelMutationProb" max="32767" attributes="0"/>
@@ -789,9 +788,6 @@
                       </Border>
                     </Property>
                   </Properties>
-                  <AccessibilityProperties>
-                    <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Objective Functions"/>
-                  </AccessibilityProperties>
 
                   <Layout>
                     <DimensionLayout dim="0">

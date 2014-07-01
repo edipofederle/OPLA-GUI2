@@ -6,6 +6,7 @@
 
 package com.ufpr.br.opla.gui2;
 
+import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import arquitetura.builders.ArchitectureBuilder;
 
 /**
