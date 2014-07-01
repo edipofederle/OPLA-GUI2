@@ -8,9 +8,10 @@ import exceptions.MissingConfigurationException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,11 +25,11 @@ class Indicadores {
    * Only for non dominated solutions
    *
    */
-  public static HashMap<String, String> getEdsForExperiment(String experimentID) {
+  public static SortedMap<String, Double> getEdsForExperiment(String experimentID) {
 
     try {
       try (Statement statement = database.Database.getConnection().createStatement()) {
-        HashMap<String, String> results = new HashMap<>();
+        SortedMap<String, Double> results = new TreeMap();
 
         StringBuilder query = new StringBuilder();
         query.append("SELECT ed, solution_name FROM distance_euclidean WHERE experiment_id = ");
@@ -37,7 +38,7 @@ class Indicadores {
         ResultSet result = statement.executeQuery(query.toString());
 
         while (result.next()) {
-          results.put(result.getString("solution_name"), result.getString("ed"));
+          results.put(result.getString("solution_name"), Double.parseDouble(result.getString("ed")));
         }
         statement.close();
 
@@ -55,18 +56,17 @@ class Indicadores {
 
   public static String getEdForSelectedSolution(String fileName, String experimentID) {
     try {
-      Statement statement = database.Database.getConnection().createStatement();
-      StringBuilder query = new StringBuilder();
-      query.append("SELECT ed FROM distance_euclidean WHERE experiment_id = ");
-      query.append(experimentID);
-      query.append(" AND solution_name ='");
-      query.append(fileName.substring(0, fileName.length() - 4));
-      query.append("'");
-
-      ResultSet result = statement.executeQuery(query.toString());
-
-    String ed =  result.getString("ed");
-    statement.close();
+      String ed;
+      try (Statement statement = database.Database.getConnection().createStatement()) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ed FROM distance_euclidean WHERE experiment_id = ");
+        query.append(experimentID);
+        query.append(" AND solution_name ='");
+        query.append(fileName.substring(0, fileName.length() - 4));
+        query.append("'");
+        ResultSet result = statement.executeQuery(query.toString());
+        ed = result.getString("ed");
+      }
     return ed;
 
     } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
@@ -77,17 +77,16 @@ class Indicadores {
 
   }
   
-  public static Entry<String, String> getSolutionWithBestTradeOff(String experimentId) {
+  public static Entry<String, Double> getSolutionWithBestTradeOff(String experimentId) {
 
-    HashMap<String, String> eds = getEdsForExperiment(experimentId);
+    SortedMap<String, Double> eds = getEdsForExperiment(experimentId);
     Double ed = Double.MAX_VALUE;
-    Entry<String, String> solution = null;
+    Entry<String, Double> solution = null;
     
-    for(Map.Entry<String, String> entry : eds.entrySet()){
-     if(Double.parseDouble(entry.getValue()) < ed){
-       ed = Double.parseDouble(entry.getValue());
-        solution = entry;
-        
+    for(Map.Entry<String, Double> entry : eds.entrySet()){
+     if(entry.getValue() < ed){
+       ed = entry.getValue();
+       solution = entry;
      }
     }  
     

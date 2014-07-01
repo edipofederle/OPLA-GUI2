@@ -109,6 +109,5 @@ class BestSolutionBySelectedFitness {
     return map;
   }
 
-  
-  
+
 }

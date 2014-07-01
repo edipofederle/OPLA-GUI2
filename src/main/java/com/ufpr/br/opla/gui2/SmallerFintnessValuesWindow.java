@@ -556,18 +556,18 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
   }
 
   public void loadEds() {
-    Map.Entry<String, String> bestTradeOffSolutionName = Indicadores.getSolutionWithBestTradeOff(selectedExperiment);
+    Map.Entry<String, Double> bestTradeOffSolutionName = Indicadores.getSolutionWithBestTradeOff(selectedExperiment);
     textFieldBestEDVName.setText(bestTradeOffSolutionName.getKey());
-    textFieldBestEDValue.setText(bestTradeOffSolutionName.getValue());
+    textFieldBestEDValue.setText(String.valueOf(bestTradeOffSolutionName.getValue()));
 
     DefaultTableModel modelTableEds = new DefaultTableModel();
     modelTableEds.addColumn("Solution Name");
     modelTableEds.addColumn("ED");
 
     edTable.setModel(modelTableEds);
-    HashMap<String, String> resultsEds = Indicadores.getEdsForExperiment(selectedExperiment);
+    SortedMap<String, Double> resultsEds = Indicadores.getEdsForExperiment(selectedExperiment);
 
-    for (Map.Entry<String, String> entry : resultsEds.entrySet()) {
+    for (Map.Entry<String, Double> entry : resultsEds.entrySet()) {
       Object[] row = new Object[2];
 
       row[0] = entry.getKey();
