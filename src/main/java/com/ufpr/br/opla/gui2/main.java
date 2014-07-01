@@ -292,7 +292,7 @@ public class main extends javax.swing.JFrame {
         panelShowMetrics = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableMetrics = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        bestSolutions = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -867,7 +867,7 @@ public class main extends javax.swing.JFrame {
                         .addGap(26, 26, 26)
                         .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(panelMetrics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))))
+                            .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))))
                 .addContainerGap(128, Short.MAX_VALUE))
         );
         panelExperimentSettingsLayout.setVerticalGroup(
@@ -908,14 +908,11 @@ public class main extends javax.swing.JFrame {
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                         .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(18, 18, 18)
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelMutationProb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(113, 113, 113))
         );
-
-        panelMetrics.getAccessibleContext().setAccessibleName("Objective Functions");
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Architecture(s)", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
@@ -1269,10 +1266,11 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Best Solutions by fitness values");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        bestSolutions.setText("Best Solutions by fitness values");
+        bestSolutions.setEnabled(false);
+        bestSolutions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                bestSolutionsActionPerformed(evt);
             }
         });
 
@@ -1294,7 +1292,7 @@ public class main extends javax.swing.JFrame {
                         .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton2)
+                    .addComponent(bestSolutions)
                     .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1315,7 +1313,7 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(bestSolutions)
                 .addContainerGap())
         );
 
@@ -1667,7 +1665,7 @@ public class main extends javax.swing.JFrame {
 
     private void tableExpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExpMouseClicked
        if (evt.getClickCount() == 2) {
-       // panelEds.setVisible(true);
+         
         panelShowMetrics.setVisible(false);
         JTable target = (JTable) evt.getSource();
         int rowIndex = target.getSelectedRow();
@@ -1680,6 +1678,7 @@ public class main extends javax.swing.JFrame {
 
         this.selectedExperiment = idExperiment;
         createTableExecutions(idExperiment);
+        bestSolutions.setEnabled(true);
        }
     }//GEN-LAST:event_tableExpMouseClicked
 
@@ -1877,7 +1876,7 @@ public class main extends javax.swing.JFrame {
     // TODO add your handling code here:
   }//GEN-LAST:event_experimentsMouseEntered
 
-  private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+  private void bestSolutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bestSolutionsActionPerformed
     SmallerFintnessValuesWindow sfvw = new SmallerFintnessValuesWindow();
 
     sfvw.setVisible(true);
@@ -1886,7 +1885,7 @@ public class main extends javax.swing.JFrame {
     sfvw.setExperimentId(selectedExperiment);
     sfvw.enablePanelsObjectiveFunctions();
     sfvw.loadEds();
-  }//GEN-LAST:event_jButton2ActionPerformed
+  }//GEN-LAST:event_bestSolutionsActionPerformed
 
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
@@ -1917,6 +1916,7 @@ public class main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ApplicationConfs;
     private javax.swing.JPanel algorithms;
+    private javax.swing.JButton bestSolutions;
     private javax.swing.JButton btnCleanListArchs1;
     private javax.swing.JButton btnConcernProfile;
     private javax.swing.JButton btnInput1;
@@ -1957,7 +1957,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
