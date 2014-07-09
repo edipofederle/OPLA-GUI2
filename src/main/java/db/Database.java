@@ -202,7 +202,10 @@ public class Database {
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
-          listFd.addAll(exec.getAllMetrics().getElegance());
+          for(Elegance m : exec.getAllMetrics().getElegance()){
+            if (m.getIsAll() == 1)
+              listFd.add(m);
+          }
         }
       }
 
@@ -216,7 +219,10 @@ public class Database {
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
-          listFd.addAll(exec.getAllMetrics().getFeatureDriven());
+          for(FeatureDriven m : exec.getAllMetrics().getFeatureDriven()){
+            if (m.getIsAll() == 1)
+              listFd.add(m);
+          }
         }
       }
     }
@@ -229,7 +235,10 @@ public class Database {
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()){
-          listCons.addAll(exec.getAllMetrics().getConventional());
+          for(Conventional m : exec.getAllMetrics().getConventional()){
+            if (m.getIsAll() == 1)
+              listCons.add(m);
+          }
         }
       }
 
@@ -243,7 +252,10 @@ public class Database {
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()){
-          listCons.addAll(exec.getAllMetrics().getPlaExtensibility());
+          for(PLAExtensibility m : exec.getAllMetrics().getPlaExtensibility()){
+            if (m.getIsAll() == 1)
+              listCons.add(m);
+          }
         }
       }
 

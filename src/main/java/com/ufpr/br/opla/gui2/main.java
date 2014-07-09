@@ -530,7 +530,7 @@ public class main extends javax.swing.JFrame {
 
         algorithms.setName("algorithms");
 
-        panelExperimentSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Experiment Settings", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        panelExperimentSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Settings", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         jLabel3.setText("Number of Runs:");
 
@@ -966,7 +966,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select where you want save outputs", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select where you want to save outputs", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         fieldOutput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1053,7 +1053,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(73, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Experiment Configurations", algorithms);
+        jTabbedPane1.addTab("Execution Configurations", algorithms);
 
         experiments.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1266,7 +1266,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        bestSolutions.setText("Best Solutions by fitness values");
+        bestSolutions.setText("Non-Dominated Solutions");
         bestSolutions.setEnabled(false);
         bestSolutions.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1317,7 +1317,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Executed Experiments", experiments);
+        jTabbedPane1.addTab("Finalized", experiments);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1789,7 +1789,7 @@ public class main extends javax.swing.JFrame {
           model.addColumn(mapColumns.get("plaextensibility")[i]);
           numberOfColumns++;
         }
-        GuiUtils.addComomColumnsToTable(model);
+       
 
         Object[] row = new Object[numberOfColumns + 2];
         row[0] = plaExt.getPlaExtensibility();
@@ -1804,14 +1804,12 @@ public class main extends javax.swing.JFrame {
           model.addColumn(mapColumns.get("elegance")[i]);
           numberOfColumns++;
         }
-        GuiUtils.addComomColumnsToTable(model);
+
 
         Object[] row = new Object[numberOfColumns + 2];
         row[0] = elegance.getNac();
         row[1] = elegance.getAtmr();
         row[2] = elegance.getEc();
-        row[3] = this.selectedExperiment;
-        row[4] = this.selectedExecution;
         model.addRow(row);
       } else if (selectedMetric.equalsIgnoreCase("conventional")) {
         Conventional conventional = db.Database.getConventionalsMetricsForSolution(idSolution, this.selectedExperiment);
@@ -1821,7 +1819,7 @@ public class main extends javax.swing.JFrame {
           numberOfColumns++;
         }
 
-        GuiUtils.addComomColumnsToTable(model);
+
         Object[] row = new Object[numberOfColumns + 2];
         row[0] = conventional.getMacAggregation();
         row[1] = conventional.getChoesion();
@@ -1831,8 +1829,6 @@ public class main extends javax.swing.JFrame {
         row[5] = conventional.getSumClassesDepOut();
         row[6] = conventional.getSumDepIn();
         row[7] = conventional.getSumDepOut();
-        row[8] = this.selectedExperiment;
-        row[9] = this.selectedExecution;
         model.addRow(row);
       } else if (selectedMetric.equalsIgnoreCase("featuredriven")) {
         FeatureDriven f = db.Database.getFeatureDrivenMetricsForSolution(idSolution, this.selectedExperiment);
@@ -1841,7 +1837,7 @@ public class main extends javax.swing.JFrame {
           model.addColumn(mapColumns.get("feature")[i]);
           numberOfColumns++;
         }
-        GuiUtils.addComomColumnsToTable(model);
+   
         Object[] row = new Object[numberOfColumns + 2];
         row[0] = f.getMsiAggregation();
         row[1] = f.getCdac();
@@ -1854,8 +1850,6 @@ public class main extends javax.swing.JFrame {
         row[8] = f.getLccClass();
         row[9] = f.getCdaClass();
         row[10] = f.getCibClass();
-        row[11] = this.selectedExperiment;
-        row[12] = this.selectedExecution;
         model.addRow(row);
 
       }

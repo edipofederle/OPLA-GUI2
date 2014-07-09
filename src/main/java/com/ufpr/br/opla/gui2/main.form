@@ -402,8 +402,8 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Experiment Configurations">
-                <Property name="tabTitle" type="java.lang.String" value="Experiment Configurations"/>
+              <JTabbedPaneConstraints tabName="Execution Configurations">
+                <Property name="tabTitle" type="java.lang.String" value="Execution Configurations"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -465,7 +465,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Experiment Settings">
+                    <TitledBorder title="Settings">
                       <Font PropertyName="font" name="Verdana" size="14" style="1"/>
                       <Color PropertyName="color" blue="ff" green="0" id="magenta" palette="1" red="ff" type="palette"/>
                     </TitledBorder>
@@ -1078,7 +1078,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Select where you want save outputs">
+                    <TitledBorder title="Select where you want to save outputs">
                       <Font PropertyName="font" name="Verdana" size="14" style="1"/>
                       <Color PropertyName="color" blue="ff" green="0" id="magenta" palette="1" red="ff" type="palette"/>
                     </TitledBorder>
@@ -1156,8 +1156,8 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Executed Experiments">
-                <Property name="tabTitle" type="java.lang.String" value="Executed Experiments"/>
+              <JTabbedPaneConstraints tabName="Finalized">
+                <Property name="tabTitle" type="java.lang.String" value="Finalized"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -1535,7 +1535,7 @@
             </Container>
             <Component class="javax.swing.JButton" name="bestSolutions">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Best Solutions by fitness values"/>
+                <Property name="text" type="java.lang.String" value="Non-Dominated Solutions"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>

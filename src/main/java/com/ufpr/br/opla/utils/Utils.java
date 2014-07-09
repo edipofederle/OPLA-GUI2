@@ -4,10 +4,17 @@
  */
 package com.ufpr.br.opla.utils;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.ufpr.br.opla.gui2.main;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.WordUtils;
@@ -88,4 +95,20 @@ public class Utils {
       return true;
     return false;
   }
+
+  public static List<Entry<String, Double>> shortMap(SortedMap<String, Double> resultsEds) {
+    List<Map.Entry<String, Double>> edsValues = Lists.newArrayList(resultsEds.entrySet());
+    
+    Ordering<Map.Entry<String, Double>> byMapValues = new Ordering<Map.Entry<String, Double>>() {
+      @Override
+      public int compare(Map.Entry<String, Double> left, Map.Entry<String, Double> right) {
+        return left.getValue().compareTo(right.getValue());
+      }
+    };
+    
+   Collections.sort(edsValues, byMapValues);
+   
+   return edsValues;
+  }
+
 }

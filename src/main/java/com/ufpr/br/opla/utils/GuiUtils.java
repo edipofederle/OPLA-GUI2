@@ -50,10 +50,6 @@ public class GuiUtils {
         }
     }
 
-  public static void addComomColumnsToTable(DefaultTableModel model) {
-    model.addColumn("Experiment");
-    model.addColumn("Execution");
-  }
 
   public static void fontSize(int fontSize) {
     for (Map.Entry<Object, Object> entry : javax.swing.UIManager.getDefaults().entrySet()) {
