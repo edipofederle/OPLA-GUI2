@@ -51,8 +51,8 @@ public class main extends javax.swing.JFrame {
   //private OplaServices oplaService = null;
   private String pathSmartyBck;
   private String pathConcernBck;
-  private String pathRelationchipBck;
-  private String pathPatternBck;
+  private String pathRelationshipsBck;
+  private String pathPatternsBck;
   private String crossoverProbabilityBck;
   private String mutationProbabilityBck;
   private String selectedExperiment;
@@ -106,15 +106,20 @@ public class main extends javax.swing.JFrame {
     //Text Field are disabled
     fieldSmartyProfile.setEditable(false);
     fieldConcernProfile.setEditable(false);
-    // fieldPatterns.setEditable(false);
-    //  fieldRelationships.setEditable(false);
+    fieldPatternsProfile.setEditable(false);
+    fieldRelationshipsProfile.setEditable(false);
+    
+    checkSmarty.setSelected(true);
+    checkConcerns.setSelected(true);
+    checkPatterns.setSelected(true);
+    checkRelationships.setSelected(true);
 
 
     GuiServices guiservices = new GuiServices(config);
     guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
     guiservices.configureConcernsProfile(fieldConcernProfile, checkConcerns, btnConcernProfile);
-    // guiservices.configurePatternsProfile(fieldPatterns, checkPatterns, btnPatternProfile);
-    // guiservices.configureRelationshipsProfile(fieldRelationships, checkRelationship, btnRelationshipProfile);
+    guiservices.configurePatternsProfile(fieldPatternsProfile, checkPatterns, btnPatternProfile);
+    guiservices.configureRelationshipsProfile(fieldRelationshipsProfile, checkRelationships, btnRelationshipProfile);
     guiservices.configureTemplates(fieldTemplate);
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
 
@@ -218,6 +223,14 @@ public class main extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         fieldConcernProfile = new javax.swing.JTextField();
         btnConcernProfile = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        fieldPatternsProfile = new javax.swing.JTextField();
+        btnPatternProfile = new javax.swing.JButton();
+        checkPatterns = new javax.swing.JCheckBox();
+        jLabel18 = new javax.swing.JLabel();
+        fieldRelationshipsProfile = new javax.swing.JTextField();
+        btnRelationshipProfile = new javax.swing.JButton();
+        checkRelationships = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -359,6 +372,33 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setText("Patterns Profile:");
+
+        btnPatternProfile.setText("Browser...");
+        btnPatternProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPatternProfileActionPerformed(evt);
+            }
+        });
+
+        checkPatterns.setText("Patterns");
+        checkPatterns.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkPatternsActionPerformed(evt);
+            }
+        });
+
+        jLabel18.setText("Relationships Profile:");
+
+        btnRelationshipProfile.setText("Browser...");
+        btnRelationshipProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelationshipProfileActionPerformed(evt);
+            }
+        });
+
+        checkRelationships.setText("Relationships");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -373,14 +413,26 @@ public class main extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(checkSmarty)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkConcerns))
+                        .addComponent(checkConcerns)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkPatterns)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkRelationships))
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel18)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(fieldConcernProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(fieldRelationshipsProfile, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fieldPatternsProfile, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(fieldConcernProfile, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnConcernProfile)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnConcernProfile)
+                            .addComponent(btnPatternProfile)
+                            .addComponent(btnRelationshipProfile, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -388,7 +440,9 @@ public class main extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(checkSmarty)
-                    .addComponent(checkConcerns))
+                    .addComponent(checkConcerns)
+                    .addComponent(checkPatterns)
+                    .addComponent(checkRelationships))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -397,11 +451,23 @@ public class main extends javax.swing.JFrame {
                     .addComponent(btnSmartyProfile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldConcernProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConcernProfile))
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldPatternsProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPatternProfile))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(fieldRelationshipsProfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRelationshipProfile))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Template Configuration", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
@@ -510,20 +576,20 @@ public class main extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addContainerGap(377, Short.MAX_VALUE))
         );
         ApplicationConfsLayout.setVerticalGroup(
             ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ApplicationConfsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addComponent(jButton1)
-                .addContainerGap(257, Short.MAX_VALUE))
+                .addGap(44, 44, 44))
         );
 
         jTabbedPane1.addTab("General Configurations", ApplicationConfs);
@@ -1413,27 +1479,27 @@ public class main extends javax.swing.JFrame {
 
     private void checkSmartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSmartyActionPerformed
       if (!checkSmarty.isSelected()) {
-        fieldSmartyProfile.setText(pathSmartyBck);
-        btnSmartyProfile.setEnabled(true);
-        this.config.updatePathToProfileSmarty(pathSmartyBck);
-      } else {
         pathSmartyBck = fieldSmartyProfile.getText();
         fieldSmartyProfile.setText("");
-        this.config.updatePathToProfileSmarty("");
         btnSmartyProfile.setEnabled(false);
+        this.config.updatePathToProfileSmarty("");
+      } else {
+        btnSmartyProfile.setEnabled(true);
+        fieldSmartyProfile.setText(pathSmartyBck);
+        this.config.updatePathToProfileSmarty(pathSmartyBck);
       }
     }//GEN-LAST:event_checkSmartyActionPerformed
 
     private void checkConcernsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkConcernsActionPerformed
-      if (!checkConcerns.isSelected()) {
-        fieldConcernProfile.setText(pathConcernBck);
-        btnConcernProfile.setEnabled(true);
-        this.config.updatePathToProfileConcerns(pathConcernBck);
-      } else {
+     if (!checkConcerns.isSelected()) {     
         pathConcernBck = fieldConcernProfile.getText();
         fieldConcernProfile.setText("");
-        this.config.updatePathToProfileConcerns("");
         btnConcernProfile.setEnabled(false);
+        this.config.updatePathToProfileConcerns("");
+      } else {
+        btnConcernProfile.setEnabled(true);
+        fieldConcernProfile.setText(pathConcernBck);
+        this.config.updatePathToProfileConcerns(pathConcernBck);
       }
     }//GEN-LAST:event_checkConcernsActionPerformed
 
@@ -1881,6 +1947,41 @@ public class main extends javax.swing.JFrame {
     sfvw.loadEds();
   }//GEN-LAST:event_bestSolutionsActionPerformed
 
+  private void btnPatternProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatternProfileActionPerformed
+    String newPath = fileChooser(fieldPatternsProfile, "uml");
+    if (newPath.equals("")) {
+      this.config.updatePathToProfilePatterns(fieldPatternsProfile.getText());
+    } else {
+      this.config.updatePathToProfilePatterns(newPath);
+    }
+  }//GEN-LAST:event_btnPatternProfileActionPerformed
+
+  private void checkPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPatternsActionPerformed
+    if (!checkRelationships.isSelected()) {     
+        pathPatternsBck = fieldPatternsProfile.getText();
+        fieldPatternsProfile.setText("");
+        btnPatternProfile.setEnabled(false);
+        this.config.updatePathToProfilePatterns(pathPatternsBck);
+      } else {
+        btnPatternProfile.setEnabled(true);
+        fieldPatternsProfile.setText(pathPatternsBck);
+        this.config.updatePathToProfilePatterns(pathPatternsBck);
+      }
+  }//GEN-LAST:event_checkPatternsActionPerformed
+
+  private void btnRelationshipProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelationshipProfileActionPerformed
+    if (!checkPatterns.isSelected()) {
+      pathRelationshipsBck = fieldRelationshipsProfile.getText();
+      fieldRelationshipsProfile.setText("");
+      btnRelationshipProfile.setEnabled(false);
+      this.config.updatePathToProfileRelationships(pathRelationshipsBck);
+    } else {
+      btnRelationshipProfile.setEnabled(true);
+      fieldRelationshipsProfile.setText(pathRelationshipsBck);
+      this.config.updatePathToProfileRelationships(pathRelationshipsBck);
+    }
+  }//GEN-LAST:event_btnRelationshipProfileActionPerformed
+
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
     int rVal = c.showOpenDialog(this);
@@ -1916,6 +2017,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnInput1;
     private javax.swing.JButton btnManipulationDir;
     private javax.swing.JButton btnOutput;
+    private javax.swing.JButton btnPatternProfile;
+    private javax.swing.JButton btnRelationshipProfile;
     private javax.swing.JButton btnRun;
     private javax.swing.JButton btnSmartyProfile;
     private javax.swing.JButton btnTemplate;
@@ -1932,6 +2035,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkMoveOperation;
     private javax.swing.JCheckBox checkMutation;
     private javax.swing.JCheckBox checkPLAExt;
+    private javax.swing.JCheckBox checkPatterns;
+    private javax.swing.JCheckBox checkRelationships;
     private javax.swing.JCheckBox checkSmarty;
     private javax.swing.JComboBox comboAlgorithms;
     private javax.swing.JComboBox comboMetrics;
@@ -1947,11 +2052,14 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldNumberOfRuns;
     private javax.swing.JTextField fieldOutput;
     private javax.swing.JTextField fieldPaesArchiveSize;
+    private javax.swing.JTextField fieldPatternsProfile;
     private javax.swing.JTextField fieldPopulationSize;
+    private javax.swing.JTextField fieldRelationshipsProfile;
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -1959,6 +2067,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
