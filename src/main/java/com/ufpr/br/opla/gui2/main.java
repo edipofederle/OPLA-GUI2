@@ -78,8 +78,9 @@ public class main extends javax.swing.JFrame {
     hidePanelShowMetricsByDefault();
     checkAllMetricsByDefault();
     initiExecutedExperiments();
+    
     panelExecutions.setVisible(false);
-
+    desactiveTabFinalizedWhenNotExperimentsFound();
 
     try {
       UserHome.createDefaultOplaPathIfDontExists();
@@ -124,6 +125,11 @@ public class main extends javax.swing.JFrame {
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
 
     guiservices.configureLocaleToExportModels(fieldOutput);
+  }
+
+  private void desactiveTabFinalizedWhenNotExperimentsFound() {
+    if(db.Database.getContent().isEmpty())
+      jTabbedPane1.setEnabledAt(2,false);
   }
 
   private void addOrRemoveOperatorMutation(final String operatorName) {
@@ -1773,6 +1779,8 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_tableExecutionsMouseClicked
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+     
+
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void experimentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_experimentsMouseClicked
@@ -2191,8 +2199,6 @@ public class main extends javax.swing.JFrame {
       tableExp.setModel(model);
 
       List<results.Experiment> allExp = db.Database.getContent();
-
-
       for (results.Experiment exp : allExp) {
         Object[] row = new Object[4];
         row[0] = exp.getId();
