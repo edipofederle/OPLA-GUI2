@@ -5,17 +5,13 @@
  */
 package com.ufpr.br.opla.gui2;
 
-import com.ufpr.br.opla.utils.Validators;
-import com.ufpr.br.opla.utils.Utils;
-import com.ufpr.br.opla.configuration.UserHome;
-import com.ufpr.br.opla.algorithms.Solution;
-import com.ufpr.br.opla.utils.ReadSolutionsFiles;
-import com.ufpr.br.opla.configuration.VolatileConfs;
-import com.ufpr.br.opla.utils.GuiUtils;
-import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
-import com.ufpr.br.opla.utils.MutationOperatorsSelected;
+import com.ufpr.br.opla.algorithms.Solution;
+import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
+import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.configuration.VolatileConfs;
+import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
