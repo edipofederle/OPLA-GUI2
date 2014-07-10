@@ -943,19 +943,22 @@ public class main extends javax.swing.JFrame {
                                 .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                                     .addComponent(jLabel3)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(fieldNumberOfRuns, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
+                                    .addComponent(fieldNumberOfRuns))
                                 .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jLabel5))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(fieldMaxEvaluations, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
-                                        .addComponent(fieldPopulationSize))))
-                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                .addComponent(labelArchivePAES)
-                                .addGap(30, 30, 30)
-                                .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelExperimentSettingsLayout.createSequentialGroup()
+                                            .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jLabel4)
+                                                .addComponent(jLabel5))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                        .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                                            .addComponent(labelArchivePAES)
+                                            .addGap(32, 32, 32)))
+                                    .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(fieldMaxEvaluations, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
+                                            .addComponent(fieldPopulationSize)))))
                             .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(checkMutation)
@@ -985,26 +988,30 @@ public class main extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(fieldMaxEvaluations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(fieldPopulationSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(11, 11, 11)
-                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(labelArchivePAES)
-                            .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(labelArchivePAES)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(fieldPopulationSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(labelOperators, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(checkCrossover, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(checkMutation)))
-                    .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                        .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(checkMutation))))
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelMutationProb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1488,12 +1495,12 @@ public class main extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
       StringBuffer sb = new StringBuffer();
       sb.append("Application.yml file content").append("\n\n");
-      sb.append("directoryToExportModels:").append(config.getConfig().getDirectoryToExportModels()).append("\n");
-      sb.append("pathToProfile:").append(config.getConfig().getPathToProfile()).append("\n");
-      sb.append("pathToProfileConcern:").append(config.getConfig().getPathToProfileConcern()).append("\n");
-      sb.append("pathToProfilePatterns").append(config.getConfig().getPathToProfilePatterns()).append("\n");
-      sb.append("pathToProfileRelationships").append(config.getConfig().getPathToProfileRelationships()).append("\n");
-      sb.append("pathToTemplateModelsDirectory").append(config.getConfig().getPathToTemplateModelsDirectory()).append("\n");
+      sb.append("directoryToExportModels: ").append(config.getConfig().getDirectoryToExportModels()).append("\n");
+      sb.append("pathToProfile: ").append(config.getConfig().getPathToProfile()).append("\n");
+      sb.append("pathToProfileConcern: ").append(config.getConfig().getPathToProfileConcern()).append("\n");
+      sb.append("pathToProfilePatterns: ").append(config.getConfig().getPathToProfilePatterns()).append("\n");
+      sb.append("pathToProfileRelationships: ").append(config.getConfig().getPathToProfileRelationships()).append("\n");
+      sb.append("pathToTemplateModelsDirectory: ").append(config.getConfig().getPathToTemplateModelsDirectory()).append("\n");
       JOptionPane.showMessageDialog(null, sb);
     }//GEN-LAST:event_jButton1ActionPerformed
 
