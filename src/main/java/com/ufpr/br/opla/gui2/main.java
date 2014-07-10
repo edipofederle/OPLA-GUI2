@@ -5,6 +5,7 @@
  */
 package com.ufpr.br.opla.gui2;
 
+import arquitetura.io.DirTarget;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.algorithms.Solution;
@@ -50,7 +51,6 @@ public class main extends javax.swing.JFrame {
   private String pathRelationshipsBck;
   private String pathPatternsBck;
   private String crossoverProbabilityBck;
-  private String mutationProbabilityBck;
   private String selectedExperiment;
   private String selectedExecution;
 
@@ -99,17 +99,8 @@ public class main extends javax.swing.JFrame {
     } catch (FileNotFoundException ex) {
       java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, ex.getMessage());
     }
-
-    //Text Field are disabled
-    fieldSmartyProfile.setEditable(false);
-    fieldConcernProfile.setEditable(false);
-    fieldPatternsProfile.setEditable(false);
-    fieldRelationshipsProfile.setEditable(false);
     
-    checkSmarty.setSelected(true);
-    checkConcerns.setSelected(true);
-    checkPatterns.setSelected(true);
-    checkRelationships.setSelected(true);
+   
 
 
     GuiServices guiservices = new GuiServices(config);
@@ -121,6 +112,36 @@ public class main extends javax.swing.JFrame {
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
 
     guiservices.configureLocaleToExportModels(fieldOutput);
+    
+    activeFieldsAndChecks();
+  }
+
+  private void activeFieldsAndChecks() {
+    //Text Field are disabled
+    fieldSmartyProfile.setEditable(false);
+    fieldConcernProfile.setEditable(false);
+    fieldPatternsProfile.setEditable(false);
+    fieldRelationshipsProfile.setEditable(false);
+    
+    if(fieldSmartyProfile.getText().isEmpty())
+      checkSmarty.setSelected(false);
+    else
+      checkSmarty.setSelected(true);
+    
+    if(fieldConcernProfile.getText().isEmpty())
+      checkConcerns.setSelected(false);  
+    else
+      checkConcerns.setSelected(true);
+    
+    if(fieldPatternsProfile.getText().isEmpty())
+      checkPatterns.setSelected(false);
+    else
+      checkPatterns.setSelected(true);
+    
+    if(fieldRelationshipsProfile.getText().isEmpty())
+      checkRelationships.setSelected(false);
+    else
+      checkRelationships.setSelected(true);
   }
 
   private void desactiveTabFinalizedWhenNotExperimentsFound() {
