@@ -638,7 +638,7 @@ public class main extends javax.swing.JFrame {
 
         panelCrossProb.setBorder(javax.swing.BorderFactory.createTitledBorder("Crossover Probability"));
 
-        fieldCrossoverProbability.setText("0.9");
+        fieldCrossoverProbability.setText("1.0");
         fieldCrossoverProbability.setEnabled(false);
 
         crossProbSlider.setMajorTickSpacing(1);
@@ -694,7 +694,7 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        fieldMutationProb.setText("0.9");
+        fieldMutationProb.setText("1.0");
         fieldMutationProb.setEnabled(false);
 
         javax.swing.GroupLayout panelMutationProbLayout = new javax.swing.GroupLayout(panelMutationProb);
