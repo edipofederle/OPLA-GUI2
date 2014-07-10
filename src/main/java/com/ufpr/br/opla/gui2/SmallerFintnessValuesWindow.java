@@ -4,8 +4,6 @@
  */
 package com.ufpr.br.opla.gui2;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.ufpr.br.opla.indicators.Indicators;
 import com.ufpr.br.opla.utils.GuiUtils;
 import com.ufpr.br.opla.utils.Utils;
@@ -631,8 +629,6 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
         includeTableObjectives(value);
       }
     }
-
-
 
   }
 

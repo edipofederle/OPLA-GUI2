@@ -1966,7 +1966,7 @@ public class main extends javax.swing.JFrame {
     SmallerFintnessValuesWindow sfvw = new SmallerFintnessValuesWindow();
 
     sfvw.setVisible(true);
-    sfvw.setTitle("Experiment " + this.selectedExperiment);
+    sfvw.setTitle("Execution " + this.selectedExperiment);
     sfvw.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     sfvw.setExperimentId(selectedExperiment);
     sfvw.enablePanelsObjectiveFunctions();
