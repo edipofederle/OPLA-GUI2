@@ -1,7 +1,6 @@
 package com.ufpr.br.opla.configuration;
 
 
-import com.ufpr.br.opla.configuration.DirTarget;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;

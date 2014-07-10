@@ -37,17 +37,14 @@ public class Utils {
     try {
       InputStream in = Thread.currentThread().getContextClassLoader().
               getResourceAsStream(source);
-
-
-      FileOutputStream out = new FileOutputStream(target);
-
-      byte[] buffer = new byte[1024];
-      int len = in.read(buffer);
-      while (len != -1) {
-        out.write(buffer, 0, len);
-        len = in.read(buffer);
+      try (FileOutputStream out = new FileOutputStream(target)) {
+        byte[] buffer = new byte[1024];
+        int len = in.read(buffer);
+        while (len != -1) {
+          out.write(buffer, 0, len);
+          len = in.read(buffer);
+        }
       }
-      out.close();
       Logger.getLogger(main.class.getName()).log(Level.INFO, "File copy from {0} to {1}", new Object[]{source, target});
     } catch (Exception e) {
       Logger.getLogger(main.class.getName()).log(Level.SEVERE, e.toString());
@@ -72,9 +69,9 @@ public class Utils {
     String s = f.getName();
     int i = s.lastIndexOf('.');
 
-    if (i > 0 && i < s.length() - 1) {
+    if (i > 0 && i < s.length() - 1)
       ext = s.substring(i + 1).toLowerCase();
-    }
+    
     return ext;
   }
 
@@ -82,17 +79,16 @@ public class Utils {
   public static String extractObjectiveIdFromFile(String name) {
     String b = name.split("-")[1];
     String a = b.substring(0, b.length() - 4);
-    if (a.startsWith("0")) {
+    if (a.startsWith("0"))
       return a.substring(1, a.length());
-    }
-
+    
     return a;
   }
 
   public static boolean selectedSolutionIsNonDominated(String fileName) {
-    if (fileName.startsWith("VAR_All")) {
+    if (fileName.startsWith("VAR_All"))
       return true;
-    }
+    
     return false;
   }
 
