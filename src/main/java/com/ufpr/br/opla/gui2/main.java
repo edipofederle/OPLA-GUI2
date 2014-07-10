@@ -400,6 +400,11 @@ public class main extends javax.swing.JFrame {
         });
 
         checkRelationships.setText("Relationships");
+        checkRelationships.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkRelationshipsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -1177,7 +1182,7 @@ public class main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableExp);
 
         jLabel13.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
-        jLabel13.setText("Experiments");
+        jLabel13.setText("Executions");
 
         tableExecutions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1201,7 +1206,7 @@ public class main extends javax.swing.JFrame {
         jScrollPane3.setViewportView(tableExecutions);
 
         jLabel16.setFont(new java.awt.Font("Monaco", 1, 18)); // NOI18N
-        jLabel16.setText("Executions");
+        jLabel16.setText("Each Run");
 
         javax.swing.GroupLayout panelExecutionsLayout = new javax.swing.GroupLayout(panelExecutions);
         panelExecutions.setLayout(panelExecutionsLayout);
@@ -1283,14 +1288,13 @@ public class main extends javax.swing.JFrame {
             panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelObjectivesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel9)
-                .addGap(18, 18, 18)
-                .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(panelObjectivesLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGroup(panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelObjectivesLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 164, Short.MAX_VALUE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)))
         );
         panelObjectivesLayout.setVerticalGroup(
             panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1299,9 +1303,8 @@ public class main extends javax.swing.JFrame {
                 .addGroup(panelObjectivesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         tableMetrics.setModel(new javax.swing.table.DefaultTableModel(
@@ -1961,7 +1964,7 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_btnPatternProfileActionPerformed
 
   private void checkPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPatternsActionPerformed
-    if (!checkRelationships.isSelected()) {     
+    if (!checkPatterns.isSelected()) {     
         pathPatternsBck = fieldPatternsProfile.getText();
         fieldPatternsProfile.setText("");
         btnPatternProfile.setEnabled(false);
@@ -1974,17 +1977,26 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_checkPatternsActionPerformed
 
   private void btnRelationshipProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelationshipProfileActionPerformed
-    if (!checkPatterns.isSelected()) {
-      pathRelationshipsBck = fieldRelationshipsProfile.getText();
-      fieldRelationshipsProfile.setText("");
-      btnRelationshipProfile.setEnabled(false);
-      this.config.updatePathToProfileRelationships(pathRelationshipsBck);
-    } else {
-      btnRelationshipProfile.setEnabled(true);
-      fieldRelationshipsProfile.setText(pathRelationshipsBck);
-      this.config.updatePathToProfileRelationships(pathRelationshipsBck);
-    }
+      String newPath = fileChooser(fieldRelationshipsProfile, "uml");
+      if (newPath.equals("")) {
+        this.config.updatePathToProfileRelationships(fieldRelationshipsProfile.getText());
+      } else {
+        this.config.updatePathToProfileRelationships(newPath);
+      }
   }//GEN-LAST:event_btnRelationshipProfileActionPerformed
+
+  private void checkRelationshipsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRelationshipsActionPerformed
+     if (!checkRelationships.isSelected()) {     
+        pathRelationshipsBck = fieldRelationshipsProfile.getText();
+        fieldRelationshipsProfile.setText("");
+        btnRelationshipProfile.setEnabled(false);
+        this.config.updatePathToProfileRelationships(pathRelationshipsBck);
+      } else {
+        btnRelationshipProfile.setEnabled(true);
+        fieldRelationshipsProfile.setText(pathRelationshipsBck);
+        this.config.updatePathToProfileRelationships(pathRelationshipsBck);
+      }
+  }//GEN-LAST:event_checkRelationshipsActionPerformed
 
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();

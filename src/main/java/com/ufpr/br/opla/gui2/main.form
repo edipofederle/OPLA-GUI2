@@ -305,6 +305,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Relationships"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkRelationshipsActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -1346,7 +1349,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Monaco" size="18" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Experiments"/>
+                <Property name="text" type="java.lang.String" value="Executions"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JPanel" name="panelExecutions">
@@ -1407,7 +1410,7 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Monaco" size="18" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Executions"/>
+                    <Property name="text" type="java.lang.String" value="Each Run"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -1465,15 +1468,15 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="comboMetrics" min="-2" pref="234" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                          <Component id="jScrollPane4" pref="536" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Component id="comboMetrics" min="-2" pref="234" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="164" max="32767" attributes="0"/>
+                              </Group>
+                              <Component id="jScrollPane4" alignment="0" pref="550" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1485,9 +1488,8 @@
                               <Component id="comboMetrics" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           <Component id="jScrollPane4" min="-2" pref="156" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
