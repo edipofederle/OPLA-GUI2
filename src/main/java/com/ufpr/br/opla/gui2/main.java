@@ -5,7 +5,6 @@
  */
 package com.ufpr.br.opla.gui2;
 
-import arquitetura.io.DirTarget;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.algorithms.Solution;
@@ -117,7 +116,6 @@ public class main extends javax.swing.JFrame {
   }
 
   private void activeFieldsAndChecks() {
-    //Text Field are disabled
     fieldSmartyProfile.setEditable(false);
     fieldConcernProfile.setEditable(false);
     fieldPatternsProfile.setEditable(false);
