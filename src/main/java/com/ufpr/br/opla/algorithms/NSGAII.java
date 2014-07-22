@@ -5,9 +5,9 @@
 package com.ufpr.br.opla.algorithms;
 
 import arquitetura.io.ReaderConfig;
-import com.ufpr.br.opla.utils.MutationOperatorsSelected;
 import com.ufpr.br.opla.configuration.UserHome;
 import com.ufpr.br.opla.configuration.VolatileConfs;
+import com.ufpr.br.opla.utils.MutationOperatorsSelected;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -53,6 +53,10 @@ public class NSGAII {
         } else {
             configs.disableCrossover();            
         }
+        
+        String[] array = new String[MutationOperatorsSelected.getSelectedPatternsToApply().size()];
+        configs.setPatterns(MutationOperatorsSelected.getSelectedPatternsToApply().toArray(array));
+        configs.setDesignPatternStrategy(VolatileConfs.getScopePatterns());
 
         //Configura onde o db esta localizado
         configs.setPathToDb(UserHome.getPathToDb());

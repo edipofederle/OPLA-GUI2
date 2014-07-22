@@ -54,6 +54,10 @@ public class PAES {
         } else {
             configs.disableCrossover();            
         }
+        
+        String[] array = new String[MutationOperatorsSelected.getSelectedPatternsToApply().size()];
+        configs.setPatterns(MutationOperatorsSelected.getSelectedPatternsToApply().toArray(array));
+        configs.setDesignPatternStrategy(VolatileConfs.getScopePatterns());
 
         //Configura onde o db esta localizado
         configs.setPathToDb(UserHome.getPathToDb());

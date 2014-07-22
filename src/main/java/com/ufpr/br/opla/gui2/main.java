@@ -5,6 +5,7 @@
  */
 package com.ufpr.br.opla.gui2;
 
+import br.ufpr.inf.opla.patterns.strategies.scopeselection.impl.ElementsWithSameDesignPatternSelection;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.algorithms.Solution;
@@ -41,7 +42,7 @@ import results.Execution;
  * @author elf
  */
 public class main extends javax.swing.JFrame {
-
+  
   public static final int FONT_SIZE = 15;
   private ManagerApplicationConfig config = null;
   //private OplaServices oplaService = null;
@@ -52,12 +53,14 @@ public class main extends javax.swing.JFrame {
   private String crossoverProbabilityBck;
   private String selectedExperiment;
   private String selectedExecution;
+  ElementsWithSameDesignPatternSelection ewsdp = null;
 
   /**
    * Creates new form main
    */
   public main() throws Exception {
-
+  
+        
     GuiUtils.fontSize(FONT_SIZE); // default font size for all GUI.
 
     initComponents();
@@ -73,6 +76,9 @@ public class main extends javax.swing.JFrame {
     hidePanelShowMetricsByDefault();
     checkAllMetricsByDefault();
     initiExecutedExperiments();
+    
+    hidePanelPatternScopeByDefault();
+    configureDefaultPatternScope();
 
     panelExecutions.setVisible(false);
     desactiveTabFinalizedWhenNotExperimentsFound();
@@ -146,6 +152,25 @@ public class main extends javax.swing.JFrame {
     }
   }
 
+  private void addFlagOperatorDesignPatternUsed() {
+    if(!MutationOperatorsSelected.getSelectedMutationOperators().contains(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName())){
+    MutationOperatorsSelected.getSelectedMutationOperators()
+            .add(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
+      
+      System.out.println("Add Design Patterns Flag");
+      System.out.println(MutationOperatorsSelected.getSelectedMutationOperators());
+      panelPatternScope.setVisible(true);
+    
+    }else if(noneDesignPatternsSelected()){
+      MutationOperatorsSelected.getSelectedMutationOperators()
+            .remove(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
+      
+      System.out.println("Remove Design Patterns Flag");
+      System.out.println(MutationOperatorsSelected.getSelectedMutationOperators());
+      panelPatternScope.setVisible(false);
+    }
+  }
+
   private void desactiveTabFinalizedWhenNotExperimentsFound() {
     if (db.Database.getContent().isEmpty()) {
       jTabbedPane1.setEnabledAt(2, false);
@@ -161,6 +186,15 @@ public class main extends javax.swing.JFrame {
     System.out.println("---> " + MutationOperatorsSelected.getSelectedMutationOperators());
   }
 
+  private void addOrRemovePatternToApply(final String patternName, JCheckBox check) {
+    if (!check.isSelected()) {
+      MutationOperatorsSelected.getSelectedPatternsToApply().remove(patternName);
+    } else {
+      MutationOperatorsSelected.getSelectedPatternsToApply().add(patternName);
+    }
+    System.out.println("---> " + MutationOperatorsSelected.getSelectedPatternsToApply());
+  }
+    
   private void addToMetrics(JCheckBox check, final String metric) {
     if (check.isSelected()) {
       VolatileConfs.getMetricsSelecteds().add(metric);
@@ -237,7 +271,6 @@ public class main extends javax.swing.JFrame {
   @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
@@ -320,7 +353,7 @@ public class main extends javax.swing.JFrame {
         checkMediator = new javax.swing.JCheckBox();
         checkStrategy = new javax.swing.JCheckBox();
         checkBridge = new javax.swing.JCheckBox();
-        jPanel6 = new javax.swing.JPanel();
+        panelPatternScope = new javax.swing.JPanel();
         radioRandomStrategy = new javax.swing.JRadioButton();
         radioElementsWithSameDPorNone = new javax.swing.JRadioButton();
         experiments = new javax.swing.JPanel();
@@ -1184,6 +1217,11 @@ public class main extends javax.swing.JFrame {
         });
 
         checkStrategy.setText("Strategy");
+        checkStrategy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkStrategyActionPerformed(evt);
+            }
+        });
 
         checkBridge.setText("Bridge");
         checkBridge.addActionListener(new java.awt.event.ActionListener() {
@@ -1202,7 +1240,7 @@ public class main extends javax.swing.JFrame {
                     .addComponent(checkBridge)
                     .addComponent(checkStrategy)
                     .addComponent(checkMediator))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(226, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1216,34 +1254,44 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Scope Selection Strategy"));
+        panelPatternScope.setBorder(javax.swing.BorderFactory.createTitledBorder("Scope Selection Strategy"));
 
         buttonGroup1.add(radioRandomStrategy);
         radioRandomStrategy.setSelected(true);
         radioRandomStrategy.setText("Random");
+        radioRandomStrategy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioRandomStrategyActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(radioElementsWithSameDPorNone);
         radioElementsWithSameDPorNone.setText("Elements With Same Design Pattern or None");
+        radioElementsWithSameDPorNone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioElementsWithSameDPorNoneActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelPatternScopeLayout = new javax.swing.GroupLayout(panelPatternScope);
+        panelPatternScope.setLayout(panelPatternScopeLayout);
+        panelPatternScopeLayout.setHorizontalGroup(
+            panelPatternScopeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPatternScopeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panelPatternScopeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(radioRandomStrategy)
                     .addComponent(radioElementsWithSameDPorNone))
-                .addContainerGap(534, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
+        panelPatternScopeLayout.setVerticalGroup(
+            panelPatternScopeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPatternScopeLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addComponent(radioRandomStrategy)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(radioElementsWithSameDPorNone)
-                .addContainerGap(86, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -1252,19 +1300,19 @@ public class main extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelPatternScope, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(245, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(282, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelPatternScope, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(516, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Design Patterns", jPanel4);
@@ -1850,7 +1898,6 @@ public class main extends javax.swing.JFrame {
           if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
             jLabel12.setText("Working....");
             java.awt.EventQueue.invokeLater(new Runnable() {
-
               @Override
               public void run() {
                 executeNSGAII();
@@ -1862,7 +1909,6 @@ public class main extends javax.swing.JFrame {
           if ("PAES".equalsIgnoreCase(algoritmToRun)) {
             jLabel12.setText("Working....");
             java.awt.EventQueue.invokeLater(new Runnable() {
-
               @Override
               public void run() {
                 executePAES();
@@ -2127,16 +2173,33 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_checkRelationshipsActionPerformed
 
   private void checkBridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBridgeActionPerformed
-    // TODO add your handling code here:
+    addFlagOperatorDesignPatternUsed();
+    addOrRemovePatternToApply("Bridge", checkBridge);
   }//GEN-LAST:event_checkBridgeActionPerformed
 
   private void checkMediatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMediatorActionPerformed
-
+    addFlagOperatorDesignPatternUsed();
+    addOrRemovePatternToApply("Strategy", checkMediator);
   }//GEN-LAST:event_checkMediatorActionPerformed
 
   private void checkManagerClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkManagerClassActionPerformed
      addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_MANAGER_CLASS_MUTATION.getOperatorName(), checkManagerClass);
   }//GEN-LAST:event_checkManagerClassActionPerformed
+
+  private void checkStrategyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkStrategyActionPerformed
+    addFlagOperatorDesignPatternUsed();
+    addOrRemovePatternToApply("Mediator", checkStrategy);
+  }//GEN-LAST:event_checkStrategyActionPerformed
+
+  private void radioElementsWithSameDPorNoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioElementsWithSameDPorNoneActionPerformed
+      if(this.ewsdp == null) 
+        this.ewsdp = new ElementsWithSameDesignPatternSelection();
+      VolatileConfs.setScopePatterns(ewsdp);
+  }//GEN-LAST:event_radioElementsWithSameDPorNoneActionPerformed
+
+  private void radioRandomStrategyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomStrategyActionPerformed
+   VolatileConfs.setScopePatterns(null);
+  }//GEN-LAST:event_radioRandomStrategyActionPerformed
 
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
@@ -2240,7 +2303,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
@@ -2260,6 +2322,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel panelMutationProb;
     private javax.swing.JPanel panelObjectives;
     private javax.swing.JPanel panelOperatorsMutation;
+    private javax.swing.JPanel panelPatternScope;
     private javax.swing.JPanel panelShowMetrics;
     private javax.swing.JPanel panelSolutions;
     private javax.swing.JRadioButton radioElementsWithSameDPorNone;
@@ -2412,4 +2475,20 @@ public class main extends javax.swing.JFrame {
 
     }
   };
+
+  private boolean noneDesignPatternsSelected() {
+    return (!checkMediator.isSelected() &&  !checkStrategy.isSelected() && !checkBridge.isSelected());
+  }
+
+  private void hidePanelPatternScopeByDefault() {
+    panelPatternScope.setVisible(false);
+  }
+
+  /**
+   * null - Random (selecinado por default na GUI)
+   * 
+   */
+  private void configureDefaultPatternScope() {
+    VolatileConfs.setScopePatterns(null);
+  }
 }

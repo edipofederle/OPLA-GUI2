@@ -1,5 +1,6 @@
 package com.ufpr.br.opla.configuration;
 
+import br.ufpr.inf.opla.patterns.strategies.scopeselection.impl.ElementsWithSameDesignPatternSelection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class VolatileConfs {
     private static int numberOfRuns; //numberOfRuns text-field
     private static int maxEvaluations; //maxEvaluations text-field
     private static int fieldPopulationSize; //entendeu ja neh?
+    private static ElementsWithSameDesignPatternSelection scopePatterns;
 
     public static String[] getArchitectureInputPath() {
         return architecturesInputPath;
@@ -61,6 +63,13 @@ public class VolatileConfs {
     public static void setPopulationSize(int i) {
         fieldPopulationSize = i;
     }
-   
+
+    public static void setScopePatterns(ElementsWithSameDesignPatternSelection scopePatterns) {
+      VolatileConfs.scopePatterns = scopePatterns;
+    }
+    
+    public static ElementsWithSameDesignPatternSelection getScopePatterns() {
+      return scopePatterns;
+    } 
     
 }
