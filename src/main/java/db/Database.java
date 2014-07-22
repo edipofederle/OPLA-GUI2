@@ -28,11 +28,10 @@ public class Database {
   }
 
   public static List<Execution> getAllExecutionsByExperimentId(String experimentId) {
-    for (Experiment exp : content) {
-      if (exp.getId().equals(experimentId)) {
+    for (Experiment exp : content)
+      if (exp.getId().equals(experimentId))
         return exp.getExecutions();
-      }
-    }
+      
     return Collections.emptyList();
   }
   
@@ -184,9 +183,8 @@ public class Database {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
           for (FeatureDriven f : exec.getAllMetrics().getFeatureDriven()) {
-            if (f.getIdSolution().equals(idSolution)){
+            if (f.getIdSolution().equals(idSolution))
               return f;
-            }
           }
         }
       }
@@ -263,7 +261,5 @@ public class Database {
 
     return listCons;
   }
-  
-  
-  
+ 
 }
