@@ -152,12 +152,13 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  private void addOrRemoveOperatorMutation(final String operatorName) {
-    if (!checkFeatureMutation.isSelected()) {
+  private void addOrRemoveOperatorMutation(final String operatorName, JCheckBox check) {
+    if (!check.isSelected()) {
       MutationOperatorsSelected.getSelectedMutationOperators().remove(operatorName);
     } else {
       MutationOperatorsSelected.getSelectedMutationOperators().add(operatorName);
     }
+    System.out.println("---> " + MutationOperatorsSelected.getSelectedMutationOperators());
   }
 
   private void addToMetrics(JCheckBox check, final String metric) {
@@ -236,7 +237,9 @@ public class main extends javax.swing.JFrame {
   @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         ApplicationConfs = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -312,6 +315,14 @@ public class main extends javax.swing.JFrame {
         btnOutput = new javax.swing.JButton();
         btnRun = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        checkMediator = new javax.swing.JCheckBox();
+        checkStrategy = new javax.swing.JCheckBox();
+        checkBridge = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
+        radioRandomStrategy = new javax.swing.JRadioButton();
+        radioElementsWithSameDPorNone = new javax.swing.JRadioButton();
         experiments = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableExp = new javax.swing.JTable();
@@ -856,6 +867,11 @@ public class main extends javax.swing.JFrame {
         });
 
         checkManagerClass.setText("Add Manager Class Mutation");
+        checkManagerClass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkManagerClassActionPerformed(evt);
+            }
+        });
 
         checkMoveAttribute.setText("Move Attribute Mutation");
         checkMoveAttribute.addActionListener(new java.awt.event.ActionListener() {
@@ -1005,7 +1021,7 @@ public class main extends javax.swing.JFrame {
                                 .addComponent(fieldPopulationSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(5, 5, 5)
                                 .addComponent(fieldPaesArchiveSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(labelOperators, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1157,6 +1173,101 @@ public class main extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Execution Configurations", algorithms);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Design Pattern Selection Strategy"));
+
+        checkMediator.setText("Mediator");
+        checkMediator.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkMediatorActionPerformed(evt);
+            }
+        });
+
+        checkStrategy.setText("Strategy");
+
+        checkBridge.setText("Bridge");
+        checkBridge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBridgeActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(checkBridge)
+                    .addComponent(checkStrategy)
+                    .addComponent(checkMediator))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(checkMediator)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkStrategy)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkBridge)
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Scope Selection Strategy"));
+
+        buttonGroup1.add(radioRandomStrategy);
+        radioRandomStrategy.setSelected(true);
+        radioRandomStrategy.setText("Random");
+
+        buttonGroup1.add(radioElementsWithSameDPorNone);
+        radioElementsWithSameDPorNone.setText("Elements With Same Design Pattern or None");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(radioRandomStrategy)
+                    .addComponent(radioElementsWithSameDPorNone))
+                .addContainerGap(534, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(radioRandomStrategy)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(radioElementsWithSameDPorNone)
+                .addContainerGap(86, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(282, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Design Patterns", jPanel4);
 
         experiments.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1424,10 +1535,10 @@ public class main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 977, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1555,23 +1666,23 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkMutationActionPerformed
 
     private void checkAddClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkAddClassActionPerformed
-      addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_CLASS_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_CLASS_MUTATION.getOperatorName(), checkAddClass);
     }//GEN-LAST:event_checkAddClassActionPerformed
 
     private void checkMoveAttributeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMoveAttributeActionPerformed
-      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_ATTRIBUTE_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_ATTRIBUTE_MUTATION.getOperatorName(), checkMoveAttribute);
     }//GEN-LAST:event_checkMoveAttributeActionPerformed
 
     private void checkFeatureMutationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkFeatureMutationActionPerformed
-      addOrRemoveOperatorMutation(FeatureMutationOperators.FEATURE_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.FEATURE_MUTATION.getOperatorName(), checkFeatureMutation);
     }//GEN-LAST:event_checkFeatureMutationActionPerformed
 
     private void checkMoveMethodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMoveMethodActionPerformed
-      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_METHOD_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_METHOD_MUTATION.getOperatorName(), checkMoveMethod);
     }//GEN-LAST:event_checkMoveMethodActionPerformed
 
     private void checkMoveOperationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMoveOperationActionPerformed
-      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_OPERATION_MUTATION.getOperatorName());
+      addOrRemoveOperatorMutation(FeatureMutationOperators.MOVE_OPERATION_MUTATION.getOperatorName(), checkMoveOperation);
     }//GEN-LAST:event_checkMoveOperationActionPerformed
 
     private void crossProbSliderMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_crossProbSliderMouseDragged
@@ -2015,6 +2126,18 @@ public class main extends javax.swing.JFrame {
     }
   }//GEN-LAST:event_checkRelationshipsActionPerformed
 
+  private void checkBridgeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBridgeActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_checkBridgeActionPerformed
+
+  private void checkMediatorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMediatorActionPerformed
+
+  }//GEN-LAST:event_checkMediatorActionPerformed
+
+  private void checkManagerClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkManagerClassActionPerformed
+     addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_MANAGER_CLASS_MUTATION.getOperatorName(), checkManagerClass);
+  }//GEN-LAST:event_checkManagerClassActionPerformed
+
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
     int rVal = c.showOpenDialog(this);
@@ -2054,7 +2177,9 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnRun;
     private javax.swing.JButton btnSmartyProfile;
     private javax.swing.JButton btnTemplate;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox checkAddClass;
+    private javax.swing.JCheckBox checkBridge;
     private javax.swing.JCheckBox checkConcerns;
     private javax.swing.JCheckBox checkConventional;
     private javax.swing.JCheckBox checkCrossover;
@@ -2062,6 +2187,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkFeatureDriven;
     private javax.swing.JCheckBox checkFeatureMutation;
     private javax.swing.JCheckBox checkManagerClass;
+    private javax.swing.JCheckBox checkMediator;
     private javax.swing.JCheckBox checkMoveAttribute;
     private javax.swing.JCheckBox checkMoveMethod;
     private javax.swing.JCheckBox checkMoveOperation;
@@ -2070,6 +2196,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkPatterns;
     private javax.swing.JCheckBox checkRelationships;
     private javax.swing.JCheckBox checkSmarty;
+    private javax.swing.JCheckBox checkStrategy;
     private javax.swing.JComboBox comboAlgorithms;
     private javax.swing.JComboBox comboMetrics;
     private javax.swing.JComboBox comboSolutions;
@@ -2111,6 +2238,9 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
@@ -2132,6 +2262,8 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel panelOperatorsMutation;
     private javax.swing.JPanel panelShowMetrics;
     private javax.swing.JPanel panelSolutions;
+    private javax.swing.JRadioButton radioElementsWithSameDPorNone;
+    private javax.swing.JRadioButton radioRandomStrategy;
     private javax.swing.JTable tableExecutions;
     private javax.swing.JTable tableExp;
     private javax.swing.JTable tableMetrics;
@@ -2152,7 +2284,8 @@ public class main extends javax.swing.JFrame {
 
     FeatureMutationOperators[] operators = FeatureMutationOperators.values();
     for (FeatureMutationOperators operator : operators) {
-      MutationOperatorsSelected.getSelectedMutationOperators().add(operator.getOperatorName());
+      if(!operator.getOperatorName().equals("DesignPatterns"))
+        MutationOperatorsSelected.getSelectedMutationOperators().add(operator.getOperatorName());
     }
   }
 
