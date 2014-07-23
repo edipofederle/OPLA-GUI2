@@ -55,6 +55,7 @@ public class PAES {
             configs.disableCrossover();            
         }
         
+        //OPA-Patterns Configurations
         String[] array = new String[MutationOperatorsSelected.getSelectedPatternsToApply().size()];
         configs.setPatterns(MutationOperatorsSelected.getSelectedPatternsToApply().toArray(array));
         configs.setDesignPatternStrategy(VolatileConfs.getScopePatterns());
