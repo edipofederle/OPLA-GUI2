@@ -1,8 +1,8 @@
 package com.ufpr.br.opla.gui2;
 
-import com.ufpr.br.opla.utils.Utils;
-import com.ufpr.br.opla.configuration.UserHome;
 import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
+import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.utils.Utils;
 import javax.swing.*;
 
 public class GuiServices {
@@ -185,5 +185,9 @@ public class GuiServices {
 
   private boolean hasPathToManipulationDir() {
     return config.getConfig().getDirectoryToSaveModels() != null;
+  }
+  
+  public void hidePanelPatternScopeByDefault(JPanel panelPatternScope) {
+    panelPatternScope.setVisible(false);
   }
 }

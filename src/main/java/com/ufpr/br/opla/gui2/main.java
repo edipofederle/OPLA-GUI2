@@ -44,6 +44,7 @@ import results.Execution;
 public class main extends javax.swing.JFrame {
   
   public static final int FONT_SIZE = 15;
+  public static final String PATH_CONFIGURATION_FILE = "config/application.yaml";
   private ManagerApplicationConfig config = null;
   //private OplaServices oplaService = null;
   private String pathSmartyBck;
@@ -59,8 +60,6 @@ public class main extends javax.swing.JFrame {
    * Creates new form main
    */
   public main() throws Exception {
-  
-        
     GuiUtils.fontSize(FONT_SIZE); // default font size for all GUI.
 
     initComponents();
@@ -77,8 +76,8 @@ public class main extends javax.swing.JFrame {
     checkAllMetricsByDefault();
     initiExecutedExperiments();
     
-    hidePanelPatternScopeByDefault();
-    configureDefaultPatternScope();
+    
+    VolatileConfs.configureDefaultPatternScope();
 
     panelExecutions.setVisible(false);
     desactiveTabFinalizedWhenNotExperimentsFound();
@@ -86,13 +85,12 @@ public class main extends javax.swing.JFrame {
     try {
       UserHome.createDefaultOplaPathIfDontExists();
 
-      String source = "config/application.yaml";
       String target = UserHome.getOplaUserHome() + "application.yaml";
 
       //Somente copia arquivo de configuracao se
       //ainda nao existir na pasta da oplatool do usuario
       if (!(new File(target).exists())) {
-        Utils.copy(source, target);
+        Utils.copy(PATH_CONFIGURATION_FILE, target);
       }
 
       UserHome.createProfilesPath();
@@ -103,10 +101,8 @@ public class main extends javax.swing.JFrame {
       config = new ManagerApplicationConfig();
     } catch (FileNotFoundException ex) {
       java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, ex.getMessage());
+      System.exit(1);
     }
-
-
-
 
     GuiServices guiservices = new GuiServices(config);
     guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
@@ -115,10 +111,10 @@ public class main extends javax.swing.JFrame {
     guiservices.configureRelationshipsProfile(fieldRelationshipsProfile, checkRelationships, btnRelationshipProfile);
     guiservices.configureTemplates(fieldTemplate);
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
-
     guiservices.configureLocaleToExportModels(fieldOutput);
 
     activeFieldsAndChecks();
+    guiservices.hidePanelPatternScopeByDefault(panelPatternScope);
   }
 
   private void activeFieldsAndChecks() {
@@ -183,7 +179,6 @@ public class main extends javax.swing.JFrame {
     } else {
       MutationOperatorsSelected.getSelectedMutationOperators().add(operatorName);
     }
-    System.out.println("---> " + MutationOperatorsSelected.getSelectedMutationOperators());
   }
 
   private void addOrRemovePatternToApply(final String patternName, JCheckBox check) {
@@ -192,7 +187,6 @@ public class main extends javax.swing.JFrame {
     } else {
       MutationOperatorsSelected.getSelectedPatternsToApply().add(patternName);
     }
-    System.out.println("---> " + MutationOperatorsSelected.getSelectedPatternsToApply());
   }
     
   private void addToMetrics(JCheckBox check, final String metric) {
@@ -1791,8 +1785,7 @@ public class main extends javax.swing.JFrame {
           enableFieldsForNSGAII();
           hideFieldsForPases();
         }
-
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Selected: " + comboAlgorithms.getSelectedItem().toString());
+        Logger.getLogger(main.class.getName()).log(Level.INFO, "Selected: {0}", comboAlgorithms.getSelectedItem().toString());
       } else {
         VolatileConfs.setAlgorithmName(null);
       }
@@ -1923,12 +1916,10 @@ public class main extends javax.swing.JFrame {
 
     private void tableExpMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExpMouseClicked
       if (evt.getClickCount() == 2) {
-
         panelShowMetrics.setVisible(false);
         JTable target = (JTable) evt.getSource();
         int rowIndex = target.getSelectedRow();
         String idExperiment = target.getModel().getValueAt(rowIndex, 0).toString();
-
 
         GuiUtils.hideSolutionsAndExecutionPaneIfExperimentSelectedChange(
                 this.selectedExperiment, idExperiment, panelSolutions,
@@ -1957,7 +1948,6 @@ public class main extends javax.swing.JFrame {
                 this.config.getConfig().getDirectoryToExportModels());
 
         comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
-
         comboSolutions.setSelectedIndex(0);
       }
     }//GEN-LAST:event_tableExecutionsMouseClicked
@@ -1978,12 +1968,10 @@ public class main extends javax.swing.JFrame {
   private void comboSolutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSolutionsActionPerformed
     panelShowMetrics.setVisible(false);
     GuiServices.initiComboMetrics(comboMetrics, this.selectedExperiment);
+    
     Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
-
     String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
-
     String objectiveId = Utils.extractObjectiveIdFromFile(fileName);
-
     Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
 
     DefaultTableModel model = new DefaultTableModel();
@@ -1991,7 +1979,6 @@ public class main extends javax.swing.JFrame {
     model.addColumn("Value");
 
     GuiUtils.makeTableNotEditable(tableObjectives);
-
     tableObjectives.setModel(model);
 
     Iterator<Entry<String, String>> it = r.entrySet().iterator();
@@ -2003,9 +1990,8 @@ public class main extends javax.swing.JFrame {
       it.remove(); // evitar ConcurrentModificationException
       model.addRow(row);
     }
-
+    
     panelObjectives.setVisible(true);
-
   }//GEN-LAST:event_comboSolutionsActionPerformed
 
   private void comboMetricsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboMetricsActionPerformed
@@ -2014,7 +2000,6 @@ public class main extends javax.swing.JFrame {
   private void comboMetricsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboMetricsItemStateChanged
     String selectedMetric = comboMetrics.getSelectedItem().toString()
             .toLowerCase().replaceAll("\\s+", "");
-
 
     Map<String, String[]> mapColumns = new HashMap<>();
     String[] plaExtColumns = {"PLA Extensibility"};
@@ -2104,7 +2089,6 @@ public class main extends javax.swing.JFrame {
 
       }
       panelShowMetrics.setVisible(true);
-
     }
   }//GEN-LAST:event_comboMetricsItemStateChanged
 
@@ -2221,7 +2205,6 @@ public class main extends javax.swing.JFrame {
     }
 
     return "";
-
   }
   /**
    * @param args the command line arguments
@@ -2480,15 +2463,6 @@ public class main extends javax.swing.JFrame {
     return (!checkMediator.isSelected() &&  !checkStrategy.isSelected() && !checkBridge.isSelected());
   }
 
-  private void hidePanelPatternScopeByDefault() {
-    panelPatternScope.setVisible(false);
-  }
 
-  /**
-   * null - Random (selecinado por default na GUI)
-   * 
-   */
-  private void configureDefaultPatternScope() {
-    VolatileConfs.setScopePatterns(null);
-  }
+
 }
