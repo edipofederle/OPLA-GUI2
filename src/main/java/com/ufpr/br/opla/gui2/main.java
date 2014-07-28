@@ -200,7 +200,7 @@ public class main extends javax.swing.JFrame {
   private void createTableExecutions(String idExperiment) throws HeadlessException {
     panelExecutions.setVisible(true);
     DefaultTableModel modelTableExecutions = new DefaultTableModel();
-    modelTableExecutions.addColumn("Execution");
+    modelTableExecutions.addColumn("Run");
     modelTableExecutions.addColumn("Time (ms)");
     modelTableExecutions.addColumn("Generated Solutions");
     modelTableExecutions.addColumn("Non Dominated Solutons");
