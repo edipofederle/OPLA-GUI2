@@ -75,7 +75,7 @@ public class main extends javax.swing.JFrame {
     hidePanelShowMetricsByDefault();
     checkAllMetricsByDefault();
     initiExecutedExperiments();
-    
+    btnShowConfigurations.setEnabled(false);
     
     VolatileConfs.configureDefaultPatternScope();
 
@@ -169,7 +169,7 @@ public class main extends javax.swing.JFrame {
 
   private void desactiveTabFinalizedWhenNotExperimentsFound() {
     if (db.Database.getContent().isEmpty()) {
-      jTabbedPane1.setEnabledAt(2, false);
+      jTabbedPane1.setEnabledAt(3, false);
     }
   }
 
@@ -191,9 +191,9 @@ public class main extends javax.swing.JFrame {
     
   private void addToMetrics(JCheckBox check, final String metric) {
     if (check.isSelected()) {
-      VolatileConfs.getMetricsSelecteds().add(metric);
+      VolatileConfs.getObjectiveFunctionSelected().add(metric);
     } else {
-      VolatileConfs.getMetricsSelecteds().remove(metric);
+      VolatileConfs.getObjectiveFunctionSelected().remove(metric);
     }
   }
 
@@ -370,6 +370,7 @@ public class main extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         tableMetrics = new javax.swing.JTable();
         bestSolutions = new javax.swing.JButton();
+        btnShowConfigurations = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -1528,6 +1529,13 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        btnShowConfigurations.setText("Show Configurations");
+        btnShowConfigurations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowConfigurationsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout experimentsLayout = new javax.swing.GroupLayout(experiments);
         experiments.setLayout(experimentsLayout);
         experimentsLayout.setHorizontalGroup(
@@ -1538,7 +1546,10 @@ public class main extends javax.swing.JFrame {
                     .addGroup(experimentsLayout.createSequentialGroup()
                         .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13))
+                            .addGroup(experimentsLayout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(1, 1, 1)
+                                .addComponent(btnShowConfigurations)))
                         .addGap(18, 18, 18)
                         .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(experimentsLayout.createSequentialGroup()
@@ -1556,7 +1567,9 @@ public class main extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(experimentsLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
+                        .addGroup(experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(btnShowConfigurations))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(panelExecutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1564,7 +1577,7 @@ public class main extends javax.swing.JFrame {
                 .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(panelShowMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(bestSolutions)
@@ -1928,6 +1941,7 @@ public class main extends javax.swing.JFrame {
         this.selectedExperiment = idExperiment;
         createTableExecutions(idExperiment);
         bestSolutions.setEnabled(true);
+        btnShowConfigurations.setEnabled(true);
       }
     }//GEN-LAST:event_tableExpMouseClicked
 
@@ -2185,6 +2199,15 @@ public class main extends javax.swing.JFrame {
    VolatileConfs.setScopePatterns(null);
   }//GEN-LAST:event_radioRandomStrategyActionPerformed
 
+  private void btnShowConfigurationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowConfigurationsActionPerformed
+  ShowConfigurations showConfs = new ShowConfigurations();
+
+    showConfs.setVisible(true);
+    showConfs.setTitle("Execution " + this.selectedExperiment);
+    showConfs.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    showConfs.setExperimentId(selectedExperiment);
+  }//GEN-LAST:event_btnShowConfigurationsActionPerformed
+
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
     int rVal = c.showOpenDialog(this);
@@ -2221,6 +2244,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnPatternProfile;
     private javax.swing.JButton btnRelationshipProfile;
     private javax.swing.JButton btnRun;
+    private javax.swing.JButton btnShowConfigurations;
     private javax.swing.JButton btnSmartyProfile;
     private javax.swing.JButton btnTemplate;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -2345,7 +2369,7 @@ public class main extends javax.swing.JFrame {
 
   private void checkAllMetricsByDefault() {
     for (Metrics m : Metrics.values()) {
-      VolatileConfs.getMetricsSelecteds().add(m.getName());
+      VolatileConfs.getObjectiveFunctionSelected().add(m.getName());
     }
 
     checkElegance.setSelected(true);

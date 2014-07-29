@@ -14,7 +14,7 @@ public class VolatileConfs {
 
   private static String[] architecturesInputPath;
   private static String algorithmName; // Cambo algorithm
-  private static List<String> metricsSelecteds = new ArrayList<>(); //checkboxs metrics
+  private static List<String> objectiveFunctionsSelected = new ArrayList<>(); //checkboxs metrics
   private static int numberOfRuns; //numberOfRuns text-field
   private static int maxEvaluations; //maxEvaluations text-field
   private static int fieldPopulationSize; //entendeu ja neh?
@@ -44,8 +44,8 @@ public class VolatileConfs {
     VolatileConfs.architecturesInputPath = architecturesInputPath;
   }
 
-  public static List<String> getMetricsSelecteds() {
-    return metricsSelecteds;
+  public static List<String> getObjectiveFunctionSelected() {
+    return objectiveFunctionsSelected;
   }
 
   public static int getNumberOfRuns() {

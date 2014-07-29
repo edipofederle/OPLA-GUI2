@@ -66,9 +66,8 @@ public class PAES {
         //Instancia a classe de configuracao da OPLA.java
         OPLAConfigs oplaConfig = new OPLAConfigs();
         
-        //Numero de objetivos /TODO ver isso com Thelma. Numero de objetivos/numero de metricas
-        oplaConfig.setNumberOfObjectives(VolatileConfs.getMetricsSelecteds().size());
-        oplaConfig.setSelectedMetrics(VolatileConfs.getMetricsSelecteds());
+      
+        oplaConfig.setSelectedObjectiveFunctions(VolatileConfs.getObjectiveFunctionSelected());
 
         //Add as confs de OPLA na classe de configuracoes gerais.
         configs.setOplaConfigs(oplaConfig);
