@@ -1202,7 +1202,7 @@ public class main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Execution Configurations", algorithms);
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Design Pattern Selection Strategy"));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Design Pattern Selection Strategy", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
 
         checkMediator.setText("Mediator");
         checkMediator.addActionListener(new java.awt.event.ActionListener() {
@@ -1249,7 +1249,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        panelPatternScope.setBorder(javax.swing.BorderFactory.createTitledBorder("Scope Selection Strategy"));
+        panelPatternScope.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Scope Selection Strategy", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
 
         buttonGroup1.add(radioRandomStrategy);
         radioRandomStrategy.setSelected(true);
@@ -1307,7 +1307,7 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(panelPatternScope, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(516, Short.MAX_VALUE))
+                .addContainerGap(514, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Design Patterns", jPanel4);
@@ -1923,6 +1923,7 @@ public class main extends javax.swing.JFrame {
               }
             });
           }
+          
         }
       }
     }//GEN-LAST:event_btnRunActionPerformed
@@ -2141,7 +2142,7 @@ public class main extends javax.swing.JFrame {
       pathPatternsBck = fieldPatternsProfile.getText();
       fieldPatternsProfile.setText("");
       btnPatternProfile.setEnabled(false);
-      this.config.updatePathToProfilePatterns(pathPatternsBck);
+      this.config.updatePathToProfilePatterns("");
     } else {
       btnPatternProfile.setEnabled(true);
       fieldPatternsProfile.setText(pathPatternsBck);
@@ -2162,7 +2163,7 @@ public class main extends javax.swing.JFrame {
       pathRelationshipsBck = fieldRelationshipsProfile.getText();
       fieldRelationshipsProfile.setText("");
       btnRelationshipProfile.setEnabled(false);
-      this.config.updatePathToProfileRelationships(pathRelationshipsBck);
+      this.config.updatePathToProfileRelationships("");
     } else {
       btnRelationshipProfile.setEnabled(true);
       fieldRelationshipsProfile.setText(pathRelationshipsBck);
@@ -2206,6 +2207,9 @@ public class main extends javax.swing.JFrame {
     showConfs.setTitle("Execution " + this.selectedExperiment);
     showConfs.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     showConfs.setExperimentId(selectedExperiment);
+    showConfs.setDirOutput(this.config.getConfig().getDirectoryToExportModels());
+    showConfs.fillFields();
+  
   }//GEN-LAST:event_btnShowConfigurationsActionPerformed
 
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
@@ -2486,7 +2490,5 @@ public class main extends javax.swing.JFrame {
   private boolean noneDesignPatternsSelected() {
     return (!checkMediator.isSelected() &&  !checkStrategy.isSelected() && !checkBridge.isSelected());
   }
-
-
-
+  
 }

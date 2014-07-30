@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 
 /**
@@ -69,9 +70,10 @@ public class Utils {
     String s = f.getName();
     int i = s.lastIndexOf('.');
 
-    if (i > 0 && i < s.length() - 1)
+    if (i > 0 && i < s.length() - 1) {
       ext = s.substring(i + 1).toLowerCase();
-    
+    }
+
     return ext;
   }
 
@@ -79,16 +81,18 @@ public class Utils {
   public static String extractObjectiveIdFromFile(String name) {
     String b = name.split("-")[1];
     String a = b.substring(0, b.length() - 4);
-    if (a.startsWith("0"))
+    if (a.startsWith("0")) {
       return a.substring(1, a.length());
-    
+    }
+
     return a;
   }
 
   public static boolean selectedSolutionIsNonDominated(String fileName) {
-    if (fileName.startsWith("VAR_All"))
+    if (fileName.startsWith("VAR_All")) {
       return true;
-    
+    }
+
     return false;
   }
 
@@ -115,5 +119,40 @@ public class Utils {
       return false;
     }
     return true;
+  }
+
+  public static boolean notNullAndNotEmpty(String str) {
+    return str != null && !str.isEmpty();
+  }
+
+  /**
+   *
+   * @param selectedExperiment
+   * @param directoryToExportModels
+   */
+  public static String getProfilesUsedForSelectedExperiment(String selectedExperiment, String directoryToExportModels) {
+    try {
+      String exts[] = {"uml"};
+      StringBuilder names = new StringBuilder();
+
+      StringBuilder path = new StringBuilder();
+      path.append(directoryToExportModels);
+      path.append(selectedExperiment);
+      path.append("/resources/");
+      System.out.println(path.toString());
+      List<File> files = (List<File>) FileUtils.listFiles(
+              new File(path.toString()),
+              exts, false);
+
+      for (File file : files) {
+        names.append(file.getName());
+        names.append(", ");
+      }
+
+      return names.deleteCharAt(names.lastIndexOf(",")).toString().trim();
+    } catch (Exception e) {
+      //I dont care.
+    }
+    return "-";
   }
 }

@@ -4,13 +4,8 @@
  */
 package com.ufpr.br.opla.gui2;
 
-import com.ufpr.br.opla.utils.GuiUtils;
+import com.ufpr.br.opla.utils.Utils;
 import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
 import persistence.ExperimentConfs;
 
 /**
@@ -18,14 +13,13 @@ import persistence.ExperimentConfs;
  * @author elf
  */
 public class ShowConfigurations extends javax.swing.JFrame {
-  
-  private String experimentId;
 
-  /**
-   * Creates new form ShowConfigurations
-   */
-  public ShowConfigurations() {
+  private String experimentId;
+  private String directoryToExportModels;
+
+  ShowConfigurations() {
     initComponents();
+
   }
 
   /**
@@ -61,10 +55,12 @@ public class ShowConfigurations extends javax.swing.JFrame {
         mutationOperators = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         crossoverProbability = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        labelProfiles = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Objective Functions"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Objective Functions", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         labelObjectiveFunctions.setText("jLabel12");
 
@@ -85,7 +81,7 @@ public class ShowConfigurations extends javax.swing.JFrame {
                 .addContainerGap(84, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("OPLA-Patterns"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "OPLA-Patterns", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
 
         jLabel7.setText("Patterns:");
 
@@ -125,7 +121,7 @@ public class ShowConfigurations extends javax.swing.JFrame {
                 .add(0, 62, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Algorithm Configuration"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Algorithm Configuration", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
 
         jLabel1.setText("Algorithm:");
 
@@ -237,6 +233,27 @@ public class ShowConfigurations extends javax.swing.JFrame {
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Profiles", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
+
+        labelProfiles.setText("jLabel11");
+
+        org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(labelProfiles)
+                .addContainerGap(315, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(labelProfiles)
+                .addContainerGap(100, Short.MAX_VALUE))
+        );
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -245,9 +262,11 @@ public class ShowConfigurations extends javax.swing.JFrame {
                 .addContainerGap()
                 .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                        .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -259,7 +278,9 @@ public class ShowConfigurations extends javax.swing.JFrame {
                         .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 111, Short.MAX_VALUE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 53, Short.MAX_VALUE))
                     .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -303,6 +324,7 @@ public class ShowConfigurations extends javax.swing.JFrame {
      */
     java.awt.EventQueue.invokeLater(new Runnable() {
 
+      @Override
       public void run() {
         new ShowConfigurations().setVisible(true);
       }
@@ -325,9 +347,11 @@ public class ShowConfigurations extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JLabel labelObjectiveFunctions;
     private javax.swing.JLabel labelPatternStrategy;
     private javax.swing.JLabel labelPatterns;
+    private javax.swing.JLabel labelProfiles;
     private javax.swing.JLabel maxEvaluations;
     private javax.swing.JLabel mutationOperators;
     private javax.swing.JLabel mutationProbability;
@@ -335,12 +359,7 @@ public class ShowConfigurations extends javax.swing.JFrame {
     private javax.swing.JLabel populationSize;
     // End of variables declaration//GEN-END:variables
 
-  void setExperimentId(String selectedExperiment) {
-    this.experimentId = selectedExperiment;
-    fillFields();
-  }
-
-  private void fillFields() {
+  public void fillFields() {
     HashMap<String, String> confs = ExperimentConfs.getConfigs(experimentId);
     algorithmName.setText(confs.get("algorithm"));
     numberOfRuns.setText(confs.get("numberOfRuns"));
@@ -353,26 +372,37 @@ public class ShowConfigurations extends javax.swing.JFrame {
     labelPatterns.setText(formatOutput(confs.get("patterns")));
     labelPatternStrategy.setText(confs.get("pattern_strategy"));
     labelObjectiveFunctions.setText(formatOutput(confs.get("objective_functions")));
+    
+    labelProfiles.setText(formatOutput(Utils.getProfilesUsedForSelectedExperiment(this.experimentId, this.directoryToExportModels)));
   }
 
   private String formatOutput(String operators) {
-    if(operators.isEmpty())
+    if (operators.isEmpty())
       return "-";
+    
     StringBuilder formatedOperators = new StringBuilder();
     formatedOperators.append("<html>");
     String[] o = null;
-            
-    if(operators.contains(",")){
+
+    if (operators.contains(",")) {
       o = operators.split(",");
-    }else{
+    } else {
       o = operators.split(" ");
     }
-    for(String operator : o){
+    for (String operator : o) {
       formatedOperators.append(operator);
       formatedOperators.append("<br>");
     }
     formatedOperators.append("</html>");
-    
+
     return formatedOperators.toString();
+  }
+
+  void setDirOutput(String directoryToExportModels) {
+    this.directoryToExportModels = directoryToExportModels;
+  }
+
+  void setExperimentId(String selectedExperiment) {
+    this.experimentId = selectedExperiment;
   }
 }

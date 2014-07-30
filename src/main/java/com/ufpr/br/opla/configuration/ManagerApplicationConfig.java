@@ -1,6 +1,7 @@
 package com.ufpr.br.opla.configuration;
 
 
+import com.ufpr.br.opla.utils.Utils;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
@@ -67,6 +68,33 @@ public class ManagerApplicationConfig {
         updateConfigurationFile();
     }
     
+    /**
+     * Retorna os profile que estão em uso ou seja, não "" nem null.
+     * 
+     */
+    public String getProfilesUsed(){
+      StringBuilder profiles = new StringBuilder();
+      
+      if(Utils.notNullAndNotEmpty(this.configurationFile.getPathToProfile())){
+        profiles.append(this.configurationFile.getPathToProfile());
+        profiles.append(",");
+      }
+      
+      if(Utils.notNullAndNotEmpty(this.configurationFile.getPathToProfileConcern())){
+        profiles.append(this.configurationFile.getPathToProfileConcern());
+        profiles.append(",");
+      }
+      
+      if(Utils.notNullAndNotEmpty(this.configurationFile.getPathToProfilePatterns())){
+        profiles.append(this.configurationFile.getPathToProfilePatterns());
+        profiles.append(",");
+      }     
+      
+      if(Utils.notNullAndNotEmpty(this.configurationFile.getPathToProfileRelationships())){
+        profiles.append(this.configurationFile.getPathToProfileRelationships());        
+      }     
+      return profiles.toString();
+    }  
     
     private void updateConfigurationFile() {
         try {

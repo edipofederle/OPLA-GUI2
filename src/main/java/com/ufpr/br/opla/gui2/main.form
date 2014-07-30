@@ -1270,7 +1270,7 @@
                           <Component id="panelPatternScope" max="32767" attributes="0"/>
                           <Component id="jPanel5" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="516" max="32767" attributes="0"/>
+                      <EmptySpace pref="514" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1280,7 +1280,10 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Design Pattern Selection Strategy"/>
+                    <TitledBorder title="Design Pattern Selection Strategy">
+                      <Font PropertyName="font" name="Verdana" size="14" style="1"/>
+                      <Color PropertyName="color" blue="ff" green="0" red="ff" type="rgb"/>
+                    </TitledBorder>
                   </Border>
                 </Property>
               </Properties>
@@ -1344,7 +1347,10 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Scope Selection Strategy"/>
+                    <TitledBorder title="Scope Selection Strategy">
+                      <Font PropertyName="font" name="Verdana" size="14" style="1"/>
+                      <Color PropertyName="color" blue="ff" green="0" red="ff" type="rgb"/>
+                    </TitledBorder>
                   </Border>
                 </Property>
               </Properties>
