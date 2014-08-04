@@ -2395,7 +2395,7 @@ public class main extends javax.swing.JFrame {
       if (!dirDb.exists())
         dirDb.mkdirs();
       
-      Utils.copy("oplatool.db", pathDb);
+      Utils.copy("emptyDB/oplatool.db", pathDb);
     }
     try {
       db.Database.setContent(results.Experiment.all());

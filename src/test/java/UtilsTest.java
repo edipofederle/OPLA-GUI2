@@ -1,5 +1,4 @@
 
-import com.sun.xml.internal.ws.policy.spi.AssertionCreationException;
 import com.ufpr.br.opla.utils.Utils;
 import junit.framework.Assert;
 import org.junit.Test;

@@ -13,10 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import jmetal.experiments.NSGAII_OPLA_FeatMutInitializer;
-import jmetal.experiments.OPLAConfigs;
-import jmetal.experiments.PAES_OPLA_FeatMutInitializer;
-import jmetal.experiments.PaesConfigs;
+import jmetal.experiments.*;
 
 /**
  *
@@ -56,9 +53,11 @@ public class PAES {
         }
         
         //OPA-Patterns Configurations
-        String[] array = new String[MutationOperatorsSelected.getSelectedPatternsToApply().size()];
-        configs.setPatterns(MutationOperatorsSelected.getSelectedPatternsToApply().toArray(array));
-        configs.setDesignPatternStrategy(VolatileConfs.getScopePatterns());
+        if (MutationOperatorsSelected.getSelectedMutationOperators().contains(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName())) {
+          String[] array = new String[MutationOperatorsSelected.getSelectedPatternsToApply().size()];
+          configs.setPatterns(MutationOperatorsSelected.getSelectedPatternsToApply().toArray(array));
+         configs.setDesignPatternStrategy(VolatileConfs.getScopePatterns());
+        }
 
         //Configura onde o db esta localizado
         configs.setPathToDb(UserHome.getPathToDb());
