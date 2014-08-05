@@ -3,6 +3,7 @@ package com.ufpr.br.opla.gui2;
 import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import com.ufpr.br.opla.configuration.UserHome;
 import com.ufpr.br.opla.utils.Utils;
+import java.io.File;
 import javax.swing.*;
 
 public class GuiServices {
@@ -14,7 +15,7 @@ public class GuiServices {
   private final String profileConcernsName;
   private final String profilePatternName;
   private final String profileRelationshipName;
-
+  
   public GuiServices(ManagerApplicationConfig managerConfig) {
     config = managerConfig;
 
@@ -189,5 +190,11 @@ public class GuiServices {
   
   public void hidePanelPatternScopeByDefault(JPanel panelPatternScope) {
     panelPatternScope.setVisible(false);
+  }
+
+  public void copyFileGuiSettings() {
+    String target = UserHome.getOplaUserHome()+"/guisettings.yml";
+    if(! new File(target).exists())
+      Utils.copy("config/guisettings.yml", target);
   }
 }

@@ -6,6 +6,7 @@ package com.ufpr.br.opla.utils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
+import com.ufpr.br.opla.configuration.UserHome;
 import com.ufpr.br.opla.gui2.main;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +26,8 @@ import org.apache.commons.lang.WordUtils;
  * @author elf
  */
 public class Utils {
+  
+  private static final String PATH_CONFIGURATION_FILE = "config/application.yaml";
 
   public static String extractSolutionIdFromSolutionFileName(String fileName) {
     return fileName.substring(fileName.indexOf("-") + 1, fileName.length() - 4);
@@ -48,6 +51,7 @@ public class Utils {
       }
       Logger.getLogger(main.class.getName()).log(Level.INFO, "File copy from {0} to {1}", new Object[]{source, target});
     } catch (Exception e) {
+      System.err.println(e);
       Logger.getLogger(main.class.getName()).log(Level.SEVERE, e.toString());
       System.exit(1);
     }
@@ -154,5 +158,28 @@ public class Utils {
       //I dont care.
     }
     return "-";
+  }
+
+  public static void createPathsOplaTool() {
+    try {
+      UserHome.createDefaultOplaPathIfDontExists();
+
+      String target = UserHome.getOplaUserHome() + "application.yaml";
+
+      //Somente copia arquivo de configuracao se
+      //ainda nao existir na pasta da oplatool do usuario
+      if (!(new File(target).exists())) {
+        Utils.copy(PATH_CONFIGURATION_FILE, target);
+      }
+
+      UserHome.createProfilesPath();
+      UserHome.createTemplatePath();
+      UserHome.createOutputPath();
+      UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
+      
+    } catch (Exception ex) {
+      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, ex.getMessage());
+      System.exit(1);
+    }
   }
 }

@@ -33,6 +33,10 @@ public class UserHome {
         return home + file_separator + "application.yaml";
     }
     
+    public static String getGuiSettingsFilePath(){
+      return home + file_separator + "guisettings.yml";
+    }
+    
     public static void createDefaultOplaPathIfDontExists(){
         File f = new File(getOplaUserHome());
         if(!f.exists())

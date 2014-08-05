@@ -10,13 +10,13 @@ import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.algorithms.Solution;
 import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
+import com.ufpr.br.opla.configuration.ManagerGuiSettingsConfig;
 import com.ufpr.br.opla.configuration.UserHome;
 import com.ufpr.br.opla.configuration.VolatileConfs;
 import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -43,10 +43,9 @@ import results.Execution;
  */
 public class main extends javax.swing.JFrame {
   
-  public static final int FONT_SIZE = 15;
-  public static final String PATH_CONFIGURATION_FILE = "config/application.yaml";
+  
+
   private ManagerApplicationConfig config = null;
-  //private OplaServices oplaService = null;
   private String pathSmartyBck;
   private String pathConcernBck;
   private String pathRelationshipsBck;
@@ -60,7 +59,12 @@ public class main extends javax.swing.JFrame {
    * Creates new form main
    */
   public main() throws Exception {
-    GuiUtils.fontSize(FONT_SIZE); // default font size for all GUI.
+    Utils.createPathsOplaTool();
+    
+    config = new ManagerApplicationConfig();
+    GuiServices guiservices = new GuiServices(config);
+    guiservices.copyFileGuiSettings();
+    GuiUtils.fontSize(new ManagerGuiSettingsConfig().getFontSize());
 
     initComponents();
 
@@ -80,39 +84,16 @@ public class main extends javax.swing.JFrame {
     VolatileConfs.configureDefaultPatternScope();
 
     panelExecutions.setVisible(false);
-    desactiveTabFinalizedWhenNotExperimentsFound();
+    disactiveTabFinalizedWhenNotExperimentsFound();
 
-    try {
-      UserHome.createDefaultOplaPathIfDontExists();
-
-      String target = UserHome.getOplaUserHome() + "application.yaml";
-
-      //Somente copia arquivo de configuracao se
-      //ainda nao existir na pasta da oplatool do usuario
-      if (!(new File(target).exists())) {
-        Utils.copy(PATH_CONFIGURATION_FILE, target);
-      }
-
-      UserHome.createProfilesPath();
-      UserHome.createTemplatePath();
-      UserHome.createOutputPath();
-      UserHome.createTempPath(); //Manipulation dir. apenas para uso intenro
-
-      config = new ManagerApplicationConfig();
-    } catch (FileNotFoundException ex) {
-      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, ex.getMessage());
-      System.exit(1);
-    }
-
-    GuiServices guiservices = new GuiServices(config);
     guiservices.configureSmartyProfile(fieldSmartyProfile, checkSmarty, btnSmartyProfile);
     guiservices.configureConcernsProfile(fieldConcernProfile, checkConcerns, btnConcernProfile);
     guiservices.configurePatternsProfile(fieldPatternsProfile, checkPatterns, btnPatternProfile);
     guiservices.configureRelationshipsProfile(fieldRelationshipsProfile, checkRelationships, btnRelationshipProfile);
     guiservices.configureTemplates(fieldTemplate);
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
-    guiservices.configureLocaleToExportModels(fieldOutput);
-
+    guiservices.configureLocaleToExportModels(fieldOutput);  
+     
     activeFieldsAndChecks();
     guiservices.hidePanelPatternScopeByDefault(panelPatternScope);
   }
@@ -163,7 +144,7 @@ public class main extends javax.swing.JFrame {
     }
   }
 
-  private void desactiveTabFinalizedWhenNotExperimentsFound() {
+  private void disactiveTabFinalizedWhenNotExperimentsFound() {
     if (db.Database.getContent().isEmpty()) {
       jTabbedPane1.setEnabledAt(3, false);
     }
@@ -646,11 +627,11 @@ public class main extends javax.swing.JFrame {
             .addGroup(ApplicationConfsLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
                     .addGroup(ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
                 .addContainerGap(377, Short.MAX_VALUE))
         );
         ApplicationConfsLayout.setVerticalGroup(
@@ -2207,7 +2188,7 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_radioRandomStrategyActionPerformed
 
   private void btnShowConfigurationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowConfigurationsActionPerformed
-  ShowConfigurations showConfs = new ShowConfigurations();
+    ShowConfigurations showConfs = new ShowConfigurations();
 
     showConfs.setVisible(true);
     showConfs.setTitle("Execution " + this.selectedExperiment);
