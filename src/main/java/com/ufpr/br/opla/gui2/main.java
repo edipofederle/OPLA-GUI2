@@ -153,16 +153,12 @@ public class main extends javax.swing.JFrame {
     MutationOperatorsSelected.getSelectedMutationOperators()
             .add(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
       
-      System.out.println("Add Design Patterns Flag");
-      System.out.println(MutationOperatorsSelected.getSelectedMutationOperators());
       panelPatternScope.setVisible(true);
     
     }else if(noneDesignPatternsSelected()){
       MutationOperatorsSelected.getSelectedMutationOperators()
             .remove(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
-      
-      System.out.println("Remove Design Patterns Flag");
-      System.out.println(MutationOperatorsSelected.getSelectedMutationOperators());
+
       panelPatternScope.setVisible(false);
     }
   }
@@ -231,19 +227,29 @@ public class main extends javax.swing.JFrame {
   }
 
   private void executeNSGAII() {
-    NSGAII nsgaii = new NSGAII();
-    nsgaii.execute(comboAlgorithms, checkMutation, fieldMutationProb,
-            fieldArchitectureInput, fieldNumberOfRuns, fieldPopulationSize,
-            fieldMaxEvaluations, checkCrossover,
-            fieldCrossoverProbability);
+    try {
+      NSGAII nsgaii = new NSGAII();
+      nsgaii.execute(comboAlgorithms, checkMutation, fieldMutationProb,
+              fieldArchitectureInput, fieldNumberOfRuns, fieldPopulationSize,
+              fieldMaxEvaluations, checkCrossover,
+              fieldCrossoverProbability);
+    } catch (Exception e) {
+      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, e.getMessage());
+      System.exit(1);
+    }
   }
 
   private void executePAES() {
+    try{
     PAES paes = new PAES();
     paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
             fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
             fieldMaxEvaluations, checkCrossover,
             fieldCrossoverProbability);
+    }catch(Exception e){
+      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, e.getMessage());
+      System.exit(1);
+    }
   }
 
   private void initAlgorithmsCombo() {
