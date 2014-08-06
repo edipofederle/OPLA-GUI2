@@ -14,10 +14,12 @@ import org.junit.Test;
  */
 public class UtilsTest {
   
+
+          
   @Test
   public void testProfileUsed(){
     String expected = "concerns.profile.uml, patterns.profile.uml, relationships.profile.uml, smarty.profile.uml";
-    Assert.assertEquals(expected, Utils.getProfilesUsedForSelectedExperiment("4574212955", "src/test/resources/output/"));
+    Assert.assertTrue(Utils.getProfilesUsedForSelectedExperiment("4574212955", "src/test/resources/output/").contains(expected));
   }
   
 }
