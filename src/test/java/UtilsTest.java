@@ -21,7 +21,12 @@ public class UtilsTest {
   @Test
   public void testProfileUsed(){
     List<String> expected = Arrays.asList("concerns.profile.uml, patterns.profile.uml, relationships.profile.uml, smarty.profile.uml");
-    Assert.assertTrue(expected.contains(Utils.getProfilesUsedForSelectedExperiment("4574212955", "src/test/resources/output/")));
+    String result = Utils.getProfilesUsedForSelectedExperiment("4574212955", "src/test/resources/output/");
+    
+    for (String profile : expected) {
+      if(!result.contains(profile))
+        Assert.fail("Returned List dont contains profile: " + profile);
+    }
   }
   
 }
