@@ -1,7 +1,5 @@
 
 import com.ufpr.br.opla.utils.Utils;
-import java.util.Arrays;
-import java.util.List;
 import junit.framework.Assert;
 import org.junit.Test;
 
