@@ -18,10 +18,8 @@ import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1145,46 +1143,45 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setText("Status:");
+        jLabel12.setText("Status: -");
 
         javax.swing.GroupLayout algorithmsLayout = new javax.swing.GroupLayout(algorithms);
         algorithms.setLayout(algorithmsLayout);
         algorithmsLayout.setHorizontalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRun)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
-                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12)
-                        .addGap(9, 9, 9)))
-                .addContainerGap(98, Short.MAX_VALUE))
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
+                        .addComponent(btnRun)
+                        .addGap(87, 87, 87))))
+            .addGroup(algorithmsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addContainerGap())
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel12)))
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addComponent(jLabel12)
+                .addGap(18, 18, 18)
+                .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(40, 40, 40)
                         .addComponent(btnRun, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
 
         jTabbedPane1.addTab("Execution Configurations", algorithms);
@@ -1889,7 +1886,7 @@ public class main extends javax.swing.JFrame {
         //E invoca a classe responsável.
         if (dialogResult == 0) {
           if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
-            jLabel12.setText("Working....");
+           jLabel12.setText("Working... wait. Started " + Time.startAt());;
             java.awt.EventQueue.invokeLater(new Runnable() {
               @Override
               public void run() {
@@ -1900,7 +1897,7 @@ public class main extends javax.swing.JFrame {
             });
           }
           if ("PAES".equalsIgnoreCase(algoritmToRun)) {
-            jLabel12.setText("Working....");
+            jLabel12.setText("Working... wait. Started " + Time.startAt());;
             java.awt.EventQueue.invokeLater(new Runnable() {
               @Override
               public void run() {
