@@ -5,6 +5,7 @@
  */
 package com.ufpr.br.opla.gui2;
 
+import arquitetura.helpers.LogConfiguration;
 import br.ufpr.inf.opla.patterns.strategies.scopeselection.impl.ElementsWithSameDesignPatternSelection;
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
@@ -13,22 +14,25 @@ import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import com.ufpr.br.opla.configuration.ManagerGuiSettingsConfig;
 import com.ufpr.br.opla.configuration.UserHome;
 import com.ufpr.br.opla.configuration.VolatileConfs;
+import com.ufpr.br.opla.logs.LogListener;
 import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.Metrics;
+import logs.log_log.Level;
+import logs.log_log.Logger;
 import metrics.Conventional;
 import metrics.Elegance;
 import metrics.FeatureDriven;
@@ -41,8 +45,6 @@ import results.Execution;
  */
 public class main extends javax.swing.JFrame {
   
-  
-
   private ManagerApplicationConfig config = null;
   private String pathSmartyBck;
   private String pathConcernBck;
@@ -57,6 +59,13 @@ public class main extends javax.swing.JFrame {
    * Creates new form main
    */
   public main() throws Exception {
+    
+    Logger.addListener(new LogListener());
+       
+    Logger.getLogger().putLog("Inicializando OPLA-Tool");
+    
+    LogConfiguration.setLogLevel(org.apache.log4j.Level.OFF);
+    
     Utils.createPathsOplaTool();
     
     config = new ManagerApplicationConfig();
@@ -212,8 +221,11 @@ public class main extends javax.swing.JFrame {
               fieldArchitectureInput, fieldNumberOfRuns, fieldPopulationSize,
               fieldMaxEvaluations, checkCrossover,
               fieldCrossoverProbability);
+      
+      Logger.getLogger().putLog("Execution NSGAII...");
     } catch (Exception e) {
-      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, e.getMessage());
+      Logger.getLogger().putLog(String.format(String.format("Error when try execute NSGA-II: %$", e.getMessage()),
+                Level.FATAL, main.class.getName()));
       System.exit(1);
     }
   }
@@ -225,8 +237,11 @@ public class main extends javax.swing.JFrame {
             fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
             fieldMaxEvaluations, checkCrossover,
             fieldCrossoverProbability);
+    
+    Logger.getLogger().putLog("Execution NSGAII...");
     }catch(Exception e){
-      java.util.logging.Logger.getLogger(main.class.getName()).log(Level.SEVERE, e.getMessage());
+           Logger.getLogger().putLog(String.format(String.format("Error when try execute PAES: %$", e.getMessage()),
+                Level.FATAL, main.class.getName()));
       System.exit(1);
     }
   }
@@ -1689,6 +1704,22 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkConcernsActionPerformed
 
     private void comboAlgorithmsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboAlgorithmsActionPerformed
+      if (comboAlgorithms.getSelectedItem() != null && comboAlgorithms.getSelectedIndex() != 0) {
+        String algorithmName = comboAlgorithms.getSelectedItem().toString();
+        VolatileConfs.setAlgorithmName(algorithmName);
+        if ("Paes".equalsIgnoreCase(algorithmName)) {
+          enableFieldForPaes();
+          hideFieldsForNSGAII();
+        }
+        if ("NSGA-II".equalsIgnoreCase(algorithmName)) {
+          enableFieldsForNSGAII();
+          hideFieldsForPases();
+        }
+        Logger.getLogger().putLog(String.format("Selected: %s", comboAlgorithms.getSelectedItem().toString()),
+                Level.INFO, main.class.getName());
+      } else {
+        VolatileConfs.setAlgorithmName(null);
+      }
     }//GEN-LAST:event_comboAlgorithmsActionPerformed
 
     private void checkMutationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMutationActionPerformed
@@ -1771,21 +1802,7 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOutputActionPerformed
 
     private void comboAlgorithmsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboAlgorithmsItemStateChanged
-      if (comboAlgorithms.getSelectedItem() != null && comboAlgorithms.getSelectedIndex() != 0) {
-        String algorithmName = comboAlgorithms.getSelectedItem().toString();
-        VolatileConfs.setAlgorithmName(algorithmName);
-        if ("Paes".equalsIgnoreCase(algorithmName)) {
-          enableFieldForPaes();
-          hideFieldsForNSGAII();
-        }
-        if ("NSGA-II".equalsIgnoreCase(algorithmName)) {
-          enableFieldsForNSGAII();
-          hideFieldsForPases();
-        }
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Selected: {0}", comboAlgorithms.getSelectedItem().toString());
-      } else {
-        VolatileConfs.setAlgorithmName(null);
-      }
+
     }//GEN-LAST:event_comboAlgorithmsItemStateChanged
 
     private void checkEleganceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEleganceActionPerformed
@@ -1809,8 +1826,9 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkFeatureDrivenActionPerformed
 
     private void numberOfRunsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numberOfRunsFocusLost
-      if (Utils.isDigit(fieldNumberOfRuns.getText())) {
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Number Of Runs: {0}", fieldNumberOfRuns.getText());
+      if (Utils.isDigit(fieldNumberOfRuns.getText())) {       
+        Logger.getLogger().putLog(String.format(String.format("Number Of Runs: %s", fieldNumberOfRuns.getText()),
+                Level.INFO, main.class.getName()));
         VolatileConfs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
       }
     }//GEN-LAST:event_numberOfRunsFocusLost
@@ -1821,14 +1839,16 @@ public class main extends javax.swing.JFrame {
 
     private void fieldMaxEvaluationsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldMaxEvaluationsFocusLost
       if (Utils.isDigit(fieldMaxEvaluations.getText())) {
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Max Evaluations: {0}", fieldMaxEvaluations.getText());
+        Logger.getLogger().putLog(String.format(String.format("Max Evaluations: %s", fieldMaxEvaluations.getText()),
+                Level.INFO, main.class.getName()));
         VolatileConfs.setMaxEvaluations(Integer.parseInt(fieldMaxEvaluations.getText()));
       }
     }//GEN-LAST:event_fieldMaxEvaluationsFocusLost
 
     private void fieldPopulationSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPopulationSizeFocusLost
-      if (Utils.isDigit(fieldPopulationSize.getText())) {
-        Logger.getLogger(main.class.getName()).log(Level.INFO, "Population Size: {0}", fieldPopulationSize.getText());
+      if (Utils.isDigit(fieldPopulationSize.getText())) {      
+        Logger.getLogger().putLog(String.format(String.format("Population Size: %s", fieldPopulationSize.getText()),
+                Level.INFO, main.class.getName()));
         VolatileConfs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
       }
     }//GEN-LAST:event_fieldPopulationSizeFocusLost
@@ -1886,23 +1906,25 @@ public class main extends javax.swing.JFrame {
         //E invoca a classe responsável.
         if (dialogResult == 0) {
           if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
-           jLabel12.setText("Working... wait. Started " + Time.startAt());;
+           jLabel12.setText("Working... wait. Started " + Time.timeNow());;
             java.awt.EventQueue.invokeLater(new Runnable() {
               @Override
               public void run() {
                 executeNSGAII();
                 jLabel12.setText("Done");
+                Logger.getLogger().putLog(String.format("Done NSGAII Execution at: %s", Time.timeNow().toString()));
                 db.Database.reloadContent();
               }
             });
           }
           if ("PAES".equalsIgnoreCase(algoritmToRun)) {
-            jLabel12.setText("Working... wait. Started " + Time.startAt());;
+            jLabel12.setText("Working... wait. Started " + Time.timeNow());;
             java.awt.EventQueue.invokeLater(new Runnable() {
               @Override
               public void run() {
                 executePAES();
                 jLabel12.setText("Done");
+                Logger.getLogger().putLog(String.format("Done PAES Execution at: %s", Time.timeNow().toString()));
                 db.Database.reloadContent();
               }
             });
@@ -2384,9 +2406,11 @@ public class main extends javax.swing.JFrame {
     try {
       db.Database.setContent(results.Experiment.all());
     } catch (SQLException ex) {
-      Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(String.format(String.format(String.format("Error ConfigureDB %s", ex.getMessage())),
+        Level.INFO, main.class.getName()));
     } catch (Exception ex) {
-      Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
+        Level.INFO, main.class.getName()));
     }
 
   }
@@ -2413,7 +2437,8 @@ public class main extends javax.swing.JFrame {
         model.addRow(row);
       }
     } catch (Exception ex) {
-      Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
+        Level.INFO, main.class.getName()));
     }
   }
 

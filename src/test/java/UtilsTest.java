@@ -1,6 +1,8 @@
 
 import com.ufpr.br.opla.utils.Utils;
 import junit.framework.Assert;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 
 /*
@@ -14,7 +16,7 @@ import org.junit.Test;
  */
 public class UtilsTest {
   
-
+ static Logger LOGGER = LogManager.getLogger(UtilsTest.class.getName());
           
   @Test
   public void testProfileUsed(){
@@ -25,6 +27,12 @@ public class UtilsTest {
       if(!result.contains(profile.trim())) 
         Assert.fail("Error. List dont contains profile: " + profile.trim());
     }
+  }
+  
+  
+  @Test
+  public void testLog(){
+    LOGGER.info("Some log here");
   }
   
 }
