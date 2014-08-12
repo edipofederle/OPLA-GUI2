@@ -4,6 +4,7 @@
  */
 package com.ufpr.br.opla.logs;
 
+import com.ufpr.br.opla.utils.Time;
 import javax.swing.JTextArea;
 import logs.log_log.Listener;
 import logs.log_log.LogLogData;
@@ -22,7 +23,7 @@ public class LogListener implements Listener{
 
   @Override
   public void message() {
-    this.textArea.append(">>" + LogLogData.printLog()+"\n");
+    this.textArea.append(Time.timeNow() + LogLogData.printLog()+"\n");
   }
   
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 public class Time {
 
   public static String timeNow() {
-    return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+    return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss ").format(new Date());
   }
   
 }
