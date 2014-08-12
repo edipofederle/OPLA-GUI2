@@ -4,6 +4,7 @@
  */
 package com.ufpr.br.opla.logs;
 
+import javax.swing.JTextArea;
 import logs.log_log.Listener;
 import logs.log_log.LogLogData;
 
@@ -12,10 +13,16 @@ import logs.log_log.LogLogData;
  * @author elf
  */
 public class LogListener implements Listener{
+  
+  private JTextArea textArea;
+
+  public LogListener(JTextArea logs) {
+    this.textArea = logs;
+  }
 
   @Override
   public void message() {
-    System.out.println(">>" + LogLogData.printLog());
+    this.textArea.append(">>" + LogLogData.printLog()+"\n");
   }
   
 }

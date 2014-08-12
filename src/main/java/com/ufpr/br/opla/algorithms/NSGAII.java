@@ -17,6 +17,7 @@ import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.NSGAIIConfig;
 import jmetal.experiments.NSGAII_OPLA_FeatMutInitializer;
 import jmetal.experiments.OPLAConfigs;
+import logs.log_log.Logger;
 
 /**
  *
@@ -32,6 +33,8 @@ public class NSGAII {
     ReaderConfig.load();
 
     NSGAIIConfig configs = new NSGAIIConfig();
+    configs.setLogger(Logger.getLogger());
+    configs.activeLogs();
 
     //Se mutação estiver marcada, pega os operadores selecionados
     //,e seta a probabilidade de mutacao

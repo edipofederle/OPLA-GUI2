@@ -32,6 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.Metrics;
 import logs.log_log.Level;
+import logs.log_log.Listener;
 import logs.log_log.Logger;
 import metrics.Conventional;
 import metrics.Elegance;
@@ -53,15 +54,15 @@ public class main extends javax.swing.JFrame {
   private String crossoverProbabilityBck;
   private String selectedExperiment;
   private String selectedExecution;
-  ElementsWithSameDesignPatternSelection ewsdp = null;
+  private ElementsWithSameDesignPatternSelection ewsdp = null;
+  private JTextArea  textLogsArea = new javax.swing.JTextArea();
 
   /**
    * Creates new form main
    */
   public main() throws Exception {
-    
-    Logger.addListener(new LogListener());
-       
+
+    Logger.addListener(new LogListener(textLogsArea));   
     Logger.getLogger().putLog("Inicializando OPLA-Tool");
     
     LogConfiguration.setLogLevel(org.apache.log4j.Level.OFF);
@@ -222,7 +223,7 @@ public class main extends javax.swing.JFrame {
               fieldMaxEvaluations, checkCrossover,
               fieldCrossoverProbability);
       
-      Logger.getLogger().putLog("Execution NSGAII...");
+
     } catch (Exception e) {
       Logger.getLogger().putLog(String.format(String.format("Error when try execute NSGA-II: %$", e.getMessage()),
                 Level.FATAL, main.class.getName()));
@@ -233,12 +234,14 @@ public class main extends javax.swing.JFrame {
   private void executePAES() {
     try{
     PAES paes = new PAES();
+    Logger.getLogger().putLog("Execution NSGAII...");
+    jTabbedPane1.setSelectedIndex(4);
     paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
             fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
             fieldMaxEvaluations, checkCrossover,
             fieldCrossoverProbability);
     
-    Logger.getLogger().putLog("Execution NSGAII...");
+
     }catch(Exception e){
            Logger.getLogger().putLog(String.format(String.format("Error when try execute PAES: %$", e.getMessage()),
                 Level.FATAL, main.class.getName()));
@@ -341,7 +344,6 @@ public class main extends javax.swing.JFrame {
         fieldOutput = new javax.swing.JTextField();
         btnOutput = new javax.swing.JButton();
         btnRun = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         checkMediator = new javax.swing.JCheckBox();
@@ -371,6 +373,10 @@ public class main extends javax.swing.JFrame {
         tableMetrics = new javax.swing.JTable();
         bestSolutions = new javax.swing.JButton();
         btnShowConfigurations = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        textLogsArea = new javax.swing.JTextArea();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -1158,8 +1164,6 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setText("Status: -");
-
         javax.swing.GroupLayout algorithmsLayout = new javax.swing.GroupLayout(algorithms);
         algorithms.setLayout(algorithmsLayout);
         algorithmsLayout.setHorizontalGroup(
@@ -1177,17 +1181,13 @@ public class main extends javax.swing.JFrame {
                         .addGap(87, 87, 87))))
             .addGroup(algorithmsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12))
+                .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(jLabel12)
-                .addGap(18, 18, 18)
+                .addContainerGap(51, Short.MAX_VALUE)
                 .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1585,6 +1585,37 @@ public class main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Results", experiments);
 
+        textLogsArea.setColumns(20);
+        textLogsArea.setRows(5);
+        jScrollPane6.setViewportView(textLogsArea);
+
+        jLabel12.setText("Status: -");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(7, 7, 7)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(270, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Logs", jPanel6);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -1906,7 +1937,9 @@ public class main extends javax.swing.JFrame {
         //E invoca a classe responsável.
         if (dialogResult == 0) {
           if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
-           jLabel12.setText("Working... wait. Started " + Time.timeNow());;
+           jLabel12.setText("Working... wait. Started " + Time.timeNow());
+           Logger.getLogger().putLog("Execution NSGAII...");
+           jTabbedPane1.setSelectedIndex(4);
             java.awt.EventQueue.invokeLater(new Runnable() {
               @Override
               public void run() {
@@ -2320,6 +2353,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
@@ -2327,6 +2361,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelAlgorithms;
     private javax.swing.JLabel labelArchivePAES;
