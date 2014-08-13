@@ -1937,8 +1937,7 @@ public class main extends javax.swing.JFrame {
         //Pede confirmacao para o usuario para de fato executar o
         //experimento.
         int dialogButton = JOptionPane.YES_NO_OPTION;
-        int dialogResult = JOptionPane.showConfirmDialog(this, "You have sure than"
-                + " want execute this experiement? This will take a time."
+        int dialogResult = JOptionPane.showConfirmDialog(this, "This will take a time."
                 + " Meanwhile the UI will be blocked",
                 "You have sure?", dialogButton);
         //Caso usuário aceite, verifica qual algoritmo executar
@@ -1952,6 +1951,8 @@ public class main extends javax.swing.JFrame {
                 jLabel12.setText("Working... wait. Started " + Time.timeNow());
                 Logger.getLogger().putLog("Execution NSGAII...");
                 jTabbedPane1.setSelectedIndex(4);
+                btnRun.setEnabled(false);
+                blockUITabs();
                 executeNSGAII();
                 return 0;
               }
@@ -1977,6 +1978,8 @@ public class main extends javax.swing.JFrame {
                 jLabel12.setText("Working... wait. Started " + Time.timeNow());
                 Logger.getLogger().putLog("Execution PAES...");
                 jTabbedPane1.setSelectedIndex(4);
+                btnRun.setEnabled(false);
+                blockUITabs();
                 executePAES();
                 return 0;
               }
@@ -1989,6 +1992,9 @@ public class main extends javax.swing.JFrame {
                 db.Database.reloadContent();
               }
             };
+
+            sw2.execute();
+            progressBar.setIndeterminate(true);
           }
 
         }
@@ -2566,5 +2572,12 @@ public class main extends javax.swing.JFrame {
 
   private boolean noneDesignPatternsSelected() {
     return (!checkMediator.isSelected() && !checkStrategy.isSelected() && !checkBridge.isSelected());
+  }
+
+  private void blockUITabs() {
+    jTabbedPane1.setEnabledAt(0, false);
+    jTabbedPane1.setEnabledAt(1, false);
+    jTabbedPane1.setEnabledAt(2, false);
+    jTabbedPane1.setEnabledAt(3, false);
   }
 }
