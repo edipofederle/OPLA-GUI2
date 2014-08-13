@@ -29,10 +29,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultCaret;
 import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.Metrics;
 import logs.log_log.Level;
-import logs.log_log.Listener;
 import logs.log_log.Logger;
 import metrics.Conventional;
 import metrics.Elegance;
@@ -45,7 +45,7 @@ import results.Execution;
  * @author elf
  */
 public class main extends javax.swing.JFrame {
-  
+
   private ManagerApplicationConfig config = null;
   private String pathSmartyBck;
   private String pathConcernBck;
@@ -55,20 +55,23 @@ public class main extends javax.swing.JFrame {
   private String selectedExperiment;
   private String selectedExecution;
   private ElementsWithSameDesignPatternSelection ewsdp = null;
-  private JTextArea  textLogsArea = new javax.swing.JTextArea();
+  private JTextArea textLogsArea = new javax.swing.JTextArea();
 
   /**
    * Creates new form main
    */
   public main() throws Exception {
 
-    Logger.addListener(new LogListener(textLogsArea));   
+    DefaultCaret caret = (DefaultCaret) textLogsArea.getCaret();
+    caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+
+    Logger.addListener(new LogListener(textLogsArea));
     Logger.getLogger().putLog("Inicializando OPLA-Tool");
-    
+
     LogConfiguration.setLogLevel(org.apache.log4j.Level.OFF);
-    
+
     Utils.createPathsOplaTool();
-    
+
     config = new ManagerApplicationConfig();
     GuiServices guiservices = new GuiServices(config);
     guiservices.copyFileGuiSettings();
@@ -88,7 +91,7 @@ public class main extends javax.swing.JFrame {
     checkAllMetricsByDefault();
     initiExecutedExperiments();
     btnShowConfigurations.setEnabled(false);
-    
+
     VolatileConfs.configureDefaultPatternScope();
 
     panelExecutions.setVisible(false);
@@ -100,8 +103,8 @@ public class main extends javax.swing.JFrame {
     guiservices.configureRelationshipsProfile(fieldRelationshipsProfile, checkRelationships, btnRelationshipProfile);
     guiservices.configureTemplates(fieldTemplate);
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
-    guiservices.configureLocaleToExportModels(fieldOutput);  
-     
+    guiservices.configureLocaleToExportModels(fieldOutput);
+
     activeFieldsAndChecks();
     guiservices.hidePanelPatternScopeByDefault(panelPatternScope);
   }
@@ -138,15 +141,13 @@ public class main extends javax.swing.JFrame {
   }
 
   private void addFlagOperatorDesignPatternUsed() {
-    if(!MutationOperatorsSelected.getSelectedMutationOperators().contains(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName())){
-    MutationOperatorsSelected.getSelectedMutationOperators()
-            .add(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
-      
+    if (!MutationOperatorsSelected.getSelectedMutationOperators().contains(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName())) {
+      MutationOperatorsSelected.getSelectedMutationOperators().add(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
+
       panelPatternScope.setVisible(true);
-    
-    }else if(noneDesignPatternsSelected()){
-      MutationOperatorsSelected.getSelectedMutationOperators()
-            .remove(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
+
+    } else if (noneDesignPatternsSelected()) {
+      MutationOperatorsSelected.getSelectedMutationOperators().remove(FeatureMutationOperators.DESIGN_PATTERNS.getOperatorName());
 
       panelPatternScope.setVisible(false);
     }
@@ -173,7 +174,7 @@ public class main extends javax.swing.JFrame {
       MutationOperatorsSelected.getSelectedPatternsToApply().add(patternName);
     }
   }
-    
+
   private void addToMetrics(JCheckBox check, final String metric) {
     if (check.isSelected()) {
       VolatileConfs.getObjectiveFunctionSelected().add(metric);
@@ -222,29 +223,31 @@ public class main extends javax.swing.JFrame {
               fieldArchitectureInput, fieldNumberOfRuns, fieldPopulationSize,
               fieldMaxEvaluations, checkCrossover,
               fieldCrossoverProbability);
-      
+
 
     } catch (Exception e) {
-      Logger.getLogger().putLog(String.format(String.format("Error when try execute NSGA-II: %$", e.getMessage()),
-                Level.FATAL, main.class.getName()));
+      JOptionPane.showMessageDialog(null, "Error when try execute NSGA-II, Finalizing...." + e.getMessage());
+      Logger.getLogger().putLog(String.format("Error when try execute NSGA-II, Finalizing...",
+              Level.FATAL, main.class.getName()));
       System.exit(1);
     }
   }
 
   private void executePAES() {
-    try{
-    PAES paes = new PAES();
-    Logger.getLogger().putLog("Execution NSGAII...");
-    jTabbedPane1.setSelectedIndex(4);
-    paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
-            fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
-            fieldMaxEvaluations, checkCrossover,
-            fieldCrossoverProbability);
-    
+    try {
+      PAES paes = new PAES();
+      Logger.getLogger().putLog("Execution NSGAII...");
+      jTabbedPane1.setSelectedIndex(4);
+      paes.execute(comboAlgorithms, checkMutation, fieldMutationProb,
+              fieldArchitectureInput, fieldNumberOfRuns, fieldPaesArchiveSize,
+              fieldMaxEvaluations, checkCrossover,
+              fieldCrossoverProbability);
 
-    }catch(Exception e){
-           Logger.getLogger().putLog(String.format(String.format("Error when try execute PAES: %$", e.getMessage()),
-                Level.FATAL, main.class.getName()));
+
+    } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "Error when try execute PAES Finalizing...." + e.getMessage());
+      Logger.getLogger().putLog(String.format("Error when try execute PAES, Finalizing...",
+              Level.FATAL, main.class.getName()));
       System.exit(1);
     }
   }
@@ -375,8 +378,8 @@ public class main extends javax.swing.JFrame {
         btnShowConfigurations = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        textLogsArea = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OPLA-Tool 0.0.1");
@@ -861,7 +864,7 @@ public class main extends javax.swing.JFrame {
                 .addGroup(panelMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(checkFeatureDriven)
                     .addComponent(checkPLAExt))
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelMetricsLayout.setVerticalGroup(
             panelMetricsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1017,7 +1020,7 @@ public class main extends javax.swing.JFrame {
                         .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(panelMetrics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(267, Short.MAX_VALUE))
         );
         panelExperimentSettingsLayout.setVerticalGroup(
             panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1169,33 +1172,36 @@ public class main extends javax.swing.JFrame {
         algorithmsLayout.setHorizontalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 361, Short.MAX_VALUE)
-                        .addComponent(btnRun)
-                        .addGap(87, 87, 87))))
-            .addGroup(algorithmsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
+                                .addGap(361, 361, 361)
+                                .addComponent(btnRun)
+                                .addGap(87, 87, 87))))))
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addContainerGap(51, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(29, 29, 29)
+                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRun, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 28, Short.MAX_VALUE)))
                 .addGap(28, 28, 28))
         );
 
@@ -1601,7 +1607,8 @@ public class main extends javax.swing.JFrame {
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel12)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -1611,7 +1618,9 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(270, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(232, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Logs", jPanel6);
@@ -1833,7 +1842,6 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOutputActionPerformed
 
     private void comboAlgorithmsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboAlgorithmsItemStateChanged
-
     }//GEN-LAST:event_comboAlgorithmsItemStateChanged
 
     private void checkEleganceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkEleganceActionPerformed
@@ -1857,7 +1865,7 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_checkFeatureDrivenActionPerformed
 
     private void numberOfRunsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numberOfRunsFocusLost
-      if (Utils.isDigit(fieldNumberOfRuns.getText())) {       
+      if (Utils.isDigit(fieldNumberOfRuns.getText())) {
         Logger.getLogger().putLog(String.format(String.format("Number Of Runs: %s", fieldNumberOfRuns.getText()),
                 Level.INFO, main.class.getName()));
         VolatileConfs.setNumberOfRuns(Integer.parseInt(fieldNumberOfRuns.getText()));
@@ -1877,7 +1885,7 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_fieldMaxEvaluationsFocusLost
 
     private void fieldPopulationSizeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPopulationSizeFocusLost
-      if (Utils.isDigit(fieldPopulationSize.getText())) {      
+      if (Utils.isDigit(fieldPopulationSize.getText())) {
         Logger.getLogger().putLog(String.format(String.format("Population Size: %s", fieldPopulationSize.getText()),
                 Level.INFO, main.class.getName()));
         VolatileConfs.setPopulationSize(Integer.parseInt(fieldPopulationSize.getText()));
@@ -1937,32 +1945,52 @@ public class main extends javax.swing.JFrame {
         //E invoca a classe responsável.
         if (dialogResult == 0) {
           if ("NSGA-II".equalsIgnoreCase(algoritmToRun)) {
-           jLabel12.setText("Working... wait. Started " + Time.timeNow());
-           Logger.getLogger().putLog("Execution NSGAII...");
-           jTabbedPane1.setSelectedIndex(4);
-            java.awt.EventQueue.invokeLater(new Runnable() {
+            SwingWorker sw = new SwingWorker() {
+
               @Override
-              public void run() {
+              protected Object doInBackground() throws Exception {
+                jLabel12.setText("Working... wait. Started " + Time.timeNow());
+                Logger.getLogger().putLog("Execution NSGAII...");
+                jTabbedPane1.setSelectedIndex(4);
                 executeNSGAII();
+                return 0;
+              }
+
+              @Override
+              protected void done() {
                 jLabel12.setText("Done");
+                progressBar.setIndeterminate(false);
                 Logger.getLogger().putLog(String.format("Done NSGAII Execution at: %s", Time.timeNow().toString()));
                 db.Database.reloadContent();
               }
-            });
+            };
+
+            sw.execute();
+            progressBar.setIndeterminate(true);
+
           }
           if ("PAES".equalsIgnoreCase(algoritmToRun)) {
-            jLabel12.setText("Working... wait. Started " + Time.timeNow());;
-            java.awt.EventQueue.invokeLater(new Runnable() {
+            SwingWorker sw2 = new SwingWorker() {
+
               @Override
-              public void run() {
+              protected Object doInBackground() throws Exception {
+                jLabel12.setText("Working... wait. Started " + Time.timeNow());
+                Logger.getLogger().putLog("Execution PAES...");
+                jTabbedPane1.setSelectedIndex(4);
                 executePAES();
+                return 0;
+              }
+
+              @Override
+              protected void done() {
                 jLabel12.setText("Done");
+                progressBar.setIndeterminate(false);
                 Logger.getLogger().putLog(String.format("Done PAES Execution at: %s", Time.timeNow().toString()));
                 db.Database.reloadContent();
               }
-            });
+            };
           }
-          
+
         }
       }
     }//GEN-LAST:event_btnRunActionPerformed
@@ -2022,7 +2050,7 @@ public class main extends javax.swing.JFrame {
   private void comboSolutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSolutionsActionPerformed
     panelShowMetrics.setVisible(false);
     GuiServices.initiComboMetrics(comboMetrics, this.selectedExperiment);
-    
+
     Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
     String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
     String objectiveId = Utils.extractObjectiveIdFromFile(fileName);
@@ -2044,7 +2072,7 @@ public class main extends javax.swing.JFrame {
       it.remove(); // evitar ConcurrentModificationException
       model.addRow(row);
     }
-    
+
     panelObjectives.setVisible(true);
   }//GEN-LAST:event_comboSolutionsActionPerformed
 
@@ -2052,8 +2080,7 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_comboMetricsActionPerformed
 
   private void comboMetricsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboMetricsItemStateChanged
-    String selectedMetric = comboMetrics.getSelectedItem().toString()
-            .toLowerCase().replaceAll("\\s+", "");
+    String selectedMetric = comboMetrics.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
 
     Map<String, String[]> mapColumns = new HashMap<>();
     String[] plaExtColumns = {"PLA Extensibility"};
@@ -2170,10 +2197,11 @@ public class main extends javax.swing.JFrame {
 
   private void btnPatternProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatternProfileActionPerformed
     String newPath = fileChooser(fieldPatternsProfile, "uml");
-    if (newPath.equals(""))
+    if (newPath.equals("")) {
       this.config.updatePathToProfilePatterns(fieldPatternsProfile.getText());
-    else
+    } else {
       this.config.updatePathToProfilePatterns(newPath);
+    }
   }//GEN-LAST:event_btnPatternProfileActionPerformed
 
   private void checkPatternsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkPatternsActionPerformed
@@ -2191,10 +2219,11 @@ public class main extends javax.swing.JFrame {
 
   private void btnRelationshipProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelationshipProfileActionPerformed
     String newPath = fileChooser(fieldRelationshipsProfile, "uml");
-    if (newPath.equals(""))
+    if (newPath.equals("")) {
       this.config.updatePathToProfileRelationships(fieldRelationshipsProfile.getText());
-    else
+    } else {
       this.config.updatePathToProfileRelationships(newPath);
+    }
   }//GEN-LAST:event_btnRelationshipProfileActionPerformed
 
   private void checkRelationshipsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkRelationshipsActionPerformed
@@ -2221,7 +2250,7 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_checkMediatorActionPerformed
 
   private void checkManagerClassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkManagerClassActionPerformed
-     addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_MANAGER_CLASS_MUTATION.getOperatorName(), checkManagerClass);
+    addOrRemoveOperatorMutation(FeatureMutationOperators.ADD_MANAGER_CLASS_MUTATION.getOperatorName(), checkManagerClass);
   }//GEN-LAST:event_checkManagerClassActionPerformed
 
   private void checkStrategyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkStrategyActionPerformed
@@ -2230,13 +2259,14 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_checkStrategyActionPerformed
 
   private void radioElementsWithSameDPorNoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioElementsWithSameDPorNoneActionPerformed
-      if(this.ewsdp == null) 
-        this.ewsdp = new ElementsWithSameDesignPatternSelection();
-      VolatileConfs.setScopePatterns(ewsdp);
+    if (this.ewsdp == null) {
+      this.ewsdp = new ElementsWithSameDesignPatternSelection();
+    }
+    VolatileConfs.setScopePatterns(ewsdp);
   }//GEN-LAST:event_radioElementsWithSameDPorNoneActionPerformed
 
   private void radioRandomStrategyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioRandomStrategyActionPerformed
-   VolatileConfs.setScopePatterns(null);
+    VolatileConfs.setScopePatterns(null);
   }//GEN-LAST:event_radioRandomStrategyActionPerformed
 
   private void btnShowConfigurationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowConfigurationsActionPerformed
@@ -2248,7 +2278,7 @@ public class main extends javax.swing.JFrame {
     showConfs.setExperimentId(selectedExperiment);
     showConfs.setDirOutput(this.config.getConfig().getDirectoryToExportModels());
     showConfs.fillFields();
-  
+
   }//GEN-LAST:event_btnShowConfigurationsActionPerformed
 
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
@@ -2377,6 +2407,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel panelPatternScope;
     private javax.swing.JPanel panelShowMetrics;
     private javax.swing.JPanel panelSolutions;
+    private javax.swing.JProgressBar progressBar;
     private javax.swing.JRadioButton radioElementsWithSameDPorNone;
     private javax.swing.JRadioButton radioRandomStrategy;
     private javax.swing.JTable tableExecutions;
@@ -2399,8 +2430,9 @@ public class main extends javax.swing.JFrame {
 
     FeatureMutationOperators[] operators = FeatureMutationOperators.values();
     for (FeatureMutationOperators operator : operators) {
-      if(!operator.getOperatorName().equals("DesignPatterns"))
+      if (!operator.getOperatorName().equals("DesignPatterns")) {
         MutationOperatorsSelected.getSelectedMutationOperators().add(operator.getOperatorName());
+      }
     }
   }
 
@@ -2433,19 +2465,20 @@ public class main extends javax.swing.JFrame {
 
     if (!(new File(pathDb).exists())) {
       File dirDb = new File(UserHome.getOplaUserHome() + "db");
-      if (!dirDb.exists())
+      if (!dirDb.exists()) {
         dirDb.mkdirs();
-      
+      }
+
       Utils.copy("emptyDB/oplatool.db", pathDb);
     }
     try {
       db.Database.setContent(results.Experiment.all());
     } catch (SQLException ex) {
       Logger.getLogger().putLog(String.format(String.format(String.format("Error ConfigureDB %s", ex.getMessage())),
-        Level.INFO, main.class.getName()));
+              Level.INFO, main.class.getName()));
     } catch (Exception ex) {
-        Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
-        Level.INFO, main.class.getName()));
+      Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
+              Level.INFO, main.class.getName()));
     }
 
   }
@@ -2472,8 +2505,8 @@ public class main extends javax.swing.JFrame {
         model.addRow(row);
       }
     } catch (Exception ex) {
-        Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
-        Level.INFO, main.class.getName()));
+      Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
+              Level.INFO, main.class.getName()));
     }
   }
 
@@ -2532,7 +2565,6 @@ public class main extends javax.swing.JFrame {
   };
 
   private boolean noneDesignPatternsSelected() {
-    return (!checkMediator.isSelected() &&  !checkStrategy.isSelected() && !checkBridge.isSelected());
+    return (!checkMediator.isSelected() && !checkStrategy.isSelected() && !checkBridge.isSelected());
   }
-  
 }

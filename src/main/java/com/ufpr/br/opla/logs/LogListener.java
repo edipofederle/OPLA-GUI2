@@ -23,6 +23,7 @@ public class LogListener implements Listener{
 
   @Override
   public void message() {
+    
     this.textArea.append(Time.timeNow() + LogLogData.printLog()+"\n");
   }
   
