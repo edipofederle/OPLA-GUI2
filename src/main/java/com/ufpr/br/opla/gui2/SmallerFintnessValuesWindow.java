@@ -91,6 +91,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
 
         panelEleganceBest.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         panelEleganceBest.setEnabled(false);
+        panelEleganceBest.setMinimumSize(new java.awt.Dimension(250, 50));
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel1.setText("Elegance");
@@ -106,6 +107,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableEleganceBest.setMinimumSize(new java.awt.Dimension(300, 64));
         tableEleganceBest.setName("elegance");
         tableEleganceBest.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -119,22 +121,25 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
         panelEleganceBestLayout.setHorizontalGroup(
             panelEleganceBestLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelEleganceBestLayout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .add(panelEleganceBestLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel1)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 343, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(panelEleganceBestLayout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(jLabel1))
+                    .add(jScrollPane1))
                 .addContainerGap())
         );
         panelEleganceBestLayout.setVerticalGroup(
             panelEleganceBestLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelEleganceBestLayout.createSequentialGroup()
                 .add(jLabel1)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 79, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .add(35, 35, 35))
+                .add(7, 7, 7)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 96, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         panelConventionalBest.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelConventionalBest.setMinimumSize(new java.awt.Dimension(250, 50));
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel2.setText("Conventional Metrics");
@@ -150,6 +155,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableConventionalBest.setMinimumSize(new java.awt.Dimension(300, 64));
         tableConventionalBest.setName("conventional");
         tableConventionalBest.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -181,6 +187,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
         );
 
         panelPlaExtBest.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelPlaExtBest.setMinimumSize(new java.awt.Dimension(250, 50));
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel3.setText("PLA-Extensibiliy");
@@ -196,6 +203,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tablePLAExtBest.setMinimumSize(new java.awt.Dimension(300, 64));
         tablePLAExtBest.setName("PLAExtensibility");
         tablePLAExtBest.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -208,11 +216,13 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
         panelPlaExtBest.setLayout(panelPlaExtBestLayout);
         panelPlaExtBestLayout.setHorizontalGroup(
             panelPlaExtBestLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(panelPlaExtBestLayout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(panelPlaExtBestLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel3)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jScrollPane4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 345, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, panelPlaExtBestLayout.createSequentialGroup()
+                .addContainerGap()
+                .add(panelPlaExtBestLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jScrollPane4)
+                    .add(panelPlaExtBestLayout.createSequentialGroup()
+                        .add(0, 372, Short.MAX_VALUE)
+                        .add(jLabel3)))
                 .addContainerGap())
         );
         panelPlaExtBestLayout.setVerticalGroup(
@@ -220,11 +230,12 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
             .add(panelPlaExtBestLayout.createSequentialGroup()
                 .add(jLabel3)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jScrollPane4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 94, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(0, 17, Short.MAX_VALUE))
         );
 
         panelFeatureDriven.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelFeatureDriven.setMinimumSize(new java.awt.Dimension(250, 50));
 
         jLabel4.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         jLabel4.setText("Feature-driven Metrics");
@@ -240,6 +251,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableFeatureDrivenBest.setMinimumSize(new java.awt.Dimension(300, 64));
         tableFeatureDrivenBest.setName("featureDriven");
         tableFeatureDrivenBest.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -255,7 +267,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, panelFeatureDrivenLayout.createSequentialGroup()
                 .addContainerGap()
                 .add(panelFeatureDrivenLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .add(jScrollPane3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
                     .add(panelFeatureDrivenLayout.createSequentialGroup()
                         .add(0, 0, Short.MAX_VALUE)
                         .add(jLabel4)))
@@ -270,6 +282,8 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                 .add(0, 12, Short.MAX_VALUE))
         );
 
+        panelTableObjectives.setMinimumSize(new java.awt.Dimension(250, 50));
+
         tableObjectives.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -281,6 +295,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableObjectives.setMinimumSize(new java.awt.Dimension(300, 64));
         jScrollPane5.setViewportView(tableObjectives);
 
         jLabel5.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
@@ -392,33 +407,34 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                     .add(panelFeatureDriven, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(panelConventionalBest, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(panelTableObjectives, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .add(18, 18, 18)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(panelEds, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(12, Short.MAX_VALUE))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(jLabel8)
-                .add(267, 267, 267))
+                .add(281, 281, 281))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(10, 10, 10)
                 .add(jLabel8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 22, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(panelEds, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(layout.createSequentialGroup()
-                        .add(panelEleganceBest, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 118, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(22, 22, 22)
+                        .add(panelEleganceBest, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(18, 18, 18)
                         .add(panelConventionalBest, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(panelPlaExtBest, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(panelFeatureDriven, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
-                        .add(panelTableObjectives, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .add(0, 80, Short.MAX_VALUE))
+                        .add(panelTableObjectives, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(panelEds, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(0, 45, Short.MAX_VALUE))
         );
 
         pack();
