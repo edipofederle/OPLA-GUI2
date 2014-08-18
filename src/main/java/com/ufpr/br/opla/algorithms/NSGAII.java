@@ -27,7 +27,7 @@ public class NSGAII {
 
   public void execute(JComboBox comboAlgorithms, JCheckBox checkMutation, JTextField fieldMutationProb,
           JTextArea fieldArchitectureInput, JTextField fieldNumberOfRuns, JTextField fieldPopulationSize,
-          JTextField fieldMaxEvaluations, JCheckBox checkCrossover, JTextField fieldCrossoverProbability) {
+          JTextField fieldMaxEvaluations, JCheckBox checkCrossover, JTextField fieldCrossoverProbability, String executionDescription) {
 
     ReaderConfig.setPathToConfigurationFile(UserHome.getPathToConfigFile());
     ReaderConfig.load();
@@ -35,6 +35,7 @@ public class NSGAII {
     NSGAIIConfig configs = new NSGAIIConfig();
     configs.setLogger(Logger.getLogger());
     configs.activeLogs();
+    configs.setDescription(executionDescription);
 
     //Se mutação estiver marcada, pega os operadores selecionados
     //,e seta a probabilidade de mutacao

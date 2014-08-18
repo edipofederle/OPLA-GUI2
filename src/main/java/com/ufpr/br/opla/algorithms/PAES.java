@@ -23,12 +23,13 @@ public class PAES {
     
     public void execute(JComboBox comboAlgorithms, JCheckBox checkMutation, JTextField fieldMutationProb,
             JTextArea fieldArchitectureInput, JTextField fieldNumberOfRuns, JTextField fieldPaesArchiveSize,
-            JTextField fieldMaxEvaluations, JCheckBox checkCrossover, JTextField fieldCrossoverProbability) {
+            JTextField fieldMaxEvaluations, JCheckBox checkCrossover, JTextField fieldCrossoverProbability, String executionDescription) {
         
         ReaderConfig.setPathToConfigurationFile(UserHome.getPathToConfigFile());
         ReaderConfig.load();
         
         PaesConfigs configs = new PaesConfigs();
+        configs.setDescription(executionDescription);
 
         //Se mutação estiver marcada, pega os operadores selecionados
         //,e seta a probabilidade de mutacao
