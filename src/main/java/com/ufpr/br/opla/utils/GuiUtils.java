@@ -28,9 +28,8 @@ public class GuiUtils {
 
     Map<String, String> mapObjectives = new HashMap<>();
 
-    for (int i = 0; i < objs.length; i++) {
+    for (int i = 0; i < objs.length; i++)
       mapObjectives.put(titles[i].toUpperCase(), objs[i]);
-    }
 
     return mapObjectives;
   }

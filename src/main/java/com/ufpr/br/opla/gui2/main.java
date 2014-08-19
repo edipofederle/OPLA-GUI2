@@ -10,6 +10,7 @@ import br.ufpr.inf.opla.patterns.strategies.scopeselection.impl.ElementsWithSame
 import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.algorithms.Solution;
+import com.ufpr.br.opla.charts.ChartGenerate;
 import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import com.ufpr.br.opla.configuration.ManagerGuiSettingsConfig;
 import com.ufpr.br.opla.configuration.UserHome;
@@ -17,13 +18,11 @@ import com.ufpr.br.opla.configuration.VolatileConfs;
 import com.ufpr.br.opla.logs.LogListener;
 import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
+import java.awt.Label;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -38,6 +37,7 @@ import metrics.Conventional;
 import metrics.Elegance;
 import metrics.FeatureDriven;
 import metrics.PLAExtensibility;
+import net.miginfocom.swing.MigLayout;
 import results.Execution;
 
 /**
@@ -378,6 +378,12 @@ public class main extends javax.swing.JFrame {
         tableMetrics = new javax.swing.JTable();
         bestSolutions = new javax.swing.JButton();
         btnShowConfigurations = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tableExp2 = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        panelFunctionExecutionsSelecteds = new javax.swing.JPanel();
+        btnGenerateChart = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jLabel12 = new javax.swing.JLabel();
@@ -656,7 +662,7 @@ public class main extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addContainerGap(377, Short.MAX_VALUE))
+                .addContainerGap(456, Short.MAX_VALUE))
         );
         ApplicationConfsLayout.setVerticalGroup(
             ApplicationConfsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1018,21 +1024,18 @@ public class main extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(checkCrossover))
                             .addComponent(labelAlgorithms))
-                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(263, Short.MAX_VALUE))
+                        .addGap(136, 136, 136)
+                        .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
         panelExperimentSettingsLayout.setVerticalGroup(
             panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(labelAlgorithms)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comboAlgorithms, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1064,9 +1067,9 @@ public class main extends javax.swing.JFrame {
                             .addComponent(checkMutation)))
                     .addGroup(panelExperimentSettingsLayout.createSequentialGroup()
                         .addComponent(panelMetrics, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(panelOperatorsMutation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18)))
                 .addGroup(panelExperimentSettingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(panelCrossProb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(panelMutationProb, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1177,25 +1180,26 @@ public class main extends javax.swing.JFrame {
         algorithmsLayout.setHorizontalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(algorithmsLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(10, Short.MAX_VALUE)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
-                                .addGap(367, 367, 367)
-                                .addComponent(btnRun)
-                                .addGap(110, 110, 110))
-                            .addGroup(algorithmsLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(executionDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(algorithmsLayout.createSequentialGroup()
+                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 419, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, algorithmsLayout.createSequentialGroup()
+                                    .addGap(6, 6, 6)
+                                    .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(executionDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addGap(77, 77, 77))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
+                            .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap()))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
+                        .addComponent(btnRun)
+                        .addGap(34, 34, 34))))
         );
         algorithmsLayout.setVerticalGroup(
             algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1205,17 +1209,18 @@ public class main extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(algorithmsLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(executionDescription, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addComponent(btnRun, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28))
-                    .addGroup(algorithmsLayout.createSequentialGroup()
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                        .addGap(31, 31, 31))))
         );
 
         jTabbedPane1.addTab("Execution Configurations", algorithms);
@@ -1316,7 +1321,7 @@ public class main extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(panelPatternScope, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(245, Short.MAX_VALUE))
+                .addContainerGap(324, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1577,7 +1582,7 @@ public class main extends javax.swing.JFrame {
                             .addComponent(panelObjectives, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(bestSolutions)
                     .addComponent(panelSolutions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         experimentsLayout.setVerticalGroup(
             experimentsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1604,6 +1609,107 @@ public class main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Results", experiments);
 
+        tableExp2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "id", "name", "algorithm", "Created at"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tableExp2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableExp2MouseClicked(evt);
+            }
+        });
+        tableExp2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tableExp2KeyPressed(evt);
+            }
+        });
+        jScrollPane7.setViewportView(tableExp2);
+
+        jButton2.setText("Select Objective Functions");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        panelFunctionExecutionsSelecteds.setMinimumSize(new java.awt.Dimension(100, 100));
+
+        javax.swing.GroupLayout panelFunctionExecutionsSelectedsLayout = new javax.swing.GroupLayout(panelFunctionExecutionsSelecteds);
+        panelFunctionExecutionsSelecteds.setLayout(panelFunctionExecutionsSelectedsLayout);
+        panelFunctionExecutionsSelectedsLayout.setHorizontalGroup(
+            panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 479, Short.MAX_VALUE)
+        );
+        panelFunctionExecutionsSelectedsLayout.setVerticalGroup(
+            panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 170, Short.MAX_VALUE)
+        );
+
+        btnGenerateChart.setText("Generate");
+        btnGenerateChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateChartActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGenerateChart))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(84, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(btnGenerateChart))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(470, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Experiments", jPanel9);
+
         textLogsArea.setColumns(20);
         textLogsArea.setRows(5);
         jScrollPane6.setViewportView(textLogsArea);
@@ -1617,7 +1723,7 @@ public class main extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 944, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 1023, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel12)
                         .addGap(0, 0, Short.MAX_VALUE))
@@ -1643,8 +1749,8 @@ public class main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(17, Short.MAX_VALUE)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 977, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -2300,6 +2406,112 @@ public class main extends javax.swing.JFrame {
 
   }//GEN-LAST:event_btnShowConfigurationsActionPerformed
 
+  private void tableExp2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableExp2MouseClicked
+    // TODO add your handling code here:
+  }//GEN-LAST:event_tableExp2MouseClicked
+
+  private void tableExp2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableExp2KeyPressed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_tableExp2KeyPressed
+
+  private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    panelFunctionExecutionsSelecteds.setLayout(new MigLayout());
+    
+    panelFunctionExecutionsSelecteds.removeAll();
+    if (tableExp2.getSelectedRows().length != 2) {
+      JOptionPane.showMessageDialog(null, "Select two Executions");
+      return;
+    }
+    
+    int exp1 = tableExp2.getSelectedRows()[0];
+    int exp2 = tableExp2.getSelectedRows()[1];
+
+    String idExperiment1 = tableExp2.getModel().getValueAt(exp1, 0).toString();
+    String idExperiment2 = tableExp2.getModel().getValueAt(exp2, 0).toString();
+
+    String f1[] = db.Database.getOrdenedObjectives(idExperiment1).split(" ");
+    String f2[] = db.Database.getOrdenedObjectives(idExperiment2).split(" ");
+    
+    
+    //Se as duas execuções não usarem as mesmas funções objetivo então retorna.
+    if(!Arrays.equals(f1, f2)){
+      JOptionPane.showMessageDialog(null, "Selected executions not used the same objective functions.");
+      return;
+    }
+
+    //Exibe Checboxs na tela.
+    panelFunctionExecutionsSelecteds.add(new JLabel("Execution: " + idExperiment1 + "\n"), "wrap");
+    for (int i = 0; i < f1.length; i++) {
+      JCheckBox box = new JCheckBox(f1[i].toUpperCase());
+      box.setName(idExperiment1 + "," +  f1[i] + "," + i); // id do experimemto, nome da funcao, indice
+      panelFunctionExecutionsSelecteds.add(box, "span, grow");
+    }
+
+    panelFunctionExecutionsSelecteds.add(new Label("Execution: " + idExperiment2 + "\n"), "wrap");
+    for (int i = 0; i < f2.length; i++) {
+      JCheckBox box = new JCheckBox(f2[i].toUpperCase());
+      box.setName(idExperiment2 + "," + f2[i] + "," + i); // id do experimemto, nome da funcao, indice
+      panelFunctionExecutionsSelecteds.add(box, "span, grow");
+    }
+    
+    panelFunctionExecutionsSelecteds.updateUI();
+
+
+  }//GEN-LAST:event_jButton2ActionPerformed
+
+  private void btnGenerateChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateChartActionPerformed
+     List<JCheckBox> checkeds = new ArrayList();
+     String[] algorithms = new String[2];
+     
+    for(Object comp : panelFunctionExecutionsSelecteds.getComponents()){
+      if(comp instanceof JCheckBox){
+        JCheckBox checkBox = ((JCheckBox)comp);
+        if(checkBox.isSelected())
+          checkeds.add(checkBox);
+      }
+    }
+    
+    int exp1 = tableExp2.getSelectedRows()[0];
+    int exp2 = tableExp2.getSelectedRows()[1];
+    
+    String idExperiment1 = tableExp2.getModel().getValueAt(exp1, 0).toString();
+    algorithms[0] = tableExp2.getModel().getValueAt(exp1, 2).toString();
+    
+    String idExperiment2 = tableExp2.getModel().getValueAt(exp2, 0).toString();
+    algorithms[1] = tableExp2.getModel().getValueAt(exp2, 2).toString();
+    
+    //validations
+    if(checkeds.size() != 4){
+      JOptionPane.showMessageDialog(null, "Selecione ao menos duas funções de cada execução escolhida."); 
+    }else if(checkeds.isEmpty()){
+      JOptionPane.showMessageDialog(null, "Selecione ao menos duas funções de cada execução escolhida."); 
+    }else if(!Validators.validateCheckedsFunctions(checkeds)){
+      JOptionPane.showMessageDialog(null, "As funcoes objetivos selecionadas devem ser as mesmas para ambas execuções.");
+    }else{
+      String[] functions = new String[checkeds.size()/2]; //x,y Axis
+      int[] columns = new int[checkeds.size()/2]; // Quais colunas do arquivo deseja-se ler.
+      
+      for(int i=0; i < checkeds.size()/2; i++){
+        final String[] splited = checkeds.get(i).getName().split(",");
+        
+        columns[i] = Integer.parseInt(splited[2]);
+        functions[i] = splited[1];
+      }
+     
+      HashMap<String, String> mapExperimentIdToFile = new HashMap<>();
+      
+      String outputDir = this.config.getConfig().getDirectoryToExportModels();
+      mapExperimentIdToFile.put(idExperiment1, outputDir + idExperiment1 + "/Hypervolume/hypervolume.txt");
+      mapExperimentIdToFile.put(idExperiment2, outputDir + idExperiment2 + "/Hypervolume/hypervolume.txt");
+
+      ChartGenerate.generate(functions, mapExperimentIdToFile, columns, algorithms);
+    }
+    
+    
+    
+  }//GEN-LAST:event_btnGenerateChartActionPerformed
+
+  
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
     int rVal = c.showOpenDialog(this);
@@ -2330,6 +2542,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton bestSolutions;
     private javax.swing.JButton btnCleanListArchs1;
     private javax.swing.JButton btnConcernProfile;
+    private javax.swing.JButton btnGenerateChart;
     private javax.swing.JButton btnInput1;
     private javax.swing.JButton btnManipulationDir;
     private javax.swing.JButton btnOutput;
@@ -2380,6 +2593,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2407,12 +2621,14 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel labelAlgorithms;
     private javax.swing.JLabel labelArchivePAES;
@@ -2421,6 +2637,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JPanel panelCrossProb;
     private javax.swing.JPanel panelExecutions;
     private javax.swing.JPanel panelExperimentSettings;
+    private javax.swing.JPanel panelFunctionExecutionsSelecteds;
     private javax.swing.JPanel panelMetrics;
     private javax.swing.JPanel panelMutationProb;
     private javax.swing.JPanel panelObjectives;
@@ -2433,6 +2650,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JRadioButton radioRandomStrategy;
     private javax.swing.JTable tableExecutions;
     private javax.swing.JTable tableExp;
+    private javax.swing.JTable tableExp2;
     private javax.swing.JTable tableMetrics;
     private javax.swing.JTable tableObjectives;
     // End of variables declaration//GEN-END:variables
@@ -2505,30 +2723,7 @@ public class main extends javax.swing.JFrame {
   }
 
   private void initiExecutedExperiments() {
-    try {
-      DefaultTableModel model = new DefaultTableModel();
-      model.addColumn("ID");
-      model.addColumn("Name");
-      model.addColumn("Algorithm");
-      model.addColumn("Created at");
-
-      GuiUtils.makeTableNotEditable(tableExp);
-
-      tableExp.setModel(model);
-
-      List<results.Experiment> allExp = db.Database.getContent();
-      for (results.Experiment exp : allExp) {
-        Object[] row = new Object[4];
-        row[0] = exp.getId();
-        row[1] = exp.getName();
-        row[2] = exp.getAlgorithm();
-        row[3] = exp.getCreatedAt();
-        model.addRow(row);
-      }
-    } catch (Exception ex) {
-      Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
-              Level.INFO, main.class.getName()));
-    }
+    populateTables();
   }
 
   private void hidePanelSolutionsByDefault() {
@@ -2595,4 +2790,34 @@ public class main extends javax.swing.JFrame {
     jTabbedPane1.setEnabledAt(2, false);
     jTabbedPane1.setEnabledAt(3, false);
   }
+  
+  private void populateTables() {
+    JTable tables[] = {tableExp, tableExp2};
+    List<results.Experiment> allExp = db.Database.getContent();
+    
+    for (int i = 0; i < tables.length; i++) {
+      try {
+        GuiUtils.makeTableNotEditable(tables[i]);
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Name");
+        model.addColumn("Algorithm");
+        model.addColumn("Created at");
+        tables[i].setModel(model);
+        
+        for (results.Experiment exp : allExp) {
+          Object[] row = new Object[4];
+          row[0] = exp.getId();
+          row[1] = exp.getName();
+          row[2] = exp.getAlgorithm();
+          row[3] = exp.getCreatedAt();
+          model.addRow(row);
+        }
+      } catch (Exception ex) {
+        Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
+                Level.INFO, main.class.getName()));
+      }
+    }
+  }
+  
 }
