@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 
@@ -182,4 +183,6 @@ public class Utils {
       System.exit(1);
     }
   }
+
+ 
 }

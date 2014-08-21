@@ -624,7 +624,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
       row[1] = entry.getValue();
       modelTableEds.addRow(row);
     }
-
+    
   }
 
   private void selectBestEdSolution() {

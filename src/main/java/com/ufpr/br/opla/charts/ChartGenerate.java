@@ -27,15 +27,17 @@ public class ChartGenerate {
    * @param mapExperimentIdToFile - map contendo o id do experimento e o path
    * para o arquivo contendo os valores das funcoes objetivos
    */
-  public static void generate(String[] functions, HashMap<String, String> mapExperimentIdToFile, int[] columns,
-          String[] algorithms) {
+public static void generate(String[] functions, HashMap<String, String> experimentToAlgorithmUsed, int[] columns, String outputDir) {
     try {
-      String name = "Meu Gráfico";
+      String name = "";
       ChartGeneratorScatter g = new ChartGeneratorScatter(name, functions[0], functions[1]);
-      int counter = 0;
+ 
 
-      for (Map.Entry<String, String> entry : mapExperimentIdToFile.entrySet()) {
-        List<List<Double>> content = ReadObjectives.read(columns, entry.getValue());
+      for (Map.Entry<String, String> entry : experimentToAlgorithmUsed.entrySet()) {
+        
+        String path = outputDir + entry.getKey() + "/Hypervolume/hypervolume.txt";
+        
+        List<List<Double>> content = ReadObjectives.read(columns, path);
         HashMap<String, List<XYDataItem>> algo = new HashMap<>();
         List<XYDataItem> one = new ArrayList<>();
 
@@ -43,11 +45,8 @@ public class ChartGenerate {
           one.add(new XYDataItem(list.get(0), list.get(1)));
         }
 
-        algo.put(algorithms[counter], one);
-        counter++;
-
+        algo.put(entry.getValue(), one);
         g.setDataSet(algo);
-
       }
 
       ChartPanel chartPanel = g.plot();
@@ -68,4 +67,7 @@ public class ChartGenerate {
 
 
   }
+
+  
+ 
 }

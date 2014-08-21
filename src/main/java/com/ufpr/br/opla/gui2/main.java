@@ -56,6 +56,9 @@ public class main extends javax.swing.JFrame {
   private String selectedExecution;
   private ElementsWithSameDesignPatternSelection ewsdp = null;
   private JTextArea textLogsArea = new javax.swing.JTextArea();
+  
+  Locale locale = Locale.US;
+  ResourceBundle rb = ResourceBundle.getBundle("i18n", locale);
 
   /**
    * Creates new form main
@@ -1768,20 +1771,20 @@ public class main extends javax.swing.JFrame {
 
     private void btnConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcernProfileActionPerformed
       String newPath = fileChooser(fieldConcernProfile, "uml");
-      if (newPath.equals("")) {
+      
+      if (newPath.equals(""))
         this.config.updatePathToProfileConcerns(fieldConcernProfile.getText());
-      } else {
+      else
         this.config.updatePathToProfileConcerns(newPath);
-      }
     }//GEN-LAST:event_btnConcernProfileActionPerformed
 
     private void btnSmartyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSmartyProfileActionPerformed
       String newPath = fileChooser(fieldSmartyProfile, "uml");
-      if (newPath.equals("")) {
+      
+      if (newPath.equals(""))
         this.config.updatePathToProfileSmarty(fieldSmartyProfile.getText());
-      } else {
+      else
         this.config.updatePathToProfileSmarty(newPath);
-      }
     }//GEN-LAST:event_btnSmartyProfileActionPerformed
 
     private void fieldConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldConcernProfileActionPerformed
@@ -1794,11 +1797,11 @@ public class main extends javax.swing.JFrame {
 
     private void btnTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplateActionPerformed
       String path = dirChooser(fieldTemplate);
-      if ("".equals(path)) {
+      
+      if ("".equals(path))
         this.config.updatePathToTemplateFiles(fieldTemplate.getText() + UserHome.getFileSeparator());
-      } else {
+      else
         this.config.updatePathToTemplateFiles(path + UserHome.getFileSeparator());
-      }
     }//GEN-LAST:event_btnTemplateActionPerformed
 
   private String dirChooser(JTextField field) throws HeadlessException {
@@ -1806,12 +1809,14 @@ public class main extends javax.swing.JFrame {
     String path;
     c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     int rVal = c.showOpenDialog(this);
+    
     if (rVal == JFileChooser.APPROVE_OPTION) {
       path = c.getSelectedFile().getAbsolutePath();
       field.setText(path + UserHome.getFileSeparator());
       field.updateUI();
       return path;
     }
+    
     return "";
   }
 
@@ -1829,11 +1834,10 @@ public class main extends javax.swing.JFrame {
 
     private void btnManipulationDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManipulationDirActionPerformed
       String path = dirChooser(fieldManipulationDir);
-      if ("".equals(path)) {
+      if ("".equals(path))
         this.config.updatePathToSaveModels(fieldManipulationDir.getText() + UserHome.getFileSeparator());
-      } else {
+      else
         this.config.updatePathToSaveModels(path + UserHome.getFileSeparator());
-      }
     }//GEN-LAST:event_btnManipulationDirActionPerformed
 
     private void checkSmartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSmartyActionPerformed
@@ -1887,9 +1891,8 @@ public class main extends javax.swing.JFrame {
         panelMutationProb.setVisible(false);
       } else {
         panelOperatorsMutation.setVisible(true);
-        if (crossoverProbabilityBck != null) {
+        if (crossoverProbabilityBck != null)
           fieldCrossoverProbability.setText(crossoverProbabilityBck);
-        }
         panelMutationProb.setVisible(true);
       }
     }//GEN-LAST:event_checkMutationActionPerformed
@@ -1943,7 +1946,6 @@ public class main extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCleanListArchs1ActionPerformed
 
     private void btnInput1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInput1ActionPerformed
-
       Validators.validateEntries(fieldArchitectureInput.getText());
     }//GEN-LAST:event_btnInput1ActionPerformed
 
@@ -2042,7 +2044,7 @@ public class main extends javax.swing.JFrame {
 
       //Validacoes inicias
       //Verifica se as entradas sao validas. Caso contrario finaliza
-      if (!Validators.validateEntries(fieldArchitectureInput.getText())) {
+      if (Validators.validateEntries(fieldArchitectureInput.getText())) {
         return;
       }
 
@@ -2416,98 +2418,79 @@ public class main extends javax.swing.JFrame {
 
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     panelFunctionExecutionsSelecteds.setLayout(new MigLayout());
-    
     panelFunctionExecutionsSelecteds.removeAll();
-    if (tableExp2.getSelectedRows().length != 2) {
-      JOptionPane.showMessageDialog(null, "Select two Executions");
+    
+    int[] selectedRows = tableExp2.getSelectedRows();
+    HashMap<String, String[]> map = new HashMap<>();
+    
+    for (int i = 0; i < selectedRows.length; i++) {
+      String experimentId = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
+      map.put(experimentId, db.Database.getOrdenedObjectives(experimentId).split(" "));
+    }
+    
+    //Validacao
+    if(selectedRows.length <= 1){
+      JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoExecution"));
+      return;
+    }else if(!Validators.selectedsExperimentsHasTheSameObjectiveFunctions(map)){
+      JOptionPane.showMessageDialog(null, rb.getString("notSameFunctions"));
       return;
     }
     
-    int exp1 = tableExp2.getSelectedRows()[0];
-    int exp2 = tableExp2.getSelectedRows()[1];
-
-    String idExperiment1 = tableExp2.getModel().getValueAt(exp1, 0).toString();
-    String idExperiment2 = tableExp2.getModel().getValueAt(exp2, 0).toString();
-
-    String f1[] = db.Database.getOrdenedObjectives(idExperiment1).split(" ");
-    String f2[] = db.Database.getOrdenedObjectives(idExperiment2).split(" ");
-    
-    
-    //Se as duas execuções não usarem as mesmas funções objetivo então retorna.
-    if(!Arrays.equals(f1, f2)){
-      JOptionPane.showMessageDialog(null, "Selected executions not used the same objective functions.");
-      return;
-    }
-
-    //Exibe Checboxs na tela.
-    panelFunctionExecutionsSelecteds.add(new JLabel("Execution: " + idExperiment1 + "\n"), "wrap");
-    for (int i = 0; i < f1.length; i++) {
-      JCheckBox box = new JCheckBox(f1[i].toUpperCase());
-      box.setName(idExperiment1 + "," +  f1[i] + "," + i); // id do experimemto, nome da funcao, indice
-      panelFunctionExecutionsSelecteds.add(box, "span, grow");
-    }
-
-    panelFunctionExecutionsSelecteds.add(new Label("Execution: " + idExperiment2 + "\n"), "wrap");
-    for (int i = 0; i < f2.length; i++) {
-      JCheckBox box = new JCheckBox(f2[i].toUpperCase());
-      box.setName(idExperiment2 + "," + f2[i] + "," + i); // id do experimemto, nome da funcao, indice
-      panelFunctionExecutionsSelecteds.add(box, "span, grow");
-    }
-    
-    panelFunctionExecutionsSelecteds.updateUI();
-
+     for (Map.Entry<String, String[]> entry : map.entrySet()) {
+       String experimentId = entry.getKey();
+       String[] values = entry.getValue();
+       panelFunctionExecutionsSelecteds.add(new JLabel("Execution: " + experimentId + "\n"), "wrap");
+       for(int i=0; i < values.length; i++){
+        JCheckBox box = new JCheckBox(values[i].toUpperCase());
+        box.setName(experimentId + "," +  values[i] + "," + i); // id do experimemto, nome da funcao, indice
+        panelFunctionExecutionsSelecteds.add(box, "span, grow");
+       }
+     }
+     
+     panelFunctionExecutionsSelecteds.updateUI();
 
   }//GEN-LAST:event_jButton2ActionPerformed
 
   private void btnGenerateChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateChartActionPerformed
-     List<JCheckBox> checkeds = new ArrayList();
-     String[] algorithms = new String[2];
-     
+    List<JCheckBox> allChecks = new ArrayList();
+    List<JCheckBox> checkeds = new ArrayList();
+    HashMap<String, String> experimentToAlgorithmUsed = new HashMap<>();      
+    
     for(Object comp : panelFunctionExecutionsSelecteds.getComponents()){
       if(comp instanceof JCheckBox){
         JCheckBox checkBox = ((JCheckBox)comp);
         if(checkBox.isSelected())
-          checkeds.add(checkBox);
+           checkeds.add(checkBox);
+        allChecks.add(checkBox);
+       
       }
     }
     
-    int exp1 = tableExp2.getSelectedRows()[0];
-    int exp2 = tableExp2.getSelectedRows()[1];
-    
-    String idExperiment1 = tableExp2.getModel().getValueAt(exp1, 0).toString();
-    algorithms[0] = tableExp2.getModel().getValueAt(exp1, 2).toString();
-    
-    String idExperiment2 = tableExp2.getModel().getValueAt(exp2, 0).toString();
-    algorithms[1] = tableExp2.getModel().getValueAt(exp2, 2).toString();
-    
-    //validations
-    if(checkeds.size() != 4){
-      JOptionPane.showMessageDialog(null, "Selecione ao menos duas funções de cada execução escolhida."); 
+    for(JCheckBox box : checkeds){
+      String id = box.getName().split(",")[0]; // experimentID
+      String algorithmUsed = db.Database.getAlgoritmUsedToExperimentId(id);
+      experimentToAlgorithmUsed.put(id, algorithmUsed);
+    }
+    if(Validators.hasMoreThatTwoFunctionsSelectedForSelectedExperiments(allChecks)){
+      JOptionPane.showMessageDialog(null, "Apenas duas funcões para cada execução.");
     }else if(checkeds.isEmpty()){
       JOptionPane.showMessageDialog(null, "Selecione ao menos duas funções de cada execução escolhida."); 
-    }else if(!Validators.validateCheckedsFunctions(checkeds)){
+    }else if(Validators.validateCheckedsFunctions(allChecks)){
       JOptionPane.showMessageDialog(null, "As funcoes objetivos selecionadas devem ser as mesmas para ambas execuções.");
     }else{
-      String[] functions = new String[checkeds.size()/2]; //x,y Axis
-      int[] columns = new int[checkeds.size()/2]; // Quais colunas do arquivo deseja-se ler.
+      String[] functions = new String[2]; //x,y Axis
+      int[] columns = new int[2]; // Quais colunas do arquivo deseja-se ler.
       
-      for(int i=0; i < checkeds.size()/2; i++){
+      for(int i=0; i < 2; i++){
         final String[] splited = checkeds.get(i).getName().split(",");
-        
         columns[i] = Integer.parseInt(splited[2]);
         functions[i] = splited[1];
       }
-     
-      HashMap<String, String> mapExperimentIdToFile = new HashMap<>();
-      
-      String outputDir = this.config.getConfig().getDirectoryToExportModels();
-      mapExperimentIdToFile.put(idExperiment1, outputDir + idExperiment1 + "/Hypervolume/hypervolume.txt");
-      mapExperimentIdToFile.put(idExperiment2, outputDir + idExperiment2 + "/Hypervolume/hypervolume.txt");
 
-      ChartGenerate.generate(functions, mapExperimentIdToFile, columns, algorithms);
-    }
-    
-    
+      String outputDir = this.config.getConfig().getDirectoryToExportModels();
+      ChartGenerate.generate(functions, experimentToAlgorithmUsed, columns, outputDir); 
+    }   
     
   }//GEN-LAST:event_btnGenerateChartActionPerformed
 
@@ -2789,6 +2772,7 @@ public class main extends javax.swing.JFrame {
     jTabbedPane1.setEnabledAt(1, false);
     jTabbedPane1.setEnabledAt(2, false);
     jTabbedPane1.setEnabledAt(3, false);
+    jTabbedPane1.setEnabledAt(4, false);
   }
   
   private void populateTables() {
