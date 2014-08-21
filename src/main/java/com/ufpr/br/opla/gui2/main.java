@@ -2473,11 +2473,11 @@ public class main extends javax.swing.JFrame {
       experimentToAlgorithmUsed.put(id, algorithmUsed);
     }
     if(Validators.hasMoreThatTwoFunctionsSelectedForSelectedExperiments(allChecks)){
-      JOptionPane.showMessageDialog(null, "Apenas duas funcões para cada execução.");
+      JOptionPane.showMessageDialog(null, rb.getString("onlyTwoFunction"));
     }else if(checkeds.isEmpty()){
-      JOptionPane.showMessageDialog(null, "Selecione ao menos duas funções de cada execução escolhida."); 
+      JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoFunctionPerSelectedExperiment")); 
     }else if(Validators.validateCheckedsFunctions(allChecks)){
-      JOptionPane.showMessageDialog(null, "As funcoes objetivos selecionadas devem ser as mesmas para ambas execuções.");
+      JOptionPane.showMessageDialog(null, "sameFunctions");
     }else{
       String[] functions = new String[2]; //x,y Axis
       int[] columns = new int[2]; // Quais colunas do arquivo deseja-se ler.
