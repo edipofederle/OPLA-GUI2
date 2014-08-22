@@ -2439,6 +2439,9 @@ public class main extends javax.swing.JFrame {
     if(selectedRows.length <= 1){
       JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoExecution"));
       return;
+    }else if(selectedRows.length > 5){
+      JOptionPane.showMessageDialog(null, rb.getString("maxExecutions"));
+      return;
     }else if(!Validators.selectedsExperimentsHasTheSameObjectiveFunctions(map)){
       JOptionPane.showMessageDialog(null, rb.getString("notSameFunctions"));
       return;
