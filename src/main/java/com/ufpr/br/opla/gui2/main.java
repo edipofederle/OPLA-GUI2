@@ -18,12 +18,11 @@ import com.ufpr.br.opla.configuration.VolatileConfs;
 import com.ufpr.br.opla.logs.LogListener;
 import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
-import java.awt.Label;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.*;
 import java.util.Map.Entry;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -1178,6 +1177,12 @@ public class main extends javax.swing.JFrame {
 
         jLabel19.setText("Set a description for this execution: (Optional)");
 
+        executionDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                executionDescriptionKeyTyped(evt);
+            }
+        });
+
         javax.swing.GroupLayout algorithmsLayout = new javax.swing.GroupLayout(algorithms);
         algorithms.setLayout(algorithmsLayout);
         algorithmsLayout.setHorizontalGroup(
@@ -1194,8 +1199,10 @@ public class main extends javax.swing.JFrame {
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, algorithmsLayout.createSequentialGroup()
                                     .addGap(6, 6, 6)
                                     .addGroup(algorithmsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(executionDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(algorithmsLayout.createSequentialGroup()
+                                            .addComponent(executionDescription, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(0, 0, Short.MAX_VALUE)))))
                             .addGap(77, 77, 77))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, algorithmsLayout.createSequentialGroup()
                             .addComponent(panelExperimentSettings, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2493,6 +2500,13 @@ public class main extends javax.swing.JFrame {
     
   }//GEN-LAST:event_btnGenerateChartActionPerformed
 
+  private void executionDescriptionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_executionDescriptionKeyTyped
+    int numbersOfChars = executionDescription.getText().length();
+    if(numbersOfChars > 10){
+      executionDescription.setText(executionDescription.getText().substring(0, 10));
+    }
+  }//GEN-LAST:event_executionDescriptionKeyTyped
+
   
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
@@ -2792,7 +2806,7 @@ public class main extends javax.swing.JFrame {
           Object[] row = new Object[4];
           row[0] = exp.getId();
           row[1] = exp.getName();
-          row[2] = exp.getAlgorithm() + " (" + exp.getDescription() + ")";
+          row[2] = exp.getAlgorithmAndDescription();
           row[3] = exp.getCreatedAt();
           model.addRow(row);
         }
