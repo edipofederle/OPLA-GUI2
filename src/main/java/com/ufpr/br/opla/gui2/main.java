@@ -2463,7 +2463,6 @@ public class main extends javax.swing.JFrame {
         if(checkBox.isSelected())
            checkeds.add(checkBox);
         allChecks.add(checkBox);
-       
       }
     }
     
@@ -2793,7 +2792,7 @@ public class main extends javax.swing.JFrame {
           Object[] row = new Object[4];
           row[0] = exp.getId();
           row[1] = exp.getName();
-          row[2] = exp.getAlgorithm();
+          row[2] = exp.getAlgorithm() + " (" + exp.getDescription() + ")";
           row[3] = exp.getCreatedAt();
           model.addRow(row);
         }

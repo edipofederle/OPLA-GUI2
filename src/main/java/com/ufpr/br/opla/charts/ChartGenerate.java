@@ -61,13 +61,7 @@ public static void generate(String[] functions, HashMap<String, String> experime
     } catch (IOException ex) {
       Logger.getLogger(ChartGenerate.class.getName()).log(Level.SEVERE, null, ex);
     }
-
-
-
-
-
+    
   }
 
-  
- 
 }

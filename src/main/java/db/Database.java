@@ -132,11 +132,11 @@ public class Database {
       statement = database.Database.getConnection().createStatement();
 
       StringBuilder query = new StringBuilder();
-      query.append("SELECT algorithm FROM experiments WHERE id=");
+      query.append("SELECT algorithm, description FROM experiments WHERE id=");
       query.append(id);
 
       ResultSet r = statement.executeQuery(query.toString());
-      return r.getString("algorithm");
+      return r.getString("algorithm") + "(" + r.getString("description") + ")";
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
       Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
