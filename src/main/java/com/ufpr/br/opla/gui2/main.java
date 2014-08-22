@@ -2479,11 +2479,11 @@ public class main extends javax.swing.JFrame {
       experimentToAlgorithmUsed.put(id, algorithmUsed);
     }
     if(Validators.hasMoreThatTwoFunctionsSelectedForSelectedExperiments(allChecks)){
-      JOptionPane.showMessageDialog(null, rb.getString("onlyTwoFunction"));
+      JOptionPane.showMessageDialog(null, rb.getString("onlyTwoFunctions"));
     }else if(checkeds.isEmpty()){
       JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoFunctionPerSelectedExperiment")); 
     }else if(Validators.validateCheckedsFunctions(allChecks)){
-      JOptionPane.showMessageDialog(null, "sameFunctions");
+      JOptionPane.showMessageDialog(null,  rb.getString("sameFunctions"));
     }else{
       String[] functions = new String[2]; //x,y Axis
       int[] columns = new int[2]; // Quais colunas do arquivo deseja-se ler.
