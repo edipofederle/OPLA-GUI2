@@ -17,6 +17,7 @@ public class EdLineTest {
     database.Database.setPathToDB(UserHome.getPathToDb());
     String ids[] = {"4726543913", "5727237783"};
     EdLine line = new EdLine(ids, "Title");
+    line.displayOnFrame();
   }
   
 }

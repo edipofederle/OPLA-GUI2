@@ -90,15 +90,19 @@ public class EdLine {
     plot.setRenderer(renderer);
 
 
-    NumberAxis yAxis = (NumberAxis) plot.getRangeAxis();
-    yAxis.setTickUnit(new NumberTickUnit(1));
-    ValueAxis rangeAxis = chart.getXYPlot().getRangeAxis();
-    yAxis.setRange(0, rangeAxis.getUpperBound() + 0.5);
+// 	// change the auto tick unit selection to integer units only...
+	final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+	rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+  
+  	// change the auto tick unit selection to integer units only...
+	final NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
+	xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
     
-    NumberFormat format = NumberFormat.getNumberInstance();
-    format.setMaximumFractionDigits(20);
-    StandardXYToolTipGenerator ttG = new StandardXYToolTipGenerator("({1},{2})", format, format);
-    renderer.setBaseToolTipGenerator(ttG);
+	NumberFormat format = NumberFormat.getNumberInstance();
+	StandardXYToolTipGenerator ttG = new StandardXYToolTipGenerator( "(Euclidean Value: {1}, Number Of Solutions: {2})", format, format);
+	renderer.setBaseToolTipGenerator(ttG);
+   
+    
 
     return chart;
 

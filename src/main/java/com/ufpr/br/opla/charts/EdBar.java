@@ -107,7 +107,7 @@ public class EdBar {
   private void configureToolTip(JFreeChart chart) {
     BarRenderer renderer = (BarRenderer) chart.getCategoryPlot().getRenderer();
     renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
-            "({1}, {2})", NumberFormat.getInstance()));
+            "(Euclidean Value: {1}, Number Of Solutions: {2})", NumberFormat.getInstance()));
   }
 
   private void buildChart(DefaultCategoryDataset data, String chartTitle) {
