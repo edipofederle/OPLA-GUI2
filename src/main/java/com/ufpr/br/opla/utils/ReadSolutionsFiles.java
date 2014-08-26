@@ -42,12 +42,17 @@ public class ReadSolutionsFiles {
     return files;
 
   }
-
+  
+  /**
+   * Return quantity of non-dominated solutions given a experimentId.
+   * 
+   * @param experimentId
+   * @param pathToOutput
+   * @return 
+   */
   public static int countNumberNonDominatedSolutins(String experimentId, String pathToOutput) {
-
     String exts[] = {"uml"};
   
-
     StringBuilder pathAll = new StringBuilder();
     pathAll.append(pathToOutput);
     pathAll.append(experimentId);

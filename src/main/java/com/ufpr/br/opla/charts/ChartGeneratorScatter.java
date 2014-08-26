@@ -92,13 +92,12 @@ public class ChartGeneratorScatter {
 
     final XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
 
-    // change the auto tick unit selection to integer units only...
     final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
     rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
     NumberFormat format = NumberFormat.getNumberInstance();
     format.setMaximumFractionDigits(20);
-    StandardXYToolTipGenerator ttG = new StandardXYToolTipGenerator("{1},{2}", format, format);
+    StandardXYToolTipGenerator ttG = new StandardXYToolTipGenerator("({1},{2})", format, format);
     renderer.setBaseToolTipGenerator(ttG);
 
     plot.setRenderer(renderer);

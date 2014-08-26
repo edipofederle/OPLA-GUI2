@@ -14,6 +14,7 @@ package com.ufpr.br.opla.configuration;
 public class GuiSettings {
   
   private int fontSize;
+  private String edChartType;
 
   public int getFontSize() {
     return fontSize;
@@ -21,6 +22,14 @@ public class GuiSettings {
 
   public void setFontSize(int fontSize) {
     this.fontSize = fontSize;
+  }
+
+  public String getEdChartType() {
+    return edChartType;
+  }
+
+  public void setEdChartType(String edChartType) {
+    this.edChartType = edChartType;
   }
   
 }

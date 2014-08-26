@@ -29,7 +29,6 @@ public class UtilsTest {
     }
   }
   
-  
   @Test
   public void testLog(){
     LOGGER.info("Some log here");

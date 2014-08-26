@@ -136,7 +136,10 @@ public class Database {
       query.append(id);
 
       ResultSet r = statement.executeQuery(query.toString());
-      return r.getString("algorithm") + "(" + r.getString("description") + ")";
+      String description = r.getString("description");
+      if("null".equals(description))
+        return r.getString("algorithm");
+      return r.getString("algorithm") + " (" + description + ")";
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
       Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);

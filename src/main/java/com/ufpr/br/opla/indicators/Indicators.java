@@ -4,16 +4,18 @@
  */
 package com.ufpr.br.opla.indicators;
 
+import com.ufpr.br.opla.configuration.ApplicationFile;
+import com.ufpr.br.opla.utils.ReadSolutionsFiles;
+import database.Database;
 import exceptions.MissingConfigurationException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.collections4.map.HashedMap;
 
 /**
  *
@@ -92,4 +94,109 @@ public class Indicators {
     
     return solution;
   }
+  
+  /**
+   * Returns only eds for non-dominated solutions.
+   * 
+   * @param ids
+   * @return array of double in "asc" order
+   */
+  public static double[] getAllEdsForExperiments(String... ids) {
+    ArrayList<Double> eds = new ArrayList<>();
+    
+    for (String id : ids) {
+      SortedMap<String, Double> values = getEdsForExperiment(id);
+
+      for (Entry<String, Double> entry : values.entrySet())
+        eds.add(entry.getValue());
+    }
+    
+    double[] edsAsc = new double[eds.size()];
+    
+    for (int i = 0; i < edsAsc.length; i++)
+      edsAsc[i] = eds.get(i);
+
+    Arrays.sort(edsAsc);
+
+    return edsAsc;
+  }
+  
+  public static int[] getAllEdsForExperimentsNormalized(String...ids){
+    double[] eds = getAllEdsForExperiments(ids);
+    int [] edsInt = new int[eds.length];
+    
+    for (int i = 0; i < eds.length; i++)
+      edsInt[i] = (int) eds[i];
+    
+    return edsInt;
+    
+  }
+
+  public static int sumTotalNonDominatedSolutions(String...ids) {
+   String dir = ApplicationFile.getInstance().getConfig().getDirectoryToExportModels();
+   int total = 0;
+   for(int i=0; i < ids.length; i++)
+    total += ReadSolutionsFiles.countNumberNonDominatedSolutins(ids[i],dir);
+   
+   
+    return total;
+  }
+  
+  
+  /**
+   * Retorna a quantidade de soluções encontrads por valor de ED.
+   * 
+   * @param selectedExperiments - Experimentos que se deseja "consultar".
+   * @param experimentId - Experimento que deseja-se buscar por EDS.
+   * 
+   * @return 
+   */
+  public static Map<String, Map<Integer, Integer>> quantityEdBySolutions(String[] selectedExperiments, String experimentId){
+    
+    int[] allEds = Indicators.getAllEdsForExperimentsNormalized(selectedExperiments);
+    Map<Integer, Integer> map = new  TreeMap<>();
+    
+    Map<String, Map<Integer, Integer>> algoritmNameToEds = new HashedMap<>();
+    
+    Statement statement = null;
+    String algorithmName = db.Database.getAlgoritmUsedToExperimentId(experimentId);
+    
+    try {
+      statement = database.Database.getConnection().createStatement();
+
+      for (int i = 0; i < allEds.length; i++) {
+
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT count(*) FROM distance_euclidean WHERE ed = ");
+        query.append(allEds[i]);
+        query.append(" AND experiment_id = ");
+        query.append(experimentId);
+
+        ResultSet r = statement.executeQuery(query.toString());
+        Integer n = Integer.parseInt(r.getString("count(*)"));
+
+        if (n != null && n != 0) {
+          int currentValue = map.get(allEds[i]) == null ? 0 : map.get(allEds[i]);
+          map.put(allEds[i], +currentValue + n);
+        } else {
+          map.put(allEds[i], 0);
+        }
+        
+      }
+ 
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+    algoritmNameToEds.put(algorithmName, map);
+    return algoritmNameToEds;
+   
+  }
+    
+  
 }

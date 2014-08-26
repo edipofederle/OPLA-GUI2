@@ -11,10 +11,9 @@ import com.ufpr.br.opla.algorithms.NSGAII;
 import com.ufpr.br.opla.algorithms.PAES;
 import com.ufpr.br.opla.algorithms.Solution;
 import com.ufpr.br.opla.charts.ChartGenerate;
-import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
-import com.ufpr.br.opla.configuration.ManagerGuiSettingsConfig;
-import com.ufpr.br.opla.configuration.UserHome;
-import com.ufpr.br.opla.configuration.VolatileConfs;
+import com.ufpr.br.opla.charts.EdBar;
+import com.ufpr.br.opla.charts.EdLine;
+import com.ufpr.br.opla.configuration.*;
 import com.ufpr.br.opla.logs.LogListener;
 import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
@@ -74,10 +73,10 @@ public class main extends javax.swing.JFrame {
 
     Utils.createPathsOplaTool();
 
-    config = new ManagerApplicationConfig();
+    config = ApplicationFile.getInstance();
     GuiServices guiservices = new GuiServices(config);
     guiservices.copyFileGuiSettings();
-    GuiUtils.fontSize(new ManagerGuiSettingsConfig().getFontSize());
+    GuiUtils.fontSize(GuiFile.getInstance().getFontSize());
 
     initComponents();
 
@@ -386,6 +385,7 @@ public class main extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         panelFunctionExecutionsSelecteds = new javax.swing.JPanel();
         btnGenerateChart = new javax.swing.JButton();
+        btnGenerateEdChart = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jLabel12 = new javax.swing.JLabel();
@@ -1685,22 +1685,32 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        btnGenerateEdChart.setText("ED");
+        btnGenerateEdChart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGenerateEdChartActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGenerateChart))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(jButton2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnGenerateChart))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(btnGenerateEdChart))
                 .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -1715,7 +1725,9 @@ public class main extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(470, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGenerateEdChart)
+                .addContainerGap(435, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Experiments", jPanel9);
@@ -2510,6 +2522,31 @@ public class main extends javax.swing.JFrame {
     }
   }//GEN-LAST:event_executionDescriptionKeyTyped
 
+  private void btnGenerateEdChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEdChartActionPerformed
+       
+    int[] selectedRows = tableExp2.getSelectedRows();
+    String ids[] = new String[selectedRows.length];
+    
+    
+    for (int i = 0; i < selectedRows.length; i++)
+      ids[i] = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
+    
+    if(selectedRows.length >= 1){
+      String typeChart = GuiFile.getInstance().getEdChartType();
+      if("bar".equalsIgnoreCase(typeChart)){
+        EdBar edBar = new EdBar(ids, null);
+        edBar.displayOnFrame();
+      }else if("line".equals(typeChart)) {
+        EdLine edLine = new EdLine(ids, null);
+        edLine.displayOnFrame();
+      }else{
+         JOptionPane.showMessageDialog(null, rb.getString("confEdChartInvalid"));
+      }
+    }else{
+      JOptionPane.showMessageDialog(null, rb.getString("atLeastOneExecution"));
+    }
+  }//GEN-LAST:event_btnGenerateEdChartActionPerformed
+
   
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
@@ -2542,6 +2579,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnCleanListArchs1;
     private javax.swing.JButton btnConcernProfile;
     private javax.swing.JButton btnGenerateChart;
+    private javax.swing.JButton btnGenerateEdChart;
     private javax.swing.JButton btnInput1;
     private javax.swing.JButton btnManipulationDir;
     private javax.swing.JButton btnOutput;
