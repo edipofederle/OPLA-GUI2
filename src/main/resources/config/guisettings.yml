@@ -1,3 +1,4 @@
 ## YAML Template.
 ---
 fontSize: 13
+edChartType: line
