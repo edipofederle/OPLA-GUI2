@@ -15,7 +15,7 @@ public class EdBarTest {
 
   public static void main(String a[]) {
     database.Database.setPathToDB(UserHome.getPathToDb());
-    String ids[] = {"4726543913", "5727237783", "9411322763"};
+    String ids[] = {"5549843218", "8327246135"};
     EdBar bar = new EdBar(ids, null);
     bar.displayOnFrame();
   }

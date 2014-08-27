@@ -43,15 +43,15 @@ public class EdLine {
     final XYSeriesCollection dataset = new XYSeriesCollection();
 
     for (int i = 0; i < idsAllSelectedExperiments.length; i++) {
-      Map<String, Map<Integer, Integer>> map = Indicators.quantityEdBySolutions(idsAllSelectedExperiments, idsAllSelectedExperiments[i]);
+      Map<String, Map<Double, Integer>> map = Indicators.quantityEdBySolutions(idsAllSelectedExperiments, idsAllSelectedExperiments[i]);
 
-      Map.Entry<String, Map<Integer, Integer>> content = map.entrySet().iterator().next();
+      Map.Entry<String, Map<Double, Integer>> content = map.entrySet().iterator().next();
       final XYSeries serie = new XYSeries(content.getKey());
 
-      Map<Integer, Integer> a = content.getValue();
+      Map<Double, Integer> a = content.getValue();
 
-      for (Map.Entry<Integer, Integer> entry : a.entrySet()) {
-        Integer double1 = entry.getKey();
+      for (Map.Entry<Double, Integer> entry : a.entrySet()) {
+        Double double1 = entry.getKey();
         Integer integer = entry.getValue();
         serie.add(double1, integer);
       }
@@ -99,6 +99,7 @@ public class EdLine {
 	xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
     
 	NumberFormat format = NumberFormat.getNumberInstance();
+  format.setMaximumFractionDigits(2);
 	StandardXYToolTipGenerator ttG = new StandardXYToolTipGenerator( "(Euclidean Value: {1}, Number Of Solutions: {2})", format, format);
 	renderer.setBaseToolTipGenerator(ttG);
    

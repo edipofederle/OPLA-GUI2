@@ -40,7 +40,7 @@ public class Indicators {
         ResultSet result = statement.executeQuery(query.toString());
 
         while (result.next()) {
-          results.put(result.getString("solution_name"), Double.parseDouble(result.getString("ed")));
+          results.put(result.getString("solution_name"), result.getDouble("ed"));
         }
         statement.close();
 
@@ -151,12 +151,12 @@ public class Indicators {
    * 
    * @return 
    */
-  public static Map<String, Map<Integer, Integer>> quantityEdBySolutions(String[] selectedExperiments, String experimentId){
+  public static Map<String, Map<Double, Integer>> quantityEdBySolutions(String[] selectedExperiments, String experimentId){
     
-    int[] allEds = Indicators.getAllEdsForExperimentsNormalized(selectedExperiments);
-    Map<Integer, Integer> map = new  TreeMap<>();
+    double[] allEds = Indicators.getAllEdsForExperiments(selectedExperiments);
+    Map<Double, Integer> map = new  TreeMap<>();
     
-    Map<String, Map<Integer, Integer>> algoritmNameToEds = new HashedMap<>();
+    Map<String, Map<Double, Integer>> algoritmNameToEds = new HashedMap<>();
     
     Statement statement = null;
     String algorithmName = db.Database.getAlgoritmUsedToExperimentId(experimentId);
