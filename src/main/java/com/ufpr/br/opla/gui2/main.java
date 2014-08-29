@@ -19,6 +19,7 @@ import com.ufpr.br.opla.utils.*;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 import java.util.*;
@@ -383,10 +384,11 @@ public class main extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         tableExp2 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
         panelFunctionExecutionsSelecteds = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
         btnGenerateChart = new javax.swing.JButton();
         btnGenerateEdChart = new javax.swing.JButton();
+        btnHypervolume = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jLabel12 = new javax.swing.JLabel();
@@ -1659,6 +1661,9 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane7.setViewportView(tableExp2);
 
+        panelFunctionExecutionsSelecteds.setBorder(javax.swing.BorderFactory.createTitledBorder("Solutions Search Space"));
+        panelFunctionExecutionsSelecteds.setMinimumSize(new java.awt.Dimension(100, 100));
+
         jButton2.setText("Select Objective Functions");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1666,30 +1671,44 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        panelFunctionExecutionsSelecteds.setMinimumSize(new java.awt.Dimension(100, 100));
-
-        javax.swing.GroupLayout panelFunctionExecutionsSelectedsLayout = new javax.swing.GroupLayout(panelFunctionExecutionsSelecteds);
-        panelFunctionExecutionsSelecteds.setLayout(panelFunctionExecutionsSelectedsLayout);
-        panelFunctionExecutionsSelectedsLayout.setHorizontalGroup(
-            panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 479, Short.MAX_VALUE)
-        );
-        panelFunctionExecutionsSelectedsLayout.setVerticalGroup(
-            panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 170, Short.MAX_VALUE)
-        );
-
-        btnGenerateChart.setText("Generate");
+        btnGenerateChart.setText("Generate Chart");
         btnGenerateChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateChartActionPerformed(evt);
             }
         });
 
-        btnGenerateEdChart.setText("ED");
+        javax.swing.GroupLayout panelFunctionExecutionsSelectedsLayout = new javax.swing.GroupLayout(panelFunctionExecutionsSelecteds);
+        panelFunctionExecutionsSelecteds.setLayout(panelFunctionExecutionsSelectedsLayout);
+        panelFunctionExecutionsSelectedsLayout.setHorizontalGroup(
+            panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFunctionExecutionsSelectedsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGenerateChart)
+                .addContainerGap(166, Short.MAX_VALUE))
+        );
+        panelFunctionExecutionsSelectedsLayout.setVerticalGroup(
+            panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelFunctionExecutionsSelectedsLayout.createSequentialGroup()
+                .addGroup(panelFunctionExecutionsSelectedsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(btnGenerateChart))
+                .addGap(0, 141, Short.MAX_VALUE))
+        );
+
+        btnGenerateEdChart.setText("Chart Euclidean Distance");
         btnGenerateEdChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateEdChartActionPerformed(evt);
+            }
+        });
+
+        btnHypervolume.setText("Hypervolume");
+        btnHypervolume.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHypervolumeActionPerformed(evt);
             }
         });
 
@@ -1702,33 +1721,25 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnGenerateChart))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(btnGenerateEdChart))
-                .addContainerGap(84, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)
+                        .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGenerateEdChart)
+                    .addComponent(btnHypervolume))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2)
-                            .addComponent(btnGenerateChart))
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(24, 24, 24)
+                        .addComponent(btnGenerateEdChart)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnGenerateEdChart)
-                .addContainerGap(435, Short.MAX_VALUE))
+                        .addComponent(btnHypervolume)))
+                .addContainerGap(382, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Experiments", jPanel9);
@@ -2528,7 +2539,6 @@ public class main extends javax.swing.JFrame {
     int[] selectedRows = tableExp2.getSelectedRows();
     String ids[] = new String[selectedRows.length];
     
-    
     for (int i = 0; i < selectedRows.length; i++)
       ids[i] = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
     
@@ -2547,6 +2557,29 @@ public class main extends javax.swing.JFrame {
       JOptionPane.showMessageDialog(null, rb.getString("atLeastOneExecution"));
     }
   }//GEN-LAST:event_btnGenerateEdChartActionPerformed
+
+  private void btnHypervolumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHypervolumeActionPerformed
+    try {
+      int[] selectedRows = tableExp2.getSelectedRows();
+      String ids[] = new String[selectedRows.length];
+      
+      for (int i = 0; i < selectedRows.length; i++)
+        ids[i] = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
+      
+        HypervolumeWindow hyperPanel = new HypervolumeWindow();
+        hyperPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        hyperPanel.setTitle("Hypervolume");
+        hyperPanel.pack();
+        hyperPanel.setResizable(false);
+        hyperPanel.setVisible(true);
+          
+        hyperPanel.loadData(ids);
+    } catch (IOException ex) {
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
+      JOptionPane.showMessageDialog(null, rb.getString("errorGenerateHypervolumeTable"));
+    }
+    
+  }//GEN-LAST:event_btnHypervolumeActionPerformed
 
   
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
@@ -2581,6 +2614,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JButton btnConcernProfile;
     private javax.swing.JButton btnGenerateChart;
     private javax.swing.JButton btnGenerateEdChart;
+    private javax.swing.JButton btnHypervolume;
     private javax.swing.JButton btnInput1;
     private javax.swing.JButton btnManipulationDir;
     private javax.swing.JButton btnOutput;

@@ -35,10 +35,10 @@ public class HypervolumeCreateDataFilesTest {
 //    Assert.assertEquals(2,hcdf.generateHyperVolumeFiles(ids).size());
   }
   
-  @Test @Ignore
+  @Test 
   public void teste2() throws Exception{
     HypervolumeCreateDataFiles hcdf = new HypervolumeCreateDataFiles();
-    String[] ids = {"9521138526", "2124944579"};
+    String[] ids = {"9951836391"};
     
     Map<String, List<Double>> content = hcdf.generateHyperVolumeFiles(ids);
     List<HypervolumeData> hypers = HypervolumeGenerateObjsData.generate(content);

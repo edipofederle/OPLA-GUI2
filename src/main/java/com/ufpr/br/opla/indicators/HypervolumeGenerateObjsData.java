@@ -20,9 +20,9 @@ public class HypervolumeGenerateObjsData {
   }
 
   public static List<HypervolumeData> generate(Map<String, List<Double>> content) throws IOException {
-    
+
     List<HypervolumeData> hypervolumeDatas = new ArrayList<>();
-    
+
     for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
       String pathToFile = entry.getKey();
       List<Double> list = entry.getValue();
@@ -30,19 +30,19 @@ public class HypervolumeGenerateObjsData {
       String[] splited = pathToFile.split("_");
       String pla = getPlaName(splited[0]);
       String algorithm = getAlgorithmName(splited[1]);
-      
+
       //Acha o ponto de referencia
       String referencePoint = findReferencePoint(list);
-     
-      
+
+
 //      //Execute o programa em C que calcula o hypervolume
       List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
-      
+
       hypervolumeDatas.add(new HypervolumeData(values, pla, algorithm));
-      
-      
+
+
     }
-   // deleteGeneratedFiles(content);
+    deleteGeneratedFiles(content);
     return hypervolumeDatas;
   }
 
@@ -74,5 +74,4 @@ public class HypervolumeGenerateObjsData {
       f.delete();
     }
   }
- 
 }
