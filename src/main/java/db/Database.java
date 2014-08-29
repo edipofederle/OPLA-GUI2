@@ -126,7 +126,6 @@ public class Database {
   }
 
   public static String getAlgoritmUsedToExperimentId(String id) {
-
     Statement statement = null;
     try {
       statement = database.Database.getConnection().createStatement();
@@ -140,6 +139,31 @@ public class Database {
       if("null".equals(description))
         return r.getString("algorithm");
       return r.getString("algorithm") + " (" + description + ")";
+
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+
+    return "";
+  }
+  
+    public static String getPlaUsedToExperimentId(String id) {
+    Statement statement = null;
+    try {
+      statement = database.Database.getConnection().createStatement();
+
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT name FROM experiments WHERE id=");
+      query.append(id);
+
+      ResultSet r = statement.executeQuery(query.toString());
+      return r.getString("name");
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
       Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);

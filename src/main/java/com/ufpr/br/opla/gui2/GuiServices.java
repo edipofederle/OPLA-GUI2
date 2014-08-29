@@ -193,8 +193,16 @@ public class GuiServices {
   }
 
   public void copyFileGuiSettings() {
-    String target = UserHome.getOplaUserHome()+"/guisettings.yml";
+    String target = UserHome.getOplaUserHome()+"guisettings.yml";
     if(! new File(target).exists())
       Utils.copy("config/guisettings.yml", target);
+  }
+
+  void copyBinHypervolume() {
+    String target = UserHome.getOplaUserHome()+"bins";
+    if(! new File(target).exists())
+      new File(target).mkdirs();
+    
+    Utils.copy("hv", target+"/hv");
   }
 }

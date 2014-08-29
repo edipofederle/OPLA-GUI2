@@ -105,6 +105,7 @@ public class main extends javax.swing.JFrame {
     guiservices.configureTemplates(fieldTemplate);
     guiservices.configureLocaleToSaveModels(fieldManipulationDir);
     guiservices.configureLocaleToExportModels(fieldOutput);
+    guiservices.copyBinHypervolume();
 
     activeFieldsAndChecks();
     guiservices.hidePanelPatternScopeByDefault(panelPatternScope);
