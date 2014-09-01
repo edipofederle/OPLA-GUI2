@@ -16,6 +16,7 @@ import com.ufpr.br.opla.charts.EdLine;
 import com.ufpr.br.opla.configuration.*;
 import com.ufpr.br.opla.logs.LogListener;
 import com.ufpr.br.opla.utils.*;
+import java.awt.Component;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -1662,7 +1663,7 @@ public class main extends javax.swing.JFrame {
         jScrollPane7.setViewportView(tableExp2);
 
         panelFunctionExecutionsSelecteds.setBorder(javax.swing.BorderFactory.createTitledBorder("Solutions Search Space"));
-        panelFunctionExecutionsSelecteds.setMinimumSize(new java.awt.Dimension(100, 100));
+        panelFunctionExecutionsSelecteds.setMinimumSize(new java.awt.Dimension(300, 100));
 
         jButton2.setText("Select Objective Functions");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -1706,6 +1707,7 @@ public class main extends javax.swing.JFrame {
         });
 
         btnHypervolume.setText("Hypervolume");
+        btnHypervolume.setEnabled(!OsUtils.isWindows());
         btnHypervolume.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHypervolumeActionPerformed(evt);
@@ -2449,7 +2451,11 @@ public class main extends javax.swing.JFrame {
 
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     panelFunctionExecutionsSelecteds.setLayout(new MigLayout());
-    panelFunctionExecutionsSelecteds.removeAll();
+        
+    for(Component comp : panelFunctionExecutionsSelecteds.getComponents()){
+      if(comp instanceof JCheckBox)
+       panelFunctionExecutionsSelecteds.remove((JCheckBox)comp);
+    }
     
     int[] selectedRows = tableExp2.getSelectedRows();
     HashMap<String, String[]> map = new HashMap<>();
@@ -2474,6 +2480,7 @@ public class main extends javax.swing.JFrame {
      for (Map.Entry<String, String[]> entry : map.entrySet()) {
        String experimentId = entry.getKey();
        String[] values = entry.getValue();
+        panelFunctionExecutionsSelecteds.add(new JLabel(""), "wrap");
        panelFunctionExecutionsSelecteds.add(new JLabel("Execution: " + experimentId + "\n"), "wrap");
        for(int i=0; i < values.length; i++){
         JCheckBox box = new JCheckBox(values[i].toUpperCase());

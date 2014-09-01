@@ -136,8 +136,9 @@ public class Database {
 
       ResultSet r = statement.executeQuery(query.toString());
       String description = r.getString("description");
-      if("null".equals(description))
+      if ("null".equals(description)) {
         return r.getString("algorithm");
+      }
       return r.getString("algorithm") + " (" + description + ")";
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
@@ -152,8 +153,8 @@ public class Database {
 
     return "";
   }
-  
-    public static String getPlaUsedToExperimentId(String id) {
+
+  public static String getPlaUsedToExperimentId(String id) {
     Statement statement = null;
     try {
       statement = database.Database.getConnection().createStatement();
@@ -323,4 +324,30 @@ public class Database {
 
     return listCons;
   }
+
+  public static int getNumberOfFunctionForExperimentId(String experimentId) {
+    Statement statement = null;
+    try {
+      statement = database.Database.getConnection().createStatement();
+
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT names FROM map_objectives_names WHERE experiment_id=");
+      query.append(experimentId.trim());
+
+      ResultSet r = statement.executeQuery(query.toString());
+      return r.getString("names").split(" ").length;
+
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+    
+    return 0;
+  }
+  
 }

@@ -2,6 +2,7 @@ package com.ufpr.br.opla.gui2;
 
 import com.ufpr.br.opla.configuration.ManagerApplicationConfig;
 import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.utils.OsUtils;
 import com.ufpr.br.opla.utils.Utils;
 import java.io.File;
 import javax.swing.*;
@@ -199,10 +200,12 @@ public class GuiServices {
   }
 
   void copyBinHypervolume() {
-    String target = UserHome.getOplaUserHome()+"bins";
-    if(! new File(target).exists())
-      new File(target).mkdirs();
-    
-    Utils.copy("hv", target+"/hv");
+    if(!OsUtils.isWindows()){ 
+      String target = UserHome.getOplaUserHome()+"bins";
+      if(! new File(target).exists())
+        new File(target).mkdirs();
+
+      Utils.copy("hv", target+"/hv");
+    }
   }
 }

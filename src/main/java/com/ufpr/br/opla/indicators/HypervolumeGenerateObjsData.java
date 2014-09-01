@@ -20,7 +20,6 @@ public class HypervolumeGenerateObjsData {
   }
 
   public static List<HypervolumeData> generate(Map<String, List<Double>> content) throws IOException {
-
     List<HypervolumeData> hypervolumeDatas = new ArrayList<>();
 
     for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
@@ -28,50 +27,69 @@ public class HypervolumeGenerateObjsData {
       List<Double> list = entry.getValue();
 
       String[] splited = pathToFile.split("_");
-      String pla = getPlaName(splited[0]);
-      String algorithm = getAlgorithmName(splited[1]);
+      String experimentId = getExperimentId(splited[0]);
+      String pla = getPlaName(splited[1]);
+      String algorithm = getAlgorithmName(splited[2]);
 
       //Acha o ponto de referencia
-      String referencePoint = findReferencePoint(list);
+      String referencePoint = findReferencePoint(list, experimentId);
 
-
-//      //Execute o programa em C que calcula o hypervolume
+      //Execute o programa em C que calcula o hypervolume
       List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
 
       hypervolumeDatas.add(new HypervolumeData(values, pla, algorithm));
-
-
     }
+    
     deleteGeneratedFiles(content);
+    
     return hypervolumeDatas;
   }
 
-  private static String getPlaName(String str) {
-    return str.substring(str.lastIndexOf("/") + 1, str.length());
-  }
-
-  private static String getAlgorithmName(String str) {
-    return str.substring(0, str.lastIndexOf("."));
-  }
-
-  //TODO gerar pontos de referêncai com base na quantidade de objectivos.
-  private static String findReferencePoint(List<Double> values) {
+  /**
+   * Retorna o ponto de referência que é usado ao chamar o script em C.
+   * 
+   * @param values
+   * @param experimentId
+   * @return 
+   */
+  private static String findReferencePoint(List<Double> values, String experimentId) {
     Double max = Double.MIN_VALUE;
+    int numberOfObjectives = db.Database.getNumberOfFunctionForExperimentId(experimentId);
 
-    for (Double double1 : values) {
-      if (double1 > max) {
+    for (Double double1 : values)
+      if (double1 > max)
         max = double1;
-      }
-    }
+    
     double point = max + 1;
-    return String.valueOf(point) + " " + String.valueOf(point);
+    String ref = "";
+    for(int i=0; i < numberOfObjectives; i++)
+      ref += String.valueOf(point) + " ";
+    
+    return ref.trim();
   }
 
+  /**
+   * Deleta arquivos .txt gerados após processamento
+   * 
+   * @param content 
+   */
   private static void deleteGeneratedFiles(Map<String, List<Double>> content) {
     for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
       String pathToFile = entry.getKey();
       File f = new File(pathToFile);
       f.delete();
     }
+  }
+
+  private static String getExperimentId(String str) {
+    return str.substring(str.lastIndexOf("/") + 1, str.length());
+  }
+  
+  private static String getPlaName(String str) {
+    return str.substring(str.lastIndexOf("/") + 1, str.length());
+  }
+
+  private static String getAlgorithmName(String str) {
+    return str.substring(0, str.lastIndexOf("."));
   }
 }

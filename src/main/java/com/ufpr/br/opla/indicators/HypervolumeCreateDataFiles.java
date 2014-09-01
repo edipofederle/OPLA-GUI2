@@ -25,7 +25,7 @@ public class HypervolumeCreateDataFiles {
    * Dado um conjunto de ids (experiments). Deve gerar os arquivos
    * correspondentes para o hypervolume
    * 
-   * TODO Validação: Os experimentos passados como argumento devem ter o mesmo número de rodadas e objetivos. 
+   * TODO Validação: Os experimentos passados como argumento devem ter o mesmo número de rodadas e objetivos. ??
    */
   public Map<String, List<Double>> generateHyperVolumeFiles(String... ids) throws IOException {
 
@@ -68,6 +68,8 @@ public class HypervolumeCreateDataFiles {
     String plaName = db.Database.getPlaUsedToExperimentId(id);
 
     StringBuilder fileName = new StringBuilder();
+    fileName.append(id);
+    fileName.append("_");
     fileName.append(plaName);
     fileName.append("_");
     fileName.append(algorithmName);
