@@ -117,7 +117,7 @@ public class HypervolumeWindow extends javax.swing.JFrame {
     HypervolumeCreateDataFiles hcdf = new HypervolumeCreateDataFiles();
     
     Map<String, List<Double>> content = hcdf.generateHyperVolumeFiles(ids);
-    List<HypervolumeData> hypers = HypervolumeGenerateObjsData.generate(content);
+    List<HypervolumeData> hypers = HypervolumeGenerateObjsData.generate(content, ids[0]);
 
     GuiUtils.makeTableNotEditable(tableHypervolume);
     DefaultTableModel model = new DefaultTableModel();

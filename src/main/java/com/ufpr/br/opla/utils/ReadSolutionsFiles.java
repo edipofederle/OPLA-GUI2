@@ -14,6 +14,8 @@ import org.apache.commons.io.FileUtils;
  */
 public class ReadSolutionsFiles {
 
+  //TODO migrar isso para usar dados do banco e nao do disco..
+  // Possivelemnte mudar para SELECT solution_name FROM objectives where experiement_id= ID
   public static List<File> read(String experimentId, String executionId,
           String pathToOutput) {
 
@@ -44,6 +46,9 @@ public class ReadSolutionsFiles {
   }
   
   /**
+   * /TODO migrar isso para usar dados do banco e nao do disco...
+   * // Mudar oara Databse.countNumberNonDominatedSolutins
+   * 
    * Return quantity of non-dominated solutions given a experimentId.
    * 
    * @param experimentId

@@ -19,20 +19,19 @@ public class HypervolumeGenerateObjsData {
   public static void generate(List<String> files) {
   }
 
-  public static List<HypervolumeData> generate(Map<String, List<Double>> content) throws IOException {
+  public static List<HypervolumeData> generate(Map<String, List<Double>> content, String idReferenceExperiment) throws IOException {
     List<HypervolumeData> hypervolumeDatas = new ArrayList<>();
+    
+    //Acha o ponto de referencia
+    
+      String referencePoint = findReferencePoint(content, idReferenceExperiment);
 
     for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
       String pathToFile = entry.getKey();
-      List<Double> list = entry.getValue();
-
+      
       String[] splited = pathToFile.split("_");
-      String experimentId = getExperimentId(splited[0]);
       String pla = getPlaName(splited[1]);
       String algorithm = getAlgorithmName(splited[2]);
-
-      //Acha o ponto de referencia
-      String referencePoint = findReferencePoint(list, experimentId);
 
       //Execute o programa em C que calcula o hypervolume
       List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
@@ -52,14 +51,17 @@ public class HypervolumeGenerateObjsData {
    * @param experimentId
    * @return 
    */
-  private static String findReferencePoint(List<Double> values, String experimentId) {
+  private static String findReferencePoint(Map<String, List<Double>> content, String experimentId) {
     Double max = Double.MIN_VALUE;
     int numberOfObjectives = db.Database.getNumberOfFunctionForExperimentId(experimentId);
 
-    for (Double double1 : values)
-      if (double1 > max)
-        max = double1;
-    
+    for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
+      List<Double> list = entry.getValue();
+      for (Double double1 : list)
+        if (double1 > max)
+          max = double1;
+    }
+        
     double point = max + 1;
     String ref = "";
     for(int i=0; i < numberOfObjectives; i++)

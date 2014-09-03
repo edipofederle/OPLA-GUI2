@@ -84,8 +84,8 @@ public class BestSolutionBySelectedFitness {
   private static SortedMap<String, Double> buildMapConventional(List<Conventional> data) {
     SortedMap<String, Double> map = new TreeMap();
     for (int i = 0; i < data.size(); i++) {
-      Conventional elegance = data.get(i);
-      map.put(elegance.getIdSolution(), elegance.getMacAggregation());
+      Conventional conventional = data.get(i);
+      map.put(conventional.getIdSolution(), conventional.getMacAggregation());
     }
     return map;
   }

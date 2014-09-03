@@ -31,7 +31,7 @@ public class Utils {
   private static final String PATH_CONFIGURATION_FILE = "config/application.yaml";
 
   public static String extractSolutionIdFromSolutionFileName(String fileName) {
-    return fileName.substring(fileName.indexOf("-") + 1, fileName.length() - 4);
+    return fileName.substring(fileName.indexOf("-") + 1, fileName.length());
   }
 
   public static String capitalize(String word) {
@@ -80,17 +80,6 @@ public class Utils {
     }
 
     return ext;
-  }
-
-  //exemplo: VAR_2_agm-5629174275.uml
-  public static String extractObjectiveIdFromFile(String name) {
-    String b = name.split("-")[1];
-    String a = b.substring(0, b.length() - 4);
-    if (a.startsWith("0")) {
-      return a.substring(1, a.length());
-    }
-
-    return a;
   }
 
   public static boolean selectedSolutionIsNonDominated(String fileName) {

@@ -264,6 +264,7 @@ public class Database {
               listFd.add(m);
             }
           }
+          return listFd;
         }
       }
 
@@ -282,6 +283,7 @@ public class Database {
               listFd.add(m);
             }
           }
+          return listFd;
         }
       }
     }
@@ -299,6 +301,7 @@ public class Database {
               listCons.add(m);
             }
           }
+          return listCons;
         }
       }
 
@@ -317,6 +320,7 @@ public class Database {
               listCons.add(m);
             }
           }
+          return listCons;
         }
       }
 
@@ -348,6 +352,81 @@ public class Database {
     }
     
     return 0;
+  }
+  
+  /**
+   * Retorna o número de soluções não dominadas dado um experimentID
+   * 
+   * @param experimentId
+   * @return number of non dominated solutions
+   */
+  public static int countNumberNonDominatedSolutins(String experimentId) {
+    Statement statement = null;
+    try {
+      statement = database.Database.getConnection().createStatement();
+           
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT count(*) FROM objectives where experiement_id=");
+      query.append(experimentId.trim());
+      query.append(" AND execution_id=''");
+      
+      ResultSet r = statement.executeQuery(query.toString());
+      return Integer.parseInt(r.getString("count(*)"));
+
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+
+    return 0;
+
+  }
+  
+
+  /**
+   * Retorna uma lista contendo o nome de todas as soluções dado um experimentId e um executionID
+   * 
+   * @param experimentId
+   * @param executionId
+   * @return 
+   */
+  public static List<String> getAllSolutionsForExecution(String experimentId, String executionId) {
+    List<String> solutionsNames = new ArrayList<>();
+    
+    Statement statement = null;
+    try {
+      statement = database.Database.getConnection().createStatement();
+           
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT solution_name FROM objectives where experiement_id=");
+      query.append(experimentId.trim());
+      query.append(" AND execution_id=");
+      query.append(executionId);
+      query.append(" OR execution_id=''");
+      
+      ResultSet r = statement.executeQuery(query.toString());
+      while(r.next()){
+        solutionsNames.add(r.getString("solution_name"));
+      }
+      
+
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
+    
+    return solutionsNames;   
+
   }
   
 }

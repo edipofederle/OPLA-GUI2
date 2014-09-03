@@ -21,9 +21,9 @@ public class SolutionsComboBoxModel extends AbstractListModel implements ComboBo
     
     Solution selection = null;
 
-    SolutionsComboBoxModel(String executionId, List<File> solutions) {
-        for(File f : solutions)
-            this.solutions.add(new Solution(executionId, f.getName())); 
+    SolutionsComboBoxModel(String executionId, List<String> solutions) {
+        for(String f : solutions)
+            this.solutions.add(new Solution(executionId, f)); 
     }
 
     @Override

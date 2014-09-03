@@ -204,16 +204,19 @@ public class main extends javax.swing.JFrame {
         Object[] row = new Object[5];
         row[0] = exec.getId();
         row[1] = exec.getTime();
-        int numberNonDominatedSolutions = ReadSolutionsFiles.countNumberNonDominatedSolutins(idExperiment, this.config.getConfig().getDirectoryToExportModels());
-        int numberSolutions = ReadSolutionsFiles.read(idExperiment,
-                exec.getId(),
-                this.config.getConfig().getDirectoryToExportModels()).size();
-        row[2] = numberSolutions - numberNonDominatedSolutions;
+       // int numberNonDominatedSolutions = ReadSolutionsFiles.countNumberNonDominatedSolutins(idExperiment, this.config.getConfig().getDirectoryToExportModels());
+        int numberNonDominatedSolutions = db.Database.countNumberNonDominatedSolutins(idExperiment);
+        int numberSolutions = db.Database.getAllSolutionsForExecution(idExperiment, exec.getId()).size();
+        
+//        int numberSolutions = ReadSolutionsFiles.read(idExperiment,
+//                exec.getId(),
+//                this.config.getConfig().getDirectoryToExportModels()).size();
+        
+        row[2] = Math.abs(numberSolutions - numberNonDominatedSolutions);
         row[3] = numberNonDominatedSolutions;
         modelTableExecutions.addRow(row);
       }
     } catch (Exception e) {
-      System.out.println(e);
       JOptionPane.showMessageDialog(null,
               "Possibly the data are not found on disk",
               "Erro when try load data.", 0);
@@ -2220,9 +2223,12 @@ public class main extends javax.swing.JFrame {
         int rowIndex = target.getSelectedRow();
         String idExecution = target.getModel().getValueAt(rowIndex, 0).toString();
         this.selectedExecution = idExecution;
-        List<File> solutions = ReadSolutionsFiles.read(this.selectedExperiment,
-                idExecution,
-                this.config.getConfig().getDirectoryToExportModels());
+        
+//        List<File> solutions = ReadSolutionsFiles.read(this.selectedExperiment,
+//                idExecution,
+//                this.config.getConfig().getDirectoryToExportModels());
+        
+       List<String> solutions =  db.Database.getAllSolutionsForExecution(selectedExperiment, idExecution);
 
         comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
         comboSolutions.setSelectedIndex(0);
@@ -2247,8 +2253,9 @@ public class main extends javax.swing.JFrame {
     GuiServices.initiComboMetrics(comboMetrics, this.selectedExperiment);
 
     Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
+    
     String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
-    String objectiveId = Utils.extractObjectiveIdFromFile(fileName);
+    String objectiveId = Utils.extractSolutionIdFromSolutionFileName(fileName);
     Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
 
     DefaultTableModel model = new DefaultTableModel();
@@ -2324,7 +2331,7 @@ public class main extends javax.swing.JFrame {
         row[2] = elegance.getEc();
         model.addRow(row);
       } else if (selectedMetric.equalsIgnoreCase("conventional")) {
-        Conventional conventional = db.Database.getConventionalsMetricsForSolution(idSolution, this.selectedExperiment);
+          Conventional conventional = db.Database.getConventionalsMetricsForSolution(idSolution, this.selectedExperiment);
 
         for (int i = 0; i < mapColumns.get(selectedMetric).length; i++) {
           model.addColumn(mapColumns.get("conventional")[i]);
