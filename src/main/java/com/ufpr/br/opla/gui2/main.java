@@ -2250,7 +2250,7 @@ public class main extends javax.swing.JFrame {
 
   private void comboSolutionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboSolutionsActionPerformed
     panelShowMetrics.setVisible(false);
-    GuiServices.initiComboMetrics(comboMetrics, this.selectedExperiment);
+    GuiServices.initializerComboObjectiveFunctions(comboMetrics, this.selectedExperiment);
 
     Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
     

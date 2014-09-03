@@ -101,6 +101,12 @@ public class GuiServices {
     }
   }
 
+  /**
+   * Directory with templates for models. This files SHOULD NOT BE CHANGED.
+   * 
+   * 
+   * @param fieldTemplate 
+   */
   public void configureTemplates(JTextField fieldTemplate) {
     if (hasTemplateInConfigFile()) {
       fieldTemplate.setText(config.getConfig().getPathToTemplateModelsDirectory());
@@ -117,7 +123,7 @@ public class GuiServices {
   }
 
   /**
-   * Saida, arquivos uml, di e notation.
+   * Output directory (.uml, .di .notation).
    *
    * @param fieldOutput
    */
@@ -134,7 +140,7 @@ public class GuiServices {
   }
 
   /**
-   * Diretorio usado no processo de maniuplacao.
+   * Internal use directory.
    *
    * @param fieldManipulationDir
    */
@@ -149,7 +155,13 @@ public class GuiServices {
     }
   }
 
-  public static void initiComboMetrics(JComboBox comboObjectiveFunctions, String experimentId) {
+  /**
+   * Initialize comboObjectiveFunctions with function of given exepriemntID
+   * 
+   * @param comboObjectiveFunctions
+   * @param experimentId 
+   */
+  public static void initializerComboObjectiveFunctions(JComboBox comboObjectiveFunctions, String experimentId) {
     String metricsSelectedForCurrentExperiment[] =
             db.Database.getOrdenedObjectives(experimentId).split(" ");
 
@@ -193,16 +205,23 @@ public class GuiServices {
     panelPatternScope.setVisible(false);
   }
 
+  /**
+   * Copy GUI setting files (guisettings.yml) to oplatool root directory
+   */
   public void copyFileGuiSettings() {
     String target = UserHome.getOplaUserHome()+"guisettings.yml";
     if(! new File(target).exists())
       Utils.copy("config/guisettings.yml", target);
   }
 
-  void copyBinHypervolume() {
+  /**
+   * Copy hybervolume binary to oplatool bins directory if OS isn't Windows (eca).
+   * 
+   */
+  public void copyBinHypervolume() {
     if(!OsUtils.isWindows()){ 
       String target = UserHome.getOplaUserHome()+"bins";
-      if(! new File(target).exists())
+      if(! new File(target+"/hv").exists())
         new File(target).mkdirs();
 
       Utils.copy("hv", target+"/hv");
