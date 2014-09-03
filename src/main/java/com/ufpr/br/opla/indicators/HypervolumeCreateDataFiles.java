@@ -5,6 +5,7 @@
 package com.ufpr.br.opla.indicators;
 
 import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.utils.Utils;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,6 +19,8 @@ import results.FunResults;
 /**
  *
  * @author elf
+ * 
+ * NAO Usada Mais. Deletar
  */
 public class HypervolumeCreateDataFiles {
 
@@ -35,7 +38,7 @@ public class HypervolumeCreateDataFiles {
     Map<String, List<Double>> fileToContent = new HashMap<>();
 
     for (String id : ids) {
-      String nameFile = (pathToSaveFiles + generateFileName(id)).replaceAll("\\s+","");
+      String nameFile = (pathToSaveFiles + Utils.generateFileName(id)).replaceAll("\\s+","");
       
       try (PrintWriter pw = new PrintWriter(new FileWriter(nameFile))) {
         List<Double> values = new ArrayList<>();
@@ -61,20 +64,5 @@ public class HypervolumeCreateDataFiles {
     
     return fileToContent;
 
-  }
-
-  private String generateFileName(String id) {
-    String algorithmName = db.Database.getAlgoritmUsedToExperimentId(id);
-    String plaName = db.Database.getPlaUsedToExperimentId(id);
-
-    StringBuilder fileName = new StringBuilder();
-    fileName.append(id);
-    fileName.append("_");
-    fileName.append(plaName);
-    fileName.append("_");
-    fileName.append(algorithmName);
-    fileName.append(".txt");
-
-    return fileName.toString();
   }
 }

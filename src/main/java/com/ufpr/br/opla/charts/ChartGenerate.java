@@ -4,13 +4,10 @@
  */
 package com.ufpr.br.opla.charts;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.jfree.chart.ChartPanel;
 import org.jfree.data.xy.XYDataItem;
@@ -28,16 +25,13 @@ public class ChartGenerate {
    * para o arquivo contendo os valores das funcoes objetivos
    */
 public static void generate(String[] functions, HashMap<String, String> experimentToAlgorithmUsed, int[] columns, String outputDir) {
-    try {
+
       String name = "";
       ChartGeneratorScatter g = new ChartGeneratorScatter(name, functions[0], functions[1]);
- 
 
       for (Map.Entry<String, String> entry : experimentToAlgorithmUsed.entrySet()) {
         
-        String path = outputDir + entry.getKey() + "/Hypervolume/hypervolume.txt";
-        
-        List<List<Double>> content = ReadObjectives.read(columns, path);
+        List<List<Double>> content = db.Database.getAllObjectivesForNonDominatedSolutions(entry.getKey(), columns);
         HashMap<String, List<XYDataItem>> algo = new HashMap<>();
         List<XYDataItem> one = new ArrayList<>();
 
@@ -57,10 +51,6 @@ public static void generate(String[] functions, HashMap<String, String> experime
       frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       frame.pack();
       frame.setVisible(true);
-
-    } catch (IOException ex) {
-      Logger.getLogger(ChartGenerate.class.getName()).log(Level.SEVERE, null, ex);
-    }
     
   }
 

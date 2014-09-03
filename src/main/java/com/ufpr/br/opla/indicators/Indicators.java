@@ -4,8 +4,6 @@
  */
 package com.ufpr.br.opla.indicators;
 
-import com.ufpr.br.opla.configuration.ApplicationFile;
-import com.ufpr.br.opla.utils.ReadSolutionsFiles;
 import database.Database;
 import exceptions.MissingConfigurationException;
 import java.sql.ResultSet;
@@ -120,29 +118,7 @@ public class Indicators {
 
     return edsAsc;
   }
-  
-  public static int[] getAllEdsForExperimentsNormalized(String...ids){
-    double[] eds = getAllEdsForExperiments(ids);
-    int [] edsInt = new int[eds.length];
-    
-    for (int i = 0; i < eds.length; i++)
-      edsInt[i] = (int) eds[i];
-    
-    return edsInt;
-    
-  }
-
-  public static int sumTotalNonDominatedSolutions(String...ids) {
-   String dir = ApplicationFile.getInstance().getConfig().getDirectoryToExportModels();
-   int total = 0;
-   for(int i=0; i < ids.length; i++)
-    total += ReadSolutionsFiles.countNumberNonDominatedSolutins(ids[i],dir);
    
-   
-    return total;
-  }
-  
-  
   /**
    * Retorna a quantidade de soluções encontrads por valor de ED.
    * 

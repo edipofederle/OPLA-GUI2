@@ -4,7 +4,6 @@
  */
 package com.ufpr.br.opla.gui2;
 
-import com.ufpr.br.opla.indicators.HypervolumeCreateDataFiles;
 import com.ufpr.br.opla.indicators.HypervolumeData;
 import com.ufpr.br.opla.indicators.HypervolumeGenerateObjsData;
 import com.ufpr.br.opla.utils.GuiUtils;
@@ -12,6 +11,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import javax.swing.table.DefaultTableModel;
+import logs.log_log.Level;
+import logs.log_log.Logger;
 
 /**
  *
@@ -114,26 +115,29 @@ public class HypervolumeWindow extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
   public void loadData(String ids[]) throws IOException {
-    HypervolumeCreateDataFiles hcdf = new HypervolumeCreateDataFiles();
-    
-    Map<String, List<Double>> content = hcdf.generateHyperVolumeFiles(ids);
-    List<HypervolumeData> hypers = HypervolumeGenerateObjsData.generate(content, ids[0]);
+    try {
+      
+      Map<String, List<Double>> content = db.Database.getAllObjectivesForDominatedSolutions(ids);
+      List<HypervolumeData> hypers = HypervolumeGenerateObjsData.generate(content);
 
-    GuiUtils.makeTableNotEditable(tableHypervolume);
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("PLA");
-    model.addColumn("Algoritm");
-    model.addColumn("Mean");
-    model.addColumn("StdDev");
-    tableHypervolume.setModel(model);
+      GuiUtils.makeTableNotEditable(tableHypervolume);
+      DefaultTableModel model = new DefaultTableModel();
+      model.addColumn("PLA");
+      model.addColumn("Algoritm");
+      model.addColumn("Mean");
+      model.addColumn("StdDev");
+      tableHypervolume.setModel(model);
 
-    for (HypervolumeData hyper : hypers) {
-      Object[] row = new Object[4];
-      row[0] = hyper.getPlaName();
-      row[1] = hyper.getAlgorithm();
-      row[2] = hyper.getMean();
-      row[3] = hyper.getStDev();
-      model.addRow(row);
+      for (HypervolumeData hyper : hypers) {
+        Object[] row = new Object[4];
+        row[0] = hyper.getPlaName();
+        row[1] = hyper.getAlgorithm();
+        row[2] = hyper.getMean();
+        row[3] = hyper.getStDev();
+        model.addRow(row);
+      }
+    } catch (Exception ex) {
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     }
   }
 }

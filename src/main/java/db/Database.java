@@ -1,12 +1,16 @@
 package db;
 
+import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.utils.Utils;
 import exceptions.MissingConfigurationException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import logs.log_log.Level;
+import logs.log_log.Logger;
 import metrics.Conventional;
 import metrics.Elegance;
 import metrics.FeatureDriven;
@@ -59,7 +63,7 @@ public class Database {
       }
 
     } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     }
 
     return (HashMap<String, String>) Collections.EMPTY_MAP;
@@ -87,7 +91,7 @@ public class Database {
       }
 
     } catch (MissingConfigurationException | ClassNotFoundException | SQLException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     }
 
 
@@ -112,12 +116,12 @@ public class Database {
       return r.getString("names");
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
         statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       }
     }
 
@@ -142,12 +146,12 @@ public class Database {
       return r.getString("algorithm") + " (" + description + ")";
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
         statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       }
     }
 
@@ -167,12 +171,12 @@ public class Database {
       return r.getString("name");
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
         statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       }
     }
 
@@ -183,9 +187,9 @@ public class Database {
     try {
       content = results.Experiment.all();
     } catch (SQLException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } catch (Exception ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     }
   }
 
@@ -342,21 +346,21 @@ public class Database {
       return r.getString("names").split(" ").length;
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
         statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       }
     }
-    
+
     return 0;
   }
-  
+
   /**
    * Retorna o número de soluções não dominadas dado um experimentID
-   * 
+   *
    * @param experimentId
    * @return number of non dominated solutions
    */
@@ -364,69 +368,180 @@ public class Database {
     Statement statement = null;
     try {
       statement = database.Database.getConnection().createStatement();
-           
+
       StringBuilder query = new StringBuilder();
       query.append("SELECT count(*) FROM objectives where experiement_id=");
       query.append(experimentId.trim());
       query.append(" AND execution_id=''");
-      
+
       ResultSet r = statement.executeQuery(query.toString());
       return Integer.parseInt(r.getString("count(*)"));
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
         statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       }
     }
 
     return 0;
 
   }
-  
 
   /**
-   * Retorna uma lista contendo o nome de todas as soluções dado um experimentId e um executionID
-   * 
+   * Retorna uma lista contendo o nome de todas as soluções dado um experimentId
+   * e um executionID
+   *
    * @param experimentId
    * @param executionId
-   * @return 
+   * @return
    */
   public static List<String> getAllSolutionsForExecution(String experimentId, String executionId) {
     List<String> solutionsNames = new ArrayList<>();
-    
+
     Statement statement = null;
     try {
       statement = database.Database.getConnection().createStatement();
-           
+
       StringBuilder query = new StringBuilder();
       query.append("SELECT solution_name FROM objectives where experiement_id=");
       query.append(experimentId.trim());
       query.append(" AND execution_id=");
       query.append(executionId);
       query.append(" OR execution_id=''");
-      
+
       ResultSet r = statement.executeQuery(query.toString());
-      while(r.next()){
+      while (r.next()) {
         solutionsNames.add(r.getString("solution_name"));
       }
-      
+
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
-      Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
         statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       }
     }
-    
-    return solutionsNames;   
+
+    return solutionsNames;
 
   }
+
+  /**
+   * Esse método é usado apenas para o cálculo do hypervolume. Ele faz duas
+   * coisas. :(
+   *
+   * 1) Retorna (fileToContent) um Map<String, List<Double>>, sendo que **key**
+   * = path para o arquivo em disco contendo os valores referentes ao **value**.
+   *
+   * 2) Cria os arquivos (citados em 1) no disco. Estes arquivos são utilizados
+   * apenas para a chamada do script em C que de fato calcula o hypervolume.
+   * Estes arquivos são deletados (método deleteGeneratedFiles() em
+   * HypervolumeGenerateObjsData) após a execução e obtenção dos resultados.
+   *
+   */
+  public static Map<String, List<Double>> getAllObjectivesForDominatedSolutions(String... exeprimentIds) throws Exception {
+    Statement statement = null;
+    Statement statementExecutions = null;
+    List<String> idsExecutions = new ArrayList<>();
+
+    //Usado temporariamente. Após cálculos estes arquivos serão apagados.
+    String pathToSaveFiles = UserHome.getOplaUserHome();
+
+    Map<String, List<Double>> fileToContent = new HashMap<>();
+
+    for (String exeprimentId : exeprimentIds) {
+      String nameFile = (pathToSaveFiles + Utils.generateFileName(exeprimentId)).replaceAll("\\s+", "");
+
+      try (PrintWriter pw = new PrintWriter(new FileWriter(nameFile))) {
+        List<Double> values = new ArrayList<>();
+
+        statementExecutions = database.Database.getConnection().createStatement();
+        statement = database.Database.getConnection().createStatement();
+
+        StringBuilder executionsQuery = new StringBuilder();
+        executionsQuery.append("select id from executions where experiement_id=").append(exeprimentId);
+
+        ResultSet executionsSet = statementExecutions.executeQuery(executionsQuery.toString());
+
+        while (executionsSet.next()) {
+          idsExecutions.add(executionsSet.getString("id"));
+        }
+
+        for (String idExecuton : idsExecutions) {
+          StringBuilder query = new StringBuilder();
+
+          query.append("SELECT objectives FROM objectives where experiement_id=").append(exeprimentId).append(" AND execution_id=").append(idExecuton);
+
+          ResultSet r = statement.executeQuery(query.toString());
+          while (r.next()) {
+            String objs = r.getString("objectives").trim().replace("|", " ");
+            String[] ov = objs.split(" ");
+
+            for (int i = 0; i < ov.length; i++) {
+              values.add(Double.parseDouble(ov[i]));
+            }
+
+            pw.write(objs);
+            pw.write("\n");
+          }
+
+          pw.write("\n");
+
+        }
+        fileToContent.put(nameFile, values);
+      }
+
+    }
+    return fileToContent;
+
+  }
+
+  public static List< List<Double>> getAllObjectivesForNonDominatedSolutions(String experimentId, int[] columns) {
   
+    Statement statement = null;
+    
+    try { 
+      statement = database.Database.getConnection().createStatement();
+
+      List<List<Double>> values = new ArrayList<>();
+
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT objectives FROM objectives where experiement_id=").append(experimentId).append(" AND execution_id=''");
+
+      ResultSet result = statement.executeQuery(query.toString());
+      while (result.next()) {
+        String objs = result.getString("objectives").trim().replace("|", " ");
+        String[] ov = objs.split(" ");
+        List<Double> objectiveValue = new ArrayList<>();
+
+        for (int i = 0; i < columns.length; i++) {
+          objectiveValue.add(Double.parseDouble(ov[i].trim()));
+        }
+
+
+        values.add(objectiveValue);
+      }
+      
+      return values;
+
+    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
+      }
+    }
+
+    return Collections.emptyList();
+
+  }
 }

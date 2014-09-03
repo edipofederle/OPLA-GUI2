@@ -172,6 +172,21 @@ public class Utils {
       System.exit(1);
     }
   }
+  
+  public static String generateFileName(String id) {
+    String algorithmName = db.Database.getAlgoritmUsedToExperimentId(id);
+    String plaName = db.Database.getPlaUsedToExperimentId(id);
+
+    StringBuilder fileName = new StringBuilder();
+    fileName.append(id);
+    fileName.append("_");
+    fileName.append(plaName);
+    fileName.append("_");
+    fileName.append(algorithmName);
+    fileName.append(".txt");
+
+    return fileName.toString();
+  }
 
  
 }

@@ -19,12 +19,12 @@ public class HypervolumeGenerateObjsData {
   public static void generate(List<String> files) {
   }
 
-  public static List<HypervolumeData> generate(Map<String, List<Double>> content, String idReferenceExperiment) throws IOException {
+  public static List<HypervolumeData> generate(Map<String, List<Double>> content) throws IOException {
     List<HypervolumeData> hypervolumeDatas = new ArrayList<>();
     
     //Acha o ponto de referencia
     
-      String referencePoint = findReferencePoint(content, idReferenceExperiment);
+     
 
     for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
       String pathToFile = entry.getKey();
@@ -32,9 +32,13 @@ public class HypervolumeGenerateObjsData {
       String[] splited = pathToFile.split("_");
       String pla = getPlaName(splited[1]);
       String algorithm = getAlgorithmName(splited[2]);
+      String experimentId = getExperimentId(splited[0]);
+      
+      
+       //Acha o ponto de referencia
+      String referencePoint = findReferencePoint(entry.getValue(), experimentId);
 
-      //Execute o programa em C que calcula o hypervolume
-      List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
+       List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
 
       hypervolumeDatas.add(new HypervolumeData(values, pla, algorithm));
     }
@@ -51,24 +55,26 @@ public class HypervolumeGenerateObjsData {
    * @param experimentId
    * @return 
    */
-  private static String findReferencePoint(Map<String, List<Double>> content, String experimentId) {
-    Double max = Double.MIN_VALUE;
+  public static String findReferencePoint(List<Double> values, String experimentId) {
+     Double max = Double.MIN_VALUE;
     int numberOfObjectives = db.Database.getNumberOfFunctionForExperimentId(experimentId);
+ 
 
-    for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
-      List<Double> list = entry.getValue();
-      for (Double double1 : list)
-        if (double1 > max)
-          max = double1;
+    for (Double double1 : values){
+      if (double1 > max){
+         max = double1;
+      }
     }
-        
-    double point = max + 1;
+    
+      double point = max + 1;
+ 
     String ref = "";
     for(int i=0; i < numberOfObjectives; i++)
       ref += String.valueOf(point) + " ";
     
     return ref.trim();
   }
+
 
   /**
    * Deleta arquivos .txt gerados após processamento

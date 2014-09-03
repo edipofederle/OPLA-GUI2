@@ -1,10 +1,10 @@
 
-import junit.framework.Assert;
-import org.junit.Test;
 import com.ufpr.br.opla.utils.MathUtils;
 import java.util.ArrayList;
 import java.util.List;
+import junit.framework.Assert;
 import org.junit.Ignore;
+import org.junit.Test;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
