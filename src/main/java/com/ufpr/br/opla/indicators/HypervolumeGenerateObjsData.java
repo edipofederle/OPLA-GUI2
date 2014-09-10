@@ -4,6 +4,7 @@
  */
 package com.ufpr.br.opla.indicators;
 
+import com.ufpr.br.opla.configuration.VolatileConfs;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,10 +22,6 @@ public class HypervolumeGenerateObjsData {
 
   public static List<HypervolumeData> generate(Map<String, List<Double>> content) throws IOException {
     List<HypervolumeData> hypervolumeDatas = new ArrayList<>();
-    
-    //Acha o ponto de referencia
-    
-     
 
     for (Map.Entry<String, List<Double>> entry : content.entrySet()) {
       String pathToFile = entry.getKey();
@@ -37,7 +34,7 @@ public class HypervolumeGenerateObjsData {
       
        //Acha o ponto de referencia
       String referencePoint = findReferencePoint(entry.getValue(), experimentId);
-
+  
        List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
 
       hypervolumeDatas.add(new HypervolumeData(values, pla, algorithm));
@@ -56,21 +53,28 @@ public class HypervolumeGenerateObjsData {
    * @return 
    */
   public static String findReferencePoint(List<Double> values, String experimentId) {
-     Double max = Double.MIN_VALUE;
     int numberOfObjectives = db.Database.getNumberOfFunctionForExperimentId(experimentId);
- 
-
-    for (Double double1 : values){
-      if (double1 > max){
-         max = double1;
-      }
-    }
-    
-      double point = max + 1;
- 
     String ref = "";
-    for(int i=0; i < numberOfObjectives; i++)
-      ref += String.valueOf(point) + " ";
+    
+    if(!VolatileConfs.hypervolumeNormalized()){
+      Double max = Double.MIN_VALUE;
+      
+            
+      for (Double double1 : values){
+        if (double1 > max){
+          max = double1;
+        }
+      }
+      double point = max + 1;
+      for(int i=0; i < numberOfObjectives; i++)
+        ref += String.valueOf(point) + " ";
+
+      
+    }else{
+       for(int i=0; i < numberOfObjectives; i++){
+          ref += "1.01" + " ";
+       }
+    }
     
     return ref.trim();
   }

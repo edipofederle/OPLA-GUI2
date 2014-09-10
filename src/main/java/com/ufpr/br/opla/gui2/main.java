@@ -393,6 +393,7 @@ public class main extends javax.swing.JFrame {
         btnGenerateChart = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         btnHypervolume = new javax.swing.JButton();
+        hypervolumeNormalized = new javax.swing.JCheckBox();
         jPanel11 = new javax.swing.JPanel();
         btnGenerateEdChart = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
@@ -1714,6 +1715,13 @@ public class main extends javax.swing.JFrame {
             }
         });
 
+        hypervolumeNormalized.setText("Use Normalization ?");
+        hypervolumeNormalized.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hypervolumeNormalizedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -1721,11 +1729,15 @@ public class main extends javax.swing.JFrame {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnHypervolume)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(hypervolumeNormalized)
+                .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnHypervolume)
+            .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(btnHypervolume)
+                .addComponent(hypervolumeNormalized))
         );
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Euclidean Distance"));
@@ -1761,9 +1773,8 @@ public class main extends javax.swing.JFrame {
                         .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panelFunctionExecutionsSelecteds, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 26, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
@@ -1775,9 +1786,9 @@ public class main extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(334, Short.MAX_VALUE))
         );
 
@@ -2620,7 +2631,10 @@ public class main extends javax.swing.JFrame {
       
         HypervolumeWindow hyperPanel = new HypervolumeWindow();
         hyperPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        hyperPanel.setTitle("Hypervolume");
+        if(VolatileConfs.hypervolumeNormalized())
+          hyperPanel.setTitle("Hypervolume - Normalized");
+        else
+          hyperPanel.setTitle("Hypervolume - Non Normalized");
         hyperPanel.pack();
         hyperPanel.setResizable(false);
         hyperPanel.setVisible(true);
@@ -2632,6 +2646,14 @@ public class main extends javax.swing.JFrame {
     }
     
   }//GEN-LAST:event_btnHypervolumeActionPerformed
+
+  private void hypervolumeNormalizedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hypervolumeNormalizedActionPerformed
+    if(hypervolumeNormalized.isEnabled()){
+     VolatileConfs.enableHybervolumeNormalization();
+    }else{
+     VolatileConfs.disableHybervolumeNormalization();
+    }
+  }//GEN-LAST:event_hypervolumeNormalizedActionPerformed
 
   
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
@@ -2716,6 +2738,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTextField fieldRelationshipsProfile;
     private javax.swing.JTextField fieldSmartyProfile;
     private javax.swing.JTextField fieldTemplate;
+    private javax.swing.JCheckBox hypervolumeNormalized;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

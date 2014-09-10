@@ -1,14 +1,18 @@
 package db;
 
 import com.ufpr.br.opla.configuration.UserHome;
+import com.ufpr.br.opla.configuration.VolatileConfs;
+import com.ufpr.br.opla.utils.MathUtils;
 import com.ufpr.br.opla.utils.Utils;
 import exceptions.MissingConfigurationException;
+import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.Map.Entry;
 import logs.log_log.Level;
 import logs.log_log.Logger;
 import metrics.Conventional;
@@ -450,64 +454,103 @@ public class Database {
     Statement statement = null;
     Statement statementExecutions = null;
     List<String> idsExecutions = new ArrayList<>();
+    HashMap<String, List<List<Double>>> listObjectivesValues = new HashMap<>();
 
     //Usado temporariamente. Após cálculos estes arquivos serão apagados.
     String pathToSaveFiles = UserHome.getOplaUserHome();
 
     Map<String, List<Double>> fileToContent = new HashMap<>();
+    List<Double> values = new ArrayList<>();
 
     for (String exeprimentId : exeprimentIds) {
       String nameFile = (pathToSaveFiles + Utils.generateFileName(exeprimentId)).replaceAll("\\s+", "");
 
-      try (PrintWriter pw = new PrintWriter(new FileWriter(nameFile))) {
-        List<Double> values = new ArrayList<>();
 
-        statementExecutions = database.Database.getConnection().createStatement();
-        statement = database.Database.getConnection().createStatement();
+      String[] objectives = db.Database.getOrdenedObjectives(exeprimentId).split(" ");
 
-        StringBuilder executionsQuery = new StringBuilder();
-        executionsQuery.append("select id from executions where experiement_id=").append(exeprimentId);
+      statementExecutions = database.Database.getConnection().createStatement();
+      statement = database.Database.getConnection().createStatement();
 
-        ResultSet executionsSet = statementExecutions.executeQuery(executionsQuery.toString());
+      StringBuilder executionsQuery = new StringBuilder();
+      executionsQuery.append("select id from executions where experiement_id=").append(exeprimentId);
 
-        while (executionsSet.next()) {
-          idsExecutions.add(executionsSet.getString("id"));
-        }
+      ResultSet executionsSet = statementExecutions.executeQuery(executionsQuery.toString());
 
-        for (String idExecuton : idsExecutions) {
-          StringBuilder query = new StringBuilder();
-
-          query.append("SELECT objectives FROM objectives where experiement_id=").append(exeprimentId).append(" AND execution_id=").append(idExecuton);
-
-          ResultSet r = statement.executeQuery(query.toString());
-          while (r.next()) {
-            String objs = r.getString("objectives").trim().replace("|", " ");
-            String[] ov = objs.split(" ");
-
-            for (int i = 0; i < ov.length; i++) {
-              values.add(Double.parseDouble(ov[i]));
-            }
-
-            pw.write(objs);
-            pw.write("\n");
-          }
-
-          pw.write("\n");
-
-        }
-        fileToContent.put(nameFile, values);
+      while (executionsSet.next()) {
+        idsExecutions.add(executionsSet.getString("id"));
       }
 
+      for (String idExecuton : idsExecutions) {
+
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT objectives FROM objectives where experiement_id=").append(exeprimentId).append(" AND execution_id=").append(idExecuton);
+
+        ResultSet r = statement.executeQuery(query.toString());
+
+        while (r.next()) {
+
+          String objs = r.getString("objectives").trim().replace("|", " ");
+          String[] ov = objs.split(" ");
+          
+          for (int i = 0; i < objectives.length; i++) {
+            
+            if(!VolatileConfs.hypervolumeNormalized())
+              values.add(Double.parseDouble(ov[i]));
+            
+            if (objectives[i].startsWith("conventional")) {
+              if (listObjectivesValues.get("conventional_" + idExecuton) == null) {
+                List<List<Double>> allValue = new ArrayList<>();
+                List<Double> valueFuc = new ArrayList<>();
+                valueFuc.add(Double.parseDouble(ov[i]));
+                allValue.add(valueFuc);
+                listObjectivesValues.put("conventional_" + idExecuton, allValue);
+              } else {
+                List<Double> last = listObjectivesValues.get("conventional_" + idExecuton).get(listObjectivesValues.get("conventional_" + idExecuton).size() - 1);
+                last.add(Double.parseDouble(ov[i]));
+              }
+            } else {
+              if (objectives[i].startsWith("featureDriven")) {
+                if (listObjectivesValues.get("featureDriven_" + idExecuton) == null) {
+                  List<List<Double>> allValue = new ArrayList<>();
+                  List<Double> valueFuc = new ArrayList<>();
+                  valueFuc.add(Double.parseDouble(ov[i]));
+                  allValue.add(valueFuc);
+                  listObjectivesValues.put("featureDriven_" + idExecuton, allValue);
+                } else {
+                  List<Double> last = listObjectivesValues.get("featureDriven_" + idExecuton).get(listObjectivesValues.get("featureDriven_" + idExecuton).size() - 1);
+                  last.add(Double.parseDouble(ov[i]));
+                }
+              }
+            }
+          }
+
+        }
+      }
+      if(VolatileConfs.hypervolumeNormalized()){
+         MathUtils.normalize(listObjectivesValues, objectives);
+      }
+
+        FileWriter fw = new FileWriter(nameFile);
+        try (BufferedWriter bw = new BufferedWriter(fw)) {
+          for (int i = 0; i < idsExecutions.size(); i++) {
+            HashMap<String, List<Double>> c = getFunctionsValueByRun(idsExecutions.get(i), listObjectivesValues, objectives);
+            mergeValues(c, i, bw);
+          }
+        }
+      
+      fileToContent.put(nameFile, values);
     }
+
     return fileToContent;
 
   }
 
   public static List< List<Double>> getAllObjectivesForNonDominatedSolutions(String experimentId, int[] columns) {
-  
+
     Statement statement = null;
-    
-    try { 
+
+    try {
       statement = database.Database.getConnection().createStatement();
 
       List<List<Double>> values = new ArrayList<>();
@@ -528,7 +571,7 @@ public class Database {
 
         values.add(objectiveValue);
       }
-      
+
       return values;
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
@@ -542,6 +585,60 @@ public class Database {
     }
 
     return Collections.emptyList();
+
+  }
+
+  //TODO add PLAExtensibility
+  private static HashMap<String, List<Double>> getFunctionsValueByRun(String run, HashMap<String, List<List<Double>>> listObjectivesValues, String[] objectives) {
+    HashMap<String, List<Double>> content = new HashMap<>();
+
+    for (int i = 0; i < objectives.length; i++) {
+      for (Map.Entry<String, List<List<Double>>> entry : listObjectivesValues.entrySet()) {
+        String string = entry.getKey();
+        List<List<Double>> list = entry.getValue();
+
+        if (string.equalsIgnoreCase(objectives[i] + "_" + run)) {
+          switch (objectives[i]) {
+            case "conventional":
+              if (content.get("conventional") == null) {
+                content.put("conventional", list.get(0));
+              } else {
+                content.get("conventional").addAll(list.get(0));
+              }
+              break;
+            case "featureDriven":
+              if (content.get("featureDriven") == null) {
+                content.put("featureDriven", list.get(0));
+              } else {
+                content.get("featureDriven").addAll(list.get(0));
+              }
+              break;
+          }
+        }
+      }
+    }
+    return content;
+  }
+
+  private static void mergeValues(HashMap<String, List<Double>> c, int index, BufferedWriter bw) {
+    HashMap<String, List<Double>> cClone = (HashMap<String, List<Double>>) c.clone();
+
+    int numberSolutions = cClone.entrySet().iterator().next().getValue().size();
+    try {
+      for (int i = 0; i < numberSolutions; i++) {
+
+        String line = "";
+        for (Entry<String, List<Double>> entry : c.entrySet()) {
+          List<Double> list = entry.getValue();
+          line += list.get(i) + " ";
+        }
+        bw.append(line + "\n");
+
+      }
+      bw.append("\n");
+    } catch (IOException ex) {
+      java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
 
   }
 }

@@ -19,6 +19,7 @@ public class VolatileConfs {
   private static int maxEvaluations; //maxEvaluations text-field
   private static int fieldPopulationSize; //entendeu ja neh?
   private static ElementsWithSameDesignPatternSelection scopePatterns;
+  private static boolean normalized; // indica se o hypervolume deve ser calculado usando normalizacao
 
   public static String[] getArchitectureInputPath() {
     return architecturesInputPath;
@@ -78,5 +79,17 @@ public class VolatileConfs {
    */
   public static void configureDefaultPatternScope() {
    VolatileConfs.setScopePatterns(null);
+  }
+
+  public static boolean hypervolumeNormalized() {
+    return normalized;
+  }
+
+  public static void enableHybervolumeNormalization() {
+    normalized = true;
+  }
+  
+  public static void disableHybervolumeNormalization() {
+    normalized = false;
   }
 }
