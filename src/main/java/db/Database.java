@@ -415,7 +415,9 @@ public class Database {
       query.append(experimentId.trim());
       query.append(" AND execution_id=");
       query.append(executionId);
-      query.append(" OR execution_id=''");
+      query.append(" OR experiement_id=");
+      query.append(experimentId.trim());
+      query.append(" AND execution_id=''");
 
       ResultSet r = statement.executeQuery(query.toString());
       while (r.next()) {
