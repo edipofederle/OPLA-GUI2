@@ -58,7 +58,6 @@ public class MathUtils {
     }
     return listObjectivesValues;
   }
- 
 
   public static Double normalizeValue(Double minValue, Double maxValue, Double objectiveValue) {
     return (objectiveValue - minValue) / (maxValue - minValue);
@@ -112,21 +111,21 @@ public class MathUtils {
             * somatorio);
   }
 
-  //TODO Add PLAExtendibility
   private static List<Double> mergeAllObjectiveOfAllRuns(HashMap<String, List<List<Double>>> listObjectivesValues, String name) {
     List<Double> allObjectiveRuns = new ArrayList<>();
     for (Entry<String, List<List<Double>>> entry : listObjectivesValues.entrySet()) {
-      if (name.equals("conventional")) {
-        if (entry.getKey().startsWith("conventional")) {
-          List<List<Double>> values = entry.getValue();
-          for (List<Double> list : values) {
-            for (Double double1 : list) {
-              allObjectiveRuns.add(double1);
+      switch (name) {
+        case "conventional":
+          if (entry.getKey().startsWith("conventional")) {
+            List<List<Double>> values = entry.getValue();
+            for (List<Double> list : values) {
+              for (Double double1 : list) {
+                allObjectiveRuns.add(double1);
+              }
             }
           }
-        }
-      } else {
-        if (name.equals("featureDriven")) {
+          break;
+        case "featureDriven":
           if (entry.getKey().startsWith("featureDriven")) {
             List<List<Double>> values = entry.getValue();
             for (List<Double> list : values) {
@@ -135,9 +134,21 @@ public class MathUtils {
               }
             }
           }
-        }
+          break;
+        case "PLAExtenxibiliy":
+          if (entry.getKey().startsWith("PLAExtenxibiliy")) {
+            List<List<Double>> values = entry.getValue();
+            for (List<Double> list : values) {
+              for (Double double1 : list) {
+                allObjectiveRuns.add(double1);
+              }
+            }
+          }
+          break;
       }
     }
+
+
 
 
     return allObjectiveRuns;

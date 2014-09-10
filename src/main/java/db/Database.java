@@ -509,8 +509,7 @@ public class Database {
                 List<Double> last = listObjectivesValues.get("conventional_" + idExecuton).get(listObjectivesValues.get("conventional_" + idExecuton).size() - 1);
                 last.add(Double.parseDouble(ov[i]));
               }
-            } else {
-              if (objectives[i].startsWith("featureDriven")) {
+            } else if (objectives[i].startsWith("featureDriven")) {
                 if (listObjectivesValues.get("featureDriven_" + idExecuton) == null) {
                   List<List<Double>> allValue = new ArrayList<>();
                   List<Double> valueFuc = new ArrayList<>();
@@ -521,8 +520,19 @@ public class Database {
                   List<Double> last = listObjectivesValues.get("featureDriven_" + idExecuton).get(listObjectivesValues.get("featureDriven_" + idExecuton).size() - 1);
                   last.add(Double.parseDouble(ov[i]));
                 }
+              } else if (objectives[i].startsWith("PLAExtenxibiliy")) {
+                if (listObjectivesValues.get("PLAExtenxibiliy_" + idExecuton) == null) {
+                  List<List<Double>> allValue = new ArrayList<>();
+                  List<Double> valueFuc = new ArrayList<>();
+                  valueFuc.add(Double.parseDouble(ov[i]));
+                  allValue.add(valueFuc);
+                  listObjectivesValues.put("PLAExtenxibiliy_" + idExecuton, allValue);
+                } else {
+                  List<Double> last = listObjectivesValues.get("PLAExtenxibiliy_" + idExecuton).get(listObjectivesValues.get("PLAExtenxibiliy_" + idExecuton).size() - 1);
+                  last.add(Double.parseDouble(ov[i]));
+                }
               }
-            }
+            
           }
 
         }
@@ -611,6 +621,13 @@ public class Database {
                 content.put("featureDriven", list.get(0));
               } else {
                 content.get("featureDriven").addAll(list.get(0));
+              }
+              break;
+            case "PLAExtenxibiliy":
+              if (content.get("PLAExtenxibiliy") == null) {
+                content.put("PLAExtenxibiliy", list.get(0));
+              } else {
+                content.get("PLAExtenxibiliy").addAll(list.get(0));
               }
               break;
           }
