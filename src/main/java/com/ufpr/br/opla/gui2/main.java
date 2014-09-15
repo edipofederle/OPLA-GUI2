@@ -2152,7 +2152,7 @@ public class main extends javax.swing.JFrame {
               protected Object doInBackground() throws Exception {
                 jLabel12.setText("Working... wait. Started " + Time.timeNow());
                 Logger.getLogger().putLog("Execution NSGAII...");
-                jTabbedPane1.setSelectedIndex(4);
+                jTabbedPane1.setSelectedIndex(5);
                 btnRun.setEnabled(false);
                 blockUITabs();
                 executeNSGAII();
@@ -2179,7 +2179,7 @@ public class main extends javax.swing.JFrame {
               protected Object doInBackground() throws Exception {
                 jLabel12.setText("Working... wait. Started " + Time.timeNow());
                 Logger.getLogger().putLog("Execution PAES...");
-                jTabbedPane1.setSelectedIndex(4);
+                jTabbedPane1.setSelectedIndex(5);
                 btnRun.setEnabled(false);
                 blockUITabs();
                 executePAES();
