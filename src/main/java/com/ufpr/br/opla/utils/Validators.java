@@ -26,6 +26,7 @@ public class Validators {
     }
     String archs[] = archsInput.trim().split(",");
     List<String> invalidsEntries = new ArrayList<>();
+    invalidsEntries.clear();
 
     for (int i = 0; i < archs.length; i++) {
       String arch;
@@ -47,7 +48,7 @@ public class Validators {
     if (invalidsEntries.isEmpty()) {
       VolatileConfs.setArchitectureInputPath(archs);
     } else {
-      JOptionPane.showMessageDialog(null, "The fowlling architecture(s) are not valid: " + invalidsEntries.toString() + "Check it please");
+      JOptionPane.showMessageDialog(null, "The following architectures are not valid or not are found\n " + invalidsEntries.toString() + "\n\n Check it please");
     }
 
     if (invalidsEntries.isEmpty()) {
