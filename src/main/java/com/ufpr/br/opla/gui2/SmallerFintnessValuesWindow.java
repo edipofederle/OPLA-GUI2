@@ -565,11 +565,11 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     for (int i = 0; i < metricsSelectedForCurrentExperiment.length; i++) {
       String f = metricsSelectedForCurrentExperiment[i];
       if (f.equalsIgnoreCase("elegance")) {
-        intializeContentForEleganceTable();
+        initializeContentForEleganceTable();
         panelEleganceBest.setVisible(true);
       }
       if (f.equalsIgnoreCase("conventional")) {
-        initializeContentForEleganceTable();
+        initializeContentForConventionalTable();
         panelConventionalBest.setVisible(true);
       }
       if (f.equalsIgnoreCase("PLAExtensibility")) {
@@ -584,7 +584,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     }
   }
 
-  private void intializeContentForEleganceTable() {
+  private void initializeContentForEleganceTable() {
     BestSolutionBySelectedFitness.buildTable(tableEleganceBest,
             BestSolutionBySelectedFitness.calculateBestElegance(
             selectedExperiment));
@@ -596,7 +596,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
   }
 
 
-  private void initializeContentForEleganceTable() {
+  private void initializeContentForConventionalTable() {
     BestSolutionBySelectedFitness.buildTable(tableConventionalBest,
             BestSolutionBySelectedFitness.calculateBestConventional(selectedExperiment));
   }

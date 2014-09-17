@@ -138,7 +138,7 @@ public class Utils {
               exts, false);
 
       for (File file : files) {
-        names.append(file.getName());
+        names.append(file.getName().toLowerCase());
         names.append(", ");
       }
 

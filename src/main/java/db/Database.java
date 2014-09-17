@@ -147,7 +147,7 @@ public class Database {
       if ("null".equals(description)) {
         return r.getString("algorithm");
       }
-      return r.getString("algorithm") + " (" + description + ")";
+      return r.getString("algorithm") + " - " + description;
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
       Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);

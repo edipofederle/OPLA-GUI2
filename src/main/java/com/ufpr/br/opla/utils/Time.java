@@ -17,4 +17,8 @@ public class Time {
     return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss ").format(new Date());
   }
   
+  public static String convertMsToMin(long time){
+    return new SimpleDateFormat("mm:ss").format(new Date(time));
+  }
+  
 }
