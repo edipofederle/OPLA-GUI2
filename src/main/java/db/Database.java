@@ -8,9 +8,7 @@ import exceptions.MissingConfigurationException;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 import java.util.Map.Entry;
 import logs.log_log.Level;
@@ -23,7 +21,7 @@ import results.Execution;
 import results.Experiment;
 
 public class Database {
-
+  private static Connection connection = null;
   private static List<Experiment> content;
 
   public static void setContent(List<Experiment> all) {
@@ -34,9 +32,9 @@ public class Database {
     return content;
   }
 
-  public static List<Execution> getAllExecutionsByExperimentId(String experimentId) {
+  public static Collection<Execution> getAllExecutionsByExperimentId(String experimentId) {
     for (Experiment exp : content) {
-      if (exp.getId().equals(experimentId)) {
+      if (exp.getId().equals(experimentId.replaceAll("\\s+",""))) {
         return exp.getExecutions();
       }
     }
@@ -371,7 +369,7 @@ public class Database {
   public static int countNumberNonDominatedSolutins(String experimentId) {
     Statement statement = null;
     try {
-      statement = database.Database.getConnection().createStatement();
+      statement = getConnection().createStatement();
 
       StringBuilder query = new StringBuilder();
       query.append("SELECT count(*) FROM objectives where experiement_id=");
@@ -381,13 +379,14 @@ public class Database {
       ResultSet r = statement.executeQuery(query.toString());
       return Integer.parseInt(r.getString("count(*)"));
 
-    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+    } catch (SQLException | NullPointerException ex) {
       Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
     } finally {
       try {
-        statement.close();
+        if(statement != null)
+          statement.close();
       } catch (SQLException ex) {
-        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
+        Logger.getLogger().putLog(ex.getCause().toString(), Level.ERROR);
       }
     }
 
@@ -408,7 +407,9 @@ public class Database {
 
     Statement statement = null;
     try {
-      statement = database.Database.getConnection().createStatement();
+      //statement = database.Database.getConnection().createStatement();
+      
+      statement = getConnection().createStatement();
 
       StringBuilder query = new StringBuilder();
       query.append("SELECT solution_name FROM objectives where experiement_id=");
@@ -424,15 +425,8 @@ public class Database {
         solutionsNames.add(r.getString("solution_name"));
       }
 
-
-    } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
+    } catch (SQLException ex) {
       Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
-    } finally {
-      try {
-        statement.close();
-      } catch (SQLException ex) {
-        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
-      }
     }
 
     return solutionsNames;
@@ -512,28 +506,28 @@ public class Database {
                 last.add(Double.parseDouble(ov[i]));
               }
             } else if (objectives[i].startsWith("featureDriven")) {
-                if (listObjectivesValues.get("featureDriven_" + idExecuton) == null) {
-                  List<List<Double>> allValue = new ArrayList<>();
-                  List<Double> valueFuc = new ArrayList<>();
-                  valueFuc.add(Double.parseDouble(ov[i]));
-                  allValue.add(valueFuc);
-                  listObjectivesValues.put("featureDriven_" + idExecuton, allValue);
-                } else {
-                  List<Double> last = listObjectivesValues.get("featureDriven_" + idExecuton).get(listObjectivesValues.get("featureDriven_" + idExecuton).size() - 1);
-                  last.add(Double.parseDouble(ov[i]));
-                }
-              } else if (objectives[i].startsWith("PLAExtenxibiliy")) {
-                if (listObjectivesValues.get("PLAExtenxibiliy_" + idExecuton) == null) {
-                  List<List<Double>> allValue = new ArrayList<>();
-                  List<Double> valueFuc = new ArrayList<>();
-                  valueFuc.add(Double.parseDouble(ov[i]));
-                  allValue.add(valueFuc);
-                  listObjectivesValues.put("PLAExtenxibiliy_" + idExecuton, allValue);
-                } else {
-                  List<Double> last = listObjectivesValues.get("PLAExtenxibiliy_" + idExecuton).get(listObjectivesValues.get("PLAExtenxibiliy_" + idExecuton).size() - 1);
-                  last.add(Double.parseDouble(ov[i]));
-                }
+              if (listObjectivesValues.get("featureDriven_" + idExecuton) == null) {
+                List<List<Double>> allValue = new ArrayList<>();
+                List<Double> valueFuc = new ArrayList<>();
+                valueFuc.add(Double.parseDouble(ov[i]));
+                allValue.add(valueFuc);
+                listObjectivesValues.put("featureDriven_" + idExecuton, allValue);
+              } else {
+                List<Double> last = listObjectivesValues.get("featureDriven_" + idExecuton).get(listObjectivesValues.get("featureDriven_" + idExecuton).size() - 1);
+                last.add(Double.parseDouble(ov[i]));
               }
+            } else if (objectives[i].startsWith("PLAExtensibility")) {
+              if (listObjectivesValues.get("PLAExtensibility_" + idExecuton) == null) {
+                List<List<Double>> allValue = new ArrayList<>();
+                List<Double> valueFuc = new ArrayList<>();
+                valueFuc.add(Double.parseDouble(ov[i]));
+                allValue.add(valueFuc);
+                listObjectivesValues.put("PLAExtensibility_" + idExecuton, allValue);
+              } else {
+                List<Double> last = listObjectivesValues.get("PLAExtensibility_" + idExecuton).get(listObjectivesValues.get("PLAExtensibility_" + idExecuton).size() - 1);
+                last.add(Double.parseDouble(ov[i]));
+              }
+            }
             
           }
 
@@ -547,7 +541,7 @@ public class Database {
         try (BufferedWriter bw = new BufferedWriter(fw)) {
           for (int i = 0; i < idsExecutions.size(); i++) {
             HashMap<String, List<Double>> c = getFunctionsValueByRun(idsExecutions.get(i), listObjectivesValues, objectives);
-            mergeValues(c, i, bw);
+            mergeValues(c, bw);
           }
         }
       
@@ -625,11 +619,11 @@ public class Database {
                 content.get("featureDriven").addAll(list.get(0));
               }
               break;
-            case "PLAExtenxibiliy":
-              if (content.get("PLAExtenxibiliy") == null) {
-                content.put("PLAExtenxibiliy", list.get(0));
+            case "PLAExtensibility":
+              if (content.get("PLAExtensibility") == null) {
+                content.put("PLAExtensibility", list.get(0));
               } else {
-                content.get("PLAExtenxibiliy").addAll(list.get(0));
+                content.get("PLAExtensibility").addAll(list.get(0));
               }
               break;
           }
@@ -639,7 +633,7 @@ public class Database {
     return content;
   }
 
-  private static void mergeValues(HashMap<String, List<Double>> c, int index, BufferedWriter bw) {
+  private static void mergeValues(HashMap<String, List<Double>> c, BufferedWriter bw) {
     HashMap<String, List<Double>> cClone = (HashMap<String, List<Double>>) c.clone();
 
     int numberSolutions = cClone.entrySet().iterator().next().getValue().size();
@@ -659,5 +653,18 @@ public class Database {
       java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
     }
 
+  }
+
+  private static Connection getConnection() {
+    try {
+      if(connection == null)
+        connection = DriverManager.getConnection("jdbc:sqlite:"+UserHome.getPathToDb());
+      
+      
+    } catch (SQLException ex) {
+      java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    }
+    
+    return connection;
   }
 }

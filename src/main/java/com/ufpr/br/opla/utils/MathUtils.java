@@ -39,6 +39,20 @@ public class MathUtils {
           }
         }
       }
+      if (objectives[i].equalsIgnoreCase("PLAExtensibility")) {
+        //Normaliza valores para conventional
+        for (Entry<String, List<List<Double>>> entry : listObjectivesValues.entrySet()) {
+          String function = entry.getKey();
+          if (function.startsWith("PLAExtensibility")) {
+            List<List<Double>> valuesConventional = entry.getValue();
+            for (List<Double> list : valuesConventional) {
+              for (int j = 0; j < list.size(); j++) {
+                list.set(j, normalizeValue(min, max, list.get(j)));
+              }
+            }
+          }
+        }
+      }
       if (objectives[i].equalsIgnoreCase("featureDriven")) {
         //Normaliza valores para conventional
         for (Entry<String, List<List<Double>>> entry : listObjectivesValues.entrySet()) {

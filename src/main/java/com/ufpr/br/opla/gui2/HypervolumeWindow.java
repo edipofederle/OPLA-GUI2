@@ -122,6 +122,7 @@ public class HypervolumeWindow extends javax.swing.JFrame {
 
       GuiUtils.makeTableNotEditable(tableHypervolume);
       DefaultTableModel model = new DefaultTableModel();
+      model.addColumn("ID Execution");
       model.addColumn("PLA");
       model.addColumn("Algoritm");
       model.addColumn("Mean");
@@ -129,11 +130,12 @@ public class HypervolumeWindow extends javax.swing.JFrame {
       tableHypervolume.setModel(model);
 
       for (HypervolumeData hyper : hypers) {
-        Object[] row = new Object[4];
-        row[0] = hyper.getPlaName();
-        row[1] = hyper.getAlgorithm();
-        row[2] = hyper.getMean();
-        row[3] = hyper.getStDev();
+        Object[] row = new Object[5];
+        row[0] = hyper.getIdExperiment();
+        row[1] = hyper.getPlaName();
+        row[2] = hyper.getAlgorithm();
+        row[3] = hyper.getMean();
+        row[4] = hyper.getStDev();
         model.addRow(row);
       }
     } catch (Exception ex) {

@@ -56,7 +56,6 @@ public class main extends javax.swing.JFrame {
   private String selectedExecution;
   private ElementsWithSameDesignPatternSelection ewsdp = null;
   private JTextArea textLogsArea = new javax.swing.JTextArea();
-  
   Locale locale = Locale.US;
   ResourceBundle rb = ResourceBundle.getBundle("i18n", locale);
 
@@ -198,28 +197,35 @@ public class main extends javax.swing.JFrame {
 
     GuiUtils.makeTableNotEditable(tableExecutions);
 
+    int rowIndex = tableExp.getSelectedRow();
+    String currentExperimentId = tableExp.getModel().getValueAt(rowIndex, 0).toString();
+    
+
+    
+    int  numberNonDominatedSolutions = db.Database.countNumberNonDominatedSolutins(idExperiment);
+    
+
     try {
-      List<Execution> all = db.Database.getAllExecutionsByExperimentId(idExperiment);
+      Collection<Execution> all = db.Database.getAllExecutionsByExperimentId(idExperiment);
       for (Execution exec : all) {
         Object[] row = new Object[5];
         row[0] = exec.getId();
         row[1] = Time.convertMsToMin(exec.getTime());
-       // int numberNonDominatedSolutions = ReadSolutionsFiles.countNumberNonDominatedSolutins(idExperiment, this.config.getConfig().getDirectoryToExportModels());
-        int numberNonDominatedSolutions = db.Database.countNumberNonDominatedSolutins(idExperiment);
+        // int numberNonDominatedSolutions = ReadSolutionsFiles.countNumberNonDominatedSolutins(idExperiment, this.config.getConfig().getDirectoryToExportModels());
+
         int numberSolutions = db.Database.getAllSolutionsForExecution(idExperiment, exec.getId()).size();
-        
+
 //        int numberSolutions = ReadSolutionsFiles.read(idExperiment,
 //                exec.getId(),
 //                this.config.getConfig().getDirectoryToExportModels()).size();
-        
+
         row[2] = Math.abs(numberSolutions - numberNonDominatedSolutions);
         row[3] = numberNonDominatedSolutions;
         modelTableExecutions.addRow(row);
       }
+      all.clear();
     } catch (Exception e) {
-      JOptionPane.showMessageDialog(null,
-              "Possibly the data are not found on disk",
-              "Erro when try load data.", 0);
+      //
     }
   }
 
@@ -1857,20 +1863,22 @@ public class main extends javax.swing.JFrame {
 
     private void btnConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConcernProfileActionPerformed
       String newPath = fileChooser(fieldConcernProfile, "uml");
-      
-      if (newPath.equals(""))
+
+      if (newPath.equals("")) {
         this.config.updatePathToProfileConcerns(fieldConcernProfile.getText());
-      else
+      } else {
         this.config.updatePathToProfileConcerns(newPath);
+      }
     }//GEN-LAST:event_btnConcernProfileActionPerformed
 
     private void btnSmartyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSmartyProfileActionPerformed
       String newPath = fileChooser(fieldSmartyProfile, "uml");
-      
-      if (newPath.equals(""))
+
+      if (newPath.equals("")) {
         this.config.updatePathToProfileSmarty(fieldSmartyProfile.getText());
-      else
+      } else {
         this.config.updatePathToProfileSmarty(newPath);
+      }
     }//GEN-LAST:event_btnSmartyProfileActionPerformed
 
     private void fieldConcernProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fieldConcernProfileActionPerformed
@@ -1883,11 +1891,12 @@ public class main extends javax.swing.JFrame {
 
     private void btnTemplateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTemplateActionPerformed
       String path = dirChooser(fieldTemplate);
-      
-      if ("".equals(path))
+
+      if ("".equals(path)) {
         this.config.updatePathToTemplateFiles(fieldTemplate.getText() + UserHome.getFileSeparator());
-      else
+      } else {
         this.config.updatePathToTemplateFiles(path + UserHome.getFileSeparator());
+      }
     }//GEN-LAST:event_btnTemplateActionPerformed
 
   private String dirChooser(JTextField field) throws HeadlessException {
@@ -1895,14 +1904,14 @@ public class main extends javax.swing.JFrame {
     String path;
     c.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
     int rVal = c.showOpenDialog(this);
-    
+
     if (rVal == JFileChooser.APPROVE_OPTION) {
       path = c.getSelectedFile().getAbsolutePath();
       field.setText(path + UserHome.getFileSeparator());
       field.updateUI();
       return path;
     }
-    
+
     return "";
   }
 
@@ -1920,10 +1929,11 @@ public class main extends javax.swing.JFrame {
 
     private void btnManipulationDirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManipulationDirActionPerformed
       String path = dirChooser(fieldManipulationDir);
-      if ("".equals(path))
+      if ("".equals(path)) {
         this.config.updatePathToSaveModels(fieldManipulationDir.getText() + UserHome.getFileSeparator());
-      else
+      } else {
         this.config.updatePathToSaveModels(path + UserHome.getFileSeparator());
+      }
     }//GEN-LAST:event_btnManipulationDirActionPerformed
 
     private void checkSmartyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkSmartyActionPerformed
@@ -1977,8 +1987,9 @@ public class main extends javax.swing.JFrame {
         panelMutationProb.setVisible(false);
       } else {
         panelOperatorsMutation.setVisible(true);
-        if (crossoverProbabilityBck != null)
+        if (crossoverProbabilityBck != null) {
           fieldCrossoverProbability.setText(crossoverProbabilityBck);
+        }
         panelMutationProb.setVisible(true);
       }
     }//GEN-LAST:event_checkMutationActionPerformed
@@ -2238,8 +2249,8 @@ public class main extends javax.swing.JFrame {
         int rowIndex = target.getSelectedRow();
         String idExecution = target.getModel().getValueAt(rowIndex, 0).toString();
         this.selectedExecution = idExecution;
-        
-        List<String> solutions =  db.Database.getAllSolutionsForExecution(selectedExperiment, idExecution);
+
+        List<String> solutions = db.Database.getAllSolutionsForExecution(selectedExperiment, idExecution);
 
         comboSolutions.setModel(new SolutionsComboBoxModel(idExecution, solutions));
         comboSolutions.setSelectedIndex(0);
@@ -2264,7 +2275,7 @@ public class main extends javax.swing.JFrame {
     GuiServices.initializerComboObjectiveFunctions(comboMetrics, this.selectedExperiment);
 
     Map<String, String> objectives = db.Database.getAllObjectivesByExecution(((Solution) comboSolutions.getSelectedItem()).getId(), this.selectedExperiment);
-    
+
     String fileName = ((Solution) comboSolutions.getSelectedItem()).getName();
     String objectiveId = Utils.extractSolutionIdFromSolutionFileName(fileName);
     Map<String, String> r = GuiUtils.formatObjectives(objectives.get(objectiveId), this.selectedExperiment);
@@ -2342,7 +2353,7 @@ public class main extends javax.swing.JFrame {
         row[2] = elegance.getEc();
         model.addRow(row);
       } else if (selectedMetric.equalsIgnoreCase("conventional")) {
-          Conventional conventional = db.Database.getConventionalsMetricsForSolution(idSolution, this.selectedExperiment);
+        Conventional conventional = db.Database.getConventionalsMetricsForSolution(idSolution, this.selectedExperiment);
 
         for (int i = 0; i < mapColumns.get(selectedMetric).length; i++) {
           model.addColumn(mapColumns.get("conventional")[i]);
@@ -2504,120 +2515,124 @@ public class main extends javax.swing.JFrame {
 
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     panelFunctionExecutionsSelecteds.setLayout(new MigLayout());
-        
-    for(Component comp : panelFunctionExecutionsSelecteds.getComponents()){
-      if(comp instanceof JCheckBox)
-        panelFunctionExecutionsSelecteds.remove((JCheckBox)comp);
-      if(comp instanceof  JLabel)
-        panelFunctionExecutionsSelecteds.remove((JLabel)comp);
-      
-      
+
+    for (Component comp : panelFunctionExecutionsSelecteds.getComponents()) {
+      if (comp instanceof JCheckBox) {
+        panelFunctionExecutionsSelecteds.remove((JCheckBox) comp);
+      }
+      if (comp instanceof JLabel) {
+        panelFunctionExecutionsSelecteds.remove((JLabel) comp);
+      }
+
+
     }
- 
+
     int[] selectedRows = tableExp2.getSelectedRows();
     HashMap<String, String[]> map = new HashMap<>();
-    
+
     for (int i = 0; i < selectedRows.length; i++) {
       String experimentId = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
       map.put(experimentId, db.Database.getOrdenedObjectives(experimentId).split(" "));
     }
-    
+
     //Validacao
-    if(selectedRows.length <= 1){
+    if (selectedRows.length <= 1) {
       JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoExecution"));
       return;
-    }else if(selectedRows.length > 5){
+    } else if (selectedRows.length > 5) {
       JOptionPane.showMessageDialog(null, rb.getString("maxExecutions"));
       return;
-    }else if(!Validators.selectedsExperimentsHasTheSameObjectiveFunctions(map)){
+    } else if (!Validators.selectedsExperimentsHasTheSameObjectiveFunctions(map)) {
       JOptionPane.showMessageDialog(null, rb.getString("notSameFunctions"));
       return;
     }
-    
-     for (Map.Entry<String, String[]> entry : map.entrySet()) {
-       String experimentId = entry.getKey();
-       String[] values = entry.getValue();
-       panelFunctionExecutionsSelecteds.add(new JLabel(""), "wrap");
-       panelFunctionExecutionsSelecteds.add(new JLabel("Execution: " + experimentId + "\n"), "wrap");
-       for(int i=0; i < values.length; i++){
+
+    for (Map.Entry<String, String[]> entry : map.entrySet()) {
+      String experimentId = entry.getKey();
+      String[] values = entry.getValue();
+      panelFunctionExecutionsSelecteds.add(new JLabel(""), "wrap");
+      panelFunctionExecutionsSelecteds.add(new JLabel("Execution: " + experimentId + "\n"), "wrap");
+      for (int i = 0; i < values.length; i++) {
         JCheckBox box = new JCheckBox(values[i].toUpperCase());
-        box.setName(experimentId + "," +  values[i] + "," + i); // id do experimemto, nome da funcao, indice
+        box.setName(experimentId + "," + values[i] + "," + i); // id do experimemto, nome da funcao, indice
         panelFunctionExecutionsSelecteds.add(box, "span, grow");
-       }
-     }
-     
-     panelFunctionExecutionsSelecteds.updateUI();
+      }
+    }
+
+    panelFunctionExecutionsSelecteds.updateUI();
 
   }//GEN-LAST:event_jButton2ActionPerformed
 
   private void btnGenerateChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateChartActionPerformed
     List<JCheckBox> allChecks = new ArrayList();
     List<JCheckBox> checkeds = new ArrayList();
-    HashMap<String, String> experimentToAlgorithmUsed = new HashMap<>();      
-    
-    for(Object comp : panelFunctionExecutionsSelecteds.getComponents()){
-      if(comp instanceof JCheckBox){
-        JCheckBox checkBox = ((JCheckBox)comp);
-        if(checkBox.isSelected())
-           checkeds.add(checkBox);
+    HashMap<String, String> experimentToAlgorithmUsed = new HashMap<>();
+
+    for (Object comp : panelFunctionExecutionsSelecteds.getComponents()) {
+      if (comp instanceof JCheckBox) {
+        JCheckBox checkBox = ((JCheckBox) comp);
+        if (checkBox.isSelected()) {
+          checkeds.add(checkBox);
+        }
         allChecks.add(checkBox);
       }
     }
-    
-    for(JCheckBox box : checkeds){
+
+    for (JCheckBox box : checkeds) {
       String id = box.getName().split(",")[0]; // experimentID
       String algorithmUsed = db.Database.getAlgoritmUsedToExperimentId(id);
       experimentToAlgorithmUsed.put(id, algorithmUsed);
     }
-    if(Validators.hasMoreThatTwoFunctionsSelectedForSelectedExperiments(allChecks)){
+    if (Validators.hasMoreThatTwoFunctionsSelectedForSelectedExperiments(allChecks)) {
       JOptionPane.showMessageDialog(null, rb.getString("onlyTwoFunctions"));
-    }else if(checkeds.isEmpty()){
-      JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoFunctionPerSelectedExperiment")); 
-    }else if(Validators.validateCheckedsFunctions(allChecks)){
-      JOptionPane.showMessageDialog(null,  rb.getString("sameFunctions"));
-    }else{
+    } else if (checkeds.isEmpty()) {
+      JOptionPane.showMessageDialog(null, rb.getString("atLeastTwoFunctionPerSelectedExperiment"));
+    } else if (Validators.validateCheckedsFunctions(allChecks)) {
+      JOptionPane.showMessageDialog(null, rb.getString("sameFunctions"));
+    } else {
       String[] functions = new String[2]; //x,y Axis
       int[] columns = new int[2]; // Quais colunas do arquivo deseja-se ler.
-      
-      for(int i=0; i < 2; i++){
+
+      for (int i = 0; i < 2; i++) {
         final String[] splited = checkeds.get(i).getName().split(",");
         columns[i] = Integer.parseInt(splited[2]);
         functions[i] = splited[1];
       }
 
       String outputDir = this.config.getConfig().getDirectoryToExportModels();
-      ChartGenerate.generate(functions, experimentToAlgorithmUsed, columns, outputDir); 
-    }   
-    
+      ChartGenerate.generate(functions, experimentToAlgorithmUsed, columns, outputDir);
+    }
+
   }//GEN-LAST:event_btnGenerateChartActionPerformed
 
   private void executionDescriptionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_executionDescriptionKeyTyped
     int numbersOfChars = executionDescription.getText().length();
-    if(numbersOfChars > 10){
+    if (numbersOfChars > 10) {
       executionDescription.setText(executionDescription.getText().substring(0, 10));
     }
   }//GEN-LAST:event_executionDescriptionKeyTyped
 
   private void btnGenerateEdChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateEdChartActionPerformed
-       
+
     int[] selectedRows = tableExp2.getSelectedRows();
     String ids[] = new String[selectedRows.length];
-    
-    for (int i = 0; i < selectedRows.length; i++)
+
+    for (int i = 0; i < selectedRows.length; i++) {
       ids[i] = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
-    
-    if(selectedRows.length >= 1){
+    }
+
+    if (selectedRows.length >= 1) {
       String typeChart = GuiFile.getInstance().getEdChartType();
-      if("bar".equalsIgnoreCase(typeChart)){
+      if ("bar".equalsIgnoreCase(typeChart)) {
         EdBar edBar = new EdBar(ids, null);
         edBar.displayOnFrame();
-      }else if("line".equals(typeChart)) {
+      } else if ("line".equals(typeChart)) {
         EdLine edLine = new EdLine(ids, null);
         edLine.displayOnFrame();
-      }else{
-         JOptionPane.showMessageDialog(null, rb.getString("confEdChartInvalid"));
+      } else {
+        JOptionPane.showMessageDialog(null, rb.getString("confEdChartInvalid"));
       }
-    }else{
+    } else {
       JOptionPane.showMessageDialog(null, rb.getString("atLeastOneExecution"));
     }
   }//GEN-LAST:event_btnGenerateEdChartActionPerformed
@@ -2626,37 +2641,48 @@ public class main extends javax.swing.JFrame {
     try {
       int[] selectedRows = tableExp2.getSelectedRows();
       String ids[] = new String[selectedRows.length];
-      
-      for (int i = 0; i < selectedRows.length; i++)
+      String funcs = "";
+
+      for (int i = 0; i < selectedRows.length; i++) {
         ids[i] = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
-      
-        HypervolumeWindow hyperPanel = new HypervolumeWindow();
-        hyperPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        if(VolatileConfs.hypervolumeNormalized())
-          hyperPanel.setTitle("Hypervolume - Normalized");
-        else
-          hyperPanel.setTitle("Hypervolume - Non Normalized");
-        hyperPanel.pack();
-        hyperPanel.setResizable(false);
-        hyperPanel.setVisible(true);
-          
-        hyperPanel.loadData(ids);
+        String functions = db.Database.getOrdenedObjectives(ids[i]);
+        if (funcs.isEmpty()) {
+          funcs = functions;
+        } else if (!funcs.equalsIgnoreCase(functions)) {
+          JOptionPane.showMessageDialog(null, rb.getString("notSameFunctions"));
+
+          return;
+        }
+
+      }
+
+      HypervolumeWindow hyperPanel = new HypervolumeWindow();
+      hyperPanel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+      if (VolatileConfs.hypervolumeNormalized()) {
+        hyperPanel.setTitle("Hypervolume - Normalized");
+      } else {
+        hyperPanel.setTitle("Hypervolume - Non Normalized");
+      }
+      hyperPanel.pack();
+      hyperPanel.setResizable(false);
+      hyperPanel.setVisible(true);
+
+      hyperPanel.loadData(ids);
     } catch (IOException ex) {
       Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
       JOptionPane.showMessageDialog(null, rb.getString("errorGenerateHypervolumeTable"));
     }
-    
+
   }//GEN-LAST:event_btnHypervolumeActionPerformed
 
   private void hypervolumeNormalizedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hypervolumeNormalizedActionPerformed
-    if(hypervolumeNormalized.isEnabled()){
-     VolatileConfs.enableHybervolumeNormalization();
-    }else{
-     VolatileConfs.disableHybervolumeNormalization();
+    if (hypervolumeNormalized.isEnabled()) {
+      VolatileConfs.enableHybervolumeNormalization();
+    } else {
+      VolatileConfs.disableHybervolumeNormalization();
     }
   }//GEN-LAST:event_hypervolumeNormalizedActionPerformed
 
-  
   private String fileChooser(JTextField fieldToSet, String allowExtension) throws HeadlessException {
     JFileChooser c = new JFileChooser();
     int rVal = c.showOpenDialog(this);
@@ -2941,11 +2967,11 @@ public class main extends javax.swing.JFrame {
     jTabbedPane1.setEnabledAt(3, false);
     jTabbedPane1.setEnabledAt(4, false);
   }
-  
+
   private void populateTables() {
     JTable tables[] = {tableExp, tableExp2};
     List<results.Experiment> allExp = db.Database.getContent();
-    
+
     for (int i = 0; i < tables.length; i++) {
       try {
         GuiUtils.makeTableNotEditable(tables[i]);
@@ -2955,7 +2981,7 @@ public class main extends javax.swing.JFrame {
         model.addColumn("Algorithm");
         model.addColumn("Created at");
         tables[i].setModel(model);
-        
+
         for (results.Experiment exp : allExp) {
           Object[] row = new Object[4];
           row[0] = exp.getId();
@@ -2972,7 +2998,6 @@ public class main extends javax.swing.JFrame {
   }
 
   private String titleWindow() {
-    return "Execution " + this.selectedExperiment + " ("+ db.Database.getAlgoritmUsedToExperimentId(this.selectedExperiment) +") - " + db.Database.getPlaUsedToExperimentId(this.selectedExperiment);
+    return "Execution " + this.selectedExperiment + " (" + db.Database.getAlgoritmUsedToExperimentId(this.selectedExperiment) + ") - " + db.Database.getPlaUsedToExperimentId(this.selectedExperiment);
   }
-  
 }

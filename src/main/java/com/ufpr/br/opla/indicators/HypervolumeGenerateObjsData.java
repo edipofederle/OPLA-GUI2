@@ -37,7 +37,7 @@ public class HypervolumeGenerateObjsData {
   
        List<Double> values = ExecuteHypervolumeScript.exec(referencePoint, pathToFile);
 
-      hypervolumeDatas.add(new HypervolumeData(values, pla, algorithm));
+      hypervolumeDatas.add(new HypervolumeData(experimentId, values, pla, algorithm));
     }
     
     deleteGeneratedFiles(content);

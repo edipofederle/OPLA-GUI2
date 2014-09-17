@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class HypervolumeTest {
   public void test1() throws IOException {
     database.Database.setPathToDB(UserHome.getPathToDb());
     db.Database.reloadContent();
-    List<Execution> fitnesses = db.Database.getAllExecutionsByExperimentId("2124944579");
+    Collection<Execution> fitnesses = db.Database.getAllExecutionsByExperimentId("2124944579");
 
 
     PrintWriter pw = new PrintWriter(new FileWriter("out.txt"));
