@@ -260,8 +260,8 @@ public class Database {
     return null;
   }
 
-  public static List<Elegance> getAllEleganceMetricsForExperimentId(String experimentId) {
-    List<Elegance> listFd = new ArrayList<>();
+  public static List<metrics.Metrics> getAllEleganceMetricsForExperimentId(String experimentId) {
+    List<metrics.Metrics> listFd = new ArrayList<>();
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
@@ -279,8 +279,8 @@ public class Database {
     return listFd;
   }
 
-  public static List<FeatureDriven> getAllFeatureDrivenMetricsForExperimentId(String experimentId) {
-    List<FeatureDriven> listFd = new ArrayList<>();
+  public static List<metrics.Metrics> getAllFeatureDrivenMetricsForExperimentId(String experimentId) {
+    List<metrics.Metrics> listFd = new ArrayList<>();
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
@@ -297,8 +297,8 @@ public class Database {
     return listFd;
   }
 
-  public static List<Conventional> getAllConventionalMetricsForExperimentId(String experimentId) {
-    List<Conventional> listCons = new ArrayList<>();
+  public static List<metrics.Metrics> getAllConventionalMetricsForExperimentId(String experimentId) {
+    List<metrics.Metrics> listCons = new ArrayList<>();
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
@@ -316,8 +316,8 @@ public class Database {
     return listCons;
   }
 
-  public static List<PLAExtensibility> getAllPLAExtMetricsForExperimentId(String experimentId) {
-    List<PLAExtensibility> listCons = new ArrayList<>();
+  public static List<metrics.Metrics> getAllPLAExtMetricsForExperimentId(String experimentId) {
+    List<metrics.Metrics> listCons = new ArrayList<>();
     for (Experiment exp : content) {
       if (exp.getId().equals(experimentId)) {
         for (Execution exec : exp.getExecutions()) {
@@ -666,5 +666,34 @@ public class Database {
     }
     
     return connection;
+  }
+
+  static String getNameSolutionById(String idSolution) {
+     Statement statement = null;
+
+    try {
+      statement = getConnection().createStatement();
+
+      
+
+      StringBuilder query = new StringBuilder();
+      query.append("SELECT solution_name FROM objectives where id=").append(idSolution);
+
+      ResultSet result = statement.executeQuery(query.toString());
+      return result.getString("solution_name");
+
+      
+
+    } catch (SQLException ex) {
+      Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
+    } finally {
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
+      }
+    }
+
+    return "-";
   }
 }

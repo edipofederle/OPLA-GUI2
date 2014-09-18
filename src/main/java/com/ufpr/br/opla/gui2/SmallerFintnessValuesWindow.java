@@ -6,13 +6,13 @@ package com.ufpr.br.opla.gui2;
 
 import com.ufpr.br.opla.indicators.Indicators;
 import com.ufpr.br.opla.utils.GuiUtils;
-import com.ufpr.br.opla.utils.Utils;
 import db.BestSolutionBySelectedFitness;
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.*;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 
 /**
  *
@@ -75,7 +75,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
         panelTableObjectives = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableObjectives = new javax.swing.JTable();
-        jLabel5 = new javax.swing.JLabel();
+        labelSelectedSolutionFunctions = new javax.swing.JLabel();
         panelEds = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -298,8 +298,8 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
         tableObjectives.setMinimumSize(new java.awt.Dimension(300, 64));
         jScrollPane5.setViewportView(tableObjectives);
 
-        jLabel5.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
-        jLabel5.setText("Objective Functions");
+        labelSelectedSolutionFunctions.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
+        labelSelectedSolutionFunctions.setText("Objective Functions");
 
         org.jdesktop.layout.GroupLayout panelTableObjectivesLayout = new org.jdesktop.layout.GroupLayout(panelTableObjectives);
         panelTableObjectives.setLayout(panelTableObjectivesLayout);
@@ -310,7 +310,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
                     .add(jScrollPane5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .add(panelTableObjectivesLayout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jLabel5)
+                        .add(labelSelectedSolutionFunctions)
                         .add(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -318,7 +318,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
             panelTableObjectivesLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, panelTableObjectivesLayout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel5)
+                .add(labelSelectedSolutionFunctions)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 13, Short.MAX_VALUE)
                 .add(jScrollPane5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 105, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -451,6 +451,13 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     if (evt.getClickCount() == 2) {
       JTable target = (JTable) evt.getSource();
       String selectedSolutionId = target.getModel().getValueAt(target.getSelectedRow(), 0).toString();
+      
+      String text = "Objective Functions";
+      labelSelectedSolutionFunctions.setText("");
+      this.repaint();
+      labelSelectedSolutionFunctions.setText(text + " (" + selectedSolutionId  + ")");
+      
+      
       includeTableObjectives(selectedSolutionId);
     }
   }//GEN-LAST:event_tableEleganceBestMouseClicked
@@ -529,7 +536,6 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -539,6 +545,7 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JLabel labelSelectedSolutionFunctions;
     private javax.swing.JPanel panelConventionalBest;
     private javax.swing.JPanel panelEds;
     private javax.swing.JPanel panelEleganceBest;
@@ -607,24 +614,33 @@ public class SmallerFintnessValuesWindow extends javax.swing.JFrame {
   }
 
   public void loadEds() {
+    
+    SortedMap<String, Double> resultsEds = Indicators.getEdsForExperiment(selectedExperiment);
+    
+    Object[][] data = new Object[resultsEds.size()][resultsEds.size()];
+    int index = 0;  
+    for (Map.Entry<String, Double> entry : resultsEds.entrySet()) {
+       data[index] = new String[] {entry.getKey(), String.valueOf(entry.getValue())};
+       index++;
+    }
+      
+    
+    String columnNames[] = { "Solution Name", "ED" };
+    
+    TableModel model = new DefaultTableModel(data, columnNames) {
+      @Override
+      public Class<?> getColumnClass(int column) {
+        return getValueAt(0, column).getClass();
+      }
+    };
+    
+     edTable.setModel(model);
+     TableRowSorter<TableModel> sorter = new TableRowSorter<>(model);
+     edTable.setRowSorter(sorter);  
+    
     Map.Entry<String, Double> bestTradeOffSolutionName = Indicators.getSolutionWithBestTradeOff(selectedExperiment);
     textFieldBestEDVName.setText(bestTradeOffSolutionName.getKey());
     textFieldBestEDValue.setText(String.valueOf(bestTradeOffSolutionName.getValue()));
-
-    DefaultTableModel modelTableEds = new DefaultTableModel();
-    modelTableEds.addColumn("Solution Name");
-    modelTableEds.addColumn("ED");
-
-    edTable.setModel(modelTableEds);
-    SortedMap<String, Double> resultsEds = Indicators.getEdsForExperiment(selectedExperiment);
-   
-    for (Map.Entry<String, Double> entry : Utils.shortMap(resultsEds)) {
-      Object[] row = new Object[2];
-      row[0] = entry.getKey();
-      row[1] = entry.getValue();
-      modelTableEds.addRow(row);
-    }
-    
   }
 
   private void selectBestEdSolution() {

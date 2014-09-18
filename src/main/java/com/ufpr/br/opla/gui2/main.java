@@ -2362,7 +2362,7 @@ public class main extends javax.swing.JFrame {
 
         Object[] row = new Object[numberOfColumns + 2];
         row[0] = conventional.getMacAggregation();
-        row[1] = conventional.getChoesion();
+        row[1] = conventional.getCohesion();
         row[2] = conventional.getMeanDepComps();
         row[3] = conventional.getMeanNumOps();
         row[4] = conventional.getSumClassesDepIn();
