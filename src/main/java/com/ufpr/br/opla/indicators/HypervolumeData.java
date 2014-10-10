@@ -23,7 +23,7 @@ public class HypervolumeData {
   }
 
   public String getStDev() {
-    return String.format("%.1f", MathUtils.stDev(values));
+    return  String.format("%.9f", MathUtils.stDev(values));
   }
 
   public String getMean() {
@@ -39,7 +39,7 @@ public class HypervolumeData {
   }
 
   private String calculeMean(List<Double> values) {
-    return String.format("%.1f", MathUtils.mean(values));
+    return String.format("%.9f", MathUtils.mean(values));
   }
 
   public String getIdExperiment() {

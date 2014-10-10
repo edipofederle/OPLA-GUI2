@@ -145,7 +145,7 @@ public class Database {
       if ("null".equals(description)) {
         return r.getString("algorithm");
       }
-      return r.getString("algorithm") + " - " + description;
+      return r.getString("algorithm");
 
     } catch (SQLException | MissingConfigurationException | ClassNotFoundException ex) {
       Logger.getLogger().putLog(ex.getMessage(), Level.ERROR);
@@ -492,40 +492,40 @@ public class Database {
           for (int i = 0; i < objectives.length; i++) {
             
             if(!VolatileConfs.hypervolumeNormalized())
-              values.add(Double.parseDouble(ov[i]));
+              values.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
             
             if (objectives[i].startsWith("conventional")) {
               if (listObjectivesValues.get("conventional_" + idExecuton) == null) {
                 List<List<Double>> allValue = new ArrayList<>();
                 List<Double> valueFuc = new ArrayList<>();
-                valueFuc.add(Double.parseDouble(ov[i]));
+                valueFuc.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
                 allValue.add(valueFuc);
                 listObjectivesValues.put("conventional_" + idExecuton, allValue);
               } else {
                 List<Double> last = listObjectivesValues.get("conventional_" + idExecuton).get(listObjectivesValues.get("conventional_" + idExecuton).size() - 1);
-                last.add(Double.parseDouble(ov[i]));
+                last.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
               }
             } else if (objectives[i].startsWith("featureDriven")) {
               if (listObjectivesValues.get("featureDriven_" + idExecuton) == null) {
                 List<List<Double>> allValue = new ArrayList<>();
                 List<Double> valueFuc = new ArrayList<>();
-                valueFuc.add(Double.parseDouble(ov[i]));
+                valueFuc.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
                 allValue.add(valueFuc);
                 listObjectivesValues.put("featureDriven_" + idExecuton, allValue);
               } else {
                 List<Double> last = listObjectivesValues.get("featureDriven_" + idExecuton).get(listObjectivesValues.get("featureDriven_" + idExecuton).size() - 1);
-                last.add(Double.parseDouble(ov[i]));
+                last.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
               }
             } else if (objectives[i].startsWith("PLAExtensibility")) {
               if (listObjectivesValues.get("PLAExtensibility_" + idExecuton) == null) {
                 List<List<Double>> allValue = new ArrayList<>();
                 List<Double> valueFuc = new ArrayList<>();
-                valueFuc.add(Double.parseDouble(ov[i]));
+                valueFuc.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
                 allValue.add(valueFuc);
                 listObjectivesValues.put("PLAExtensibility_" + idExecuton, allValue);
               } else {
                 List<Double> last = listObjectivesValues.get("PLAExtensibility_" + idExecuton).get(listObjectivesValues.get("PLAExtensibility_" + idExecuton).size() - 1);
-                last.add(Double.parseDouble(ov[i]));
+                last.add(Double.valueOf(String.format("%.6f",Double.parseDouble(ov[i]))));
               }
             }
             
@@ -570,9 +570,10 @@ public class Database {
         String[] ov = objs.split(" ");
         List<Double> objectiveValue = new ArrayList<>();
 
-        for (int i = 0; i < columns.length; i++) {
-          objectiveValue.add(Double.parseDouble(ov[i].trim()));
-        }
+        //for (int i = 0; i < columns.length; i++) {
+          objectiveValue.add(Double.parseDouble(ov[columns[0]].trim()));
+          objectiveValue.add(Double.parseDouble(ov[columns[1]].trim()));
+        //}
 
 
         values.add(objectiveValue);
@@ -594,7 +595,6 @@ public class Database {
 
   }
 
-  //TODO add PLAExtensibility
   private static HashMap<String, List<Double>> getFunctionsValueByRun(String run, HashMap<String, List<List<Double>>> listObjectivesValues, String[] objectives) {
     HashMap<String, List<Double>> content = new HashMap<>();
 

@@ -15,6 +15,7 @@ public class GuiSettings {
   
   private int fontSize;
   private String edChartType;
+  private String saveChartsAsPng;
 
   public int getFontSize() {
     return fontSize;
@@ -31,5 +32,16 @@ public class GuiSettings {
   public void setEdChartType(String edChartType) {
     this.edChartType = edChartType;
   }
+
+  public void setSaveChartsAsPng(String saveChartsAsPng) {
+    this.saveChartsAsPng = saveChartsAsPng;
+  }
+  
+ 
+  public String getSaveChartsAsPng(){
+    return this.saveChartsAsPng;
+  }
+  
+  
   
 }

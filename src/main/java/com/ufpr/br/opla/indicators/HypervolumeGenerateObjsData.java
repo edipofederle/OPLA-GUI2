@@ -40,7 +40,7 @@ public class HypervolumeGenerateObjsData {
       hypervolumeDatas.add(new HypervolumeData(experimentId, values, pla, algorithm));
     }
     
-    deleteGeneratedFiles(content);
+   // deleteGeneratedFiles(content);
     
     return hypervolumeDatas;
   }

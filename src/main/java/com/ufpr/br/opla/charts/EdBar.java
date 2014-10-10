@@ -77,7 +77,7 @@ public class EdBar {
     String titleChart = ((title == null)|| (title.isEmpty())) ? "Euclidean Distance" : title;
     JFreeChart chart = ChartFactory.createBarChart(titleChart, xLabel, yLabel,
             chartData,
-            PlotOrientation.VERTICAL,
+            PlotOrientation.HORIZONTAL,
             true,
             true,
             false);
@@ -106,6 +106,7 @@ public class EdBar {
 
   private void configureToolTip(JFreeChart chart) {
     BarRenderer renderer = (BarRenderer) chart.getCategoryPlot().getRenderer();
+    
     renderer.setBaseToolTipGenerator(new StandardCategoryToolTipGenerator(
             "(Euclidean Value: {1}, Number Of Solutions: {2})", NumberFormat.getInstance()));
   }

@@ -404,6 +404,7 @@ public class main extends javax.swing.JFrame {
         btnGenerateEdChart = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
+
         jLabel12 = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
 
@@ -1680,7 +1681,7 @@ public class main extends javax.swing.JFrame {
         });
         jScrollPane7.setViewportView(tableExp2);
 
-        panelFunctionExecutionsSelecteds.setBorder(javax.swing.BorderFactory.createTitledBorder("Solutions Search Space"));
+        panelFunctionExecutionsSelecteds.setBorder(javax.swing.BorderFactory.createTitledBorder("Solutions in the Search Space"));
         panelFunctionExecutionsSelecteds.setMinimumSize(new java.awt.Dimension(300, 100));
 
         jButton2.setText("Select Objective Functions");
@@ -1754,7 +1755,7 @@ public class main extends javax.swing.JFrame {
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Euclidean Distance"));
 
-        btnGenerateEdChart.setText("Chart Euclidean Distance");
+        btnGenerateEdChart.setText("Number of Solutions per Euclidean Distance");
         btnGenerateEdChart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGenerateEdChartActionPerformed(evt);
@@ -1767,7 +1768,7 @@ public class main extends javax.swing.JFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addComponent(btnGenerateEdChart)
-                .addGap(0, 31, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2564,6 +2565,7 @@ public class main extends javax.swing.JFrame {
   }//GEN-LAST:event_jButton2ActionPerformed
 
   private void btnGenerateChartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateChartActionPerformed
+    String referenceExp = null;
     List<JCheckBox> allChecks = new ArrayList();
     List<JCheckBox> checkeds = new ArrayList();
     HashMap<String, String> experimentToAlgorithmUsed = new HashMap<>();
@@ -2580,6 +2582,7 @@ public class main extends javax.swing.JFrame {
 
     for (JCheckBox box : checkeds) {
       String id = box.getName().split(",")[0]; // experimentID
+      referenceExp = id;
       String algorithmUsed = db.Database.getAlgoritmUsedToExperimentId(id);
       experimentToAlgorithmUsed.put(id, algorithmUsed);
     }
@@ -2600,7 +2603,11 @@ public class main extends javax.swing.JFrame {
       }
 
       String outputDir = this.config.getConfig().getDirectoryToExportModels();
-      ChartGenerate.generate(functions, experimentToAlgorithmUsed, columns, outputDir);
+      try {
+        ChartGenerate.generate(functions, experimentToAlgorithmUsed, columns, outputDir, referenceExp);
+      } catch (IOException ex) {
+        java.util.logging.Logger.getLogger(main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+      }
     }
 
   }//GEN-LAST:event_btnGenerateChartActionPerformed
@@ -2620,11 +2627,13 @@ public class main extends javax.swing.JFrame {
     for (int i = 0; i < selectedRows.length; i++) {
       ids[i] = tableExp2.getModel().getValueAt(selectedRows[i], 0).toString();
     }
+    
+    String name = db.Database.getPlaUsedToExperimentId(ids[0]);
 
     if (selectedRows.length >= 1) {
       String typeChart = GuiFile.getInstance().getEdChartType();
       if ("bar".equalsIgnoreCase(typeChart)) {
-        EdBar edBar = new EdBar(ids, null);
+        EdBar edBar = new EdBar(ids, "Euclidean Distance ("+name+")");
         edBar.displayOnFrame();
       } else if ("line".equals(typeChart)) {
         EdLine edLine = new EdLine(ids, null);
@@ -2829,6 +2838,7 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTable tableExp2;
     private javax.swing.JTable tableMetrics;
     private javax.swing.JTable tableObjectives;
+
     // End of variables declaration//GEN-END:variables
 
   private void hidePanelMutationOperatorsByDefault() {
@@ -2891,9 +2901,11 @@ public class main extends javax.swing.JFrame {
     } catch (SQLException ex) {
       Logger.getLogger().putLog(String.format(String.format(String.format("Error ConfigureDB %s", ex.getMessage())),
               Level.INFO, main.class.getName()));
+      System.exit(1);
     } catch (Exception ex) {
       Logger.getLogger().putLog(String.format(String.format(String.format(String.format("Generic ERROR %s", ex.getMessage()))),
               Level.INFO, main.class.getName()));
+      System.exit(1);
     }
 
   }

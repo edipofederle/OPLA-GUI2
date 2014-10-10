@@ -41,7 +41,7 @@ public class BestSolutionBySelectedFitness {
       data[i] = new String[] {db.Database.getNameSolutionById(map.get(i).getIdSolution()), String.valueOf(getValueFitness(map.get(i)))};
     }
     
-    String columnNames[] = { "Solution ID", "Value" };
+    String columnNames[] = { "Solution Name", "Value" };
     
     TableModel model = new DefaultTableModel(data, columnNames) {
       @Override

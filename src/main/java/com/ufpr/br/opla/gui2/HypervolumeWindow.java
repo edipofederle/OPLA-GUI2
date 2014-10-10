@@ -40,6 +40,7 @@ public class HypervolumeWindow extends javax.swing.JFrame {
         tableHypervolume = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         tableHypervolume.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

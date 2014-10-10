@@ -34,6 +34,10 @@ public class ManagerGuiSettingsConfig {
     return this.guisettings.getEdChartType();
   }
   
+  public String getSaveChartsAsPng(){
+    return this.guisettings.getSaveChartsAsPng();
+  }
+  
   /**
    * Não usado ainda.
    * @param fontSize 
@@ -42,9 +46,6 @@ public class ManagerGuiSettingsConfig {
     this.guisettings.setFontSize(fontSize);
     updateConfigurationFile();
   }
-  
-  
-  
 
   private void updateConfigurationFile() {
     try {

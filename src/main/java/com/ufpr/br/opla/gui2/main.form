@@ -1932,7 +1932,7 @@
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder title="Solutions Search Space"/>
+                    <TitledBorder title="Solutions in the Search Space"/>
                   </Border>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -2049,7 +2049,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="btnGenerateEdChart" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="31" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -2062,7 +2062,7 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="btnGenerateEdChart">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Chart Euclidean Distance"/>
+                    <Property name="text" type="java.lang.String" value="Number of Solutions per Euclidean Distance"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGenerateEdChartActionPerformed"/>
