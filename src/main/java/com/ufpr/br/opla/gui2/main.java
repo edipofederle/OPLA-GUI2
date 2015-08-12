@@ -404,7 +404,7 @@ public class main extends javax.swing.JFrame {
         btnGenerateEdChart = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
-
+        textLogsArea = new javax.swing.JTextArea();
         jLabel12 = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
 
@@ -824,7 +824,7 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        labelOperators.setText("Select operators which want to use");
+        labelOperators.setText("Select operators which you want to use");
 
         checkCrossover.setText("Crossover");
         checkCrossover.addActionListener(new java.awt.event.ActionListener() {
@@ -845,7 +845,7 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        labelAlgorithms.setText("Select algorithm which want to use:");
+        labelAlgorithms.setText("Select algorithm which you want to use:");
 
         panelMetrics.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Objective Functions", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
@@ -2838,7 +2838,6 @@ public class main extends javax.swing.JFrame {
     private javax.swing.JTable tableExp2;
     private javax.swing.JTable tableMetrics;
     private javax.swing.JTable tableObjectives;
-
     // End of variables declaration//GEN-END:variables
 
   private void hidePanelMutationOperatorsByDefault() {

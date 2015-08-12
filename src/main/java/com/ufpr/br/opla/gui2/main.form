@@ -835,7 +835,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelOperators">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Select operators which want to use"/>
+                    <Property name="text" type="java.lang.String" value="Select operators which you want to use"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="checkCrossover">
@@ -864,7 +864,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="labelAlgorithms">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Select algorithm which want to use:"/>
+                    <Property name="text" type="java.lang.String" value="Select algorithm which you want to use:"/>
                   </Properties>
                 </Component>
                 <Container class="javax.swing.JPanel" name="panelMetrics">
