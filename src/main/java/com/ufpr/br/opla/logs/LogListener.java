@@ -15,15 +15,14 @@ import logs.log_log.LogLogData;
  */
 public class LogListener implements Listener{
   
-  private JTextArea textArea;
+  private final JTextArea textArea;
 
   public LogListener(JTextArea logs) {
     this.textArea = logs;
   }
 
   @Override
-  public void message() {
-    
+  public void message() {   
     this.textArea.append(Time.timeNow() + LogLogData.printLog()+"\n");
   }
   

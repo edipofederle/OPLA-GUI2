@@ -32,6 +32,7 @@ import javax.swing.text.DefaultCaret;
 import jmetal.experiments.FeatureMutationOperators;
 import jmetal.experiments.Metrics;
 import logs.log_log.Level;
+import logs.log_log.LogLogData;
 import logs.log_log.Logger;
 import metrics.Conventional;
 import metrics.Elegance;
@@ -64,10 +65,13 @@ public class main extends javax.swing.JFrame {
    */
   public main() throws Exception {
 
-    DefaultCaret caret = (DefaultCaret) textLogsArea.getCaret();
+    DefaultCaret caret = (DefaultCaret) this.textLogsArea.getCaret();
     caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
-    Logger.addListener(new LogListener(textLogsArea));
+    
+    
+    Logger.addListener(new Listener1());
+    
+  
     Logger.getLogger().putLog("Inicializando OPLA-Tool");
 
     LogConfiguration.setLogLevel(org.apache.log4j.Level.OFF);
@@ -425,7 +429,7 @@ public class main extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Profiles Configuration", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Profiles Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         checkSmarty.setText("SMarty");
         checkSmarty.addActionListener(new java.awt.event.ActionListener() {
@@ -576,7 +580,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Template Configuration", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Template Configuration", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
         jLabel7.setText("about templates");
@@ -620,10 +624,10 @@ public class main extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fieldTemplate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnTemplate))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manipulation Directory", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Manipulation Directory", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         jLabel14.setFont(new java.awt.Font("Lucida Grande", 0, 10)); // NOI18N
         jLabel14.setText("about manipulation directory");
@@ -698,9 +702,9 @@ public class main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("General Configurations", ApplicationConfs);
 
-        algorithms.setName("algorithms");
+        algorithms.setName("algorithms"); // NOI18N
 
-        panelExperimentSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Settings", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        panelExperimentSettings.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Settings", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         jLabel3.setText("Number of Runs:");
 
@@ -847,7 +851,7 @@ public class main extends javax.swing.JFrame {
 
         labelAlgorithms.setText("Select algorithm which you want to use:");
 
-        panelMetrics.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Objective Functions", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        panelMetrics.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Objective Functions", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         checkConventional.setText("Conventional");
         checkConventional.addActionListener(new java.awt.event.ActionListener() {
@@ -906,7 +910,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
-        panelOperatorsMutation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Mutation Operators wich want to use", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        panelOperatorsMutation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select Mutation Operators wich want to use", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         checkFeatureMutation.setText("Feature-driven Mutation");
         checkFeatureMutation.addActionListener(new java.awt.event.ActionListener() {
@@ -1094,7 +1098,7 @@ public class main extends javax.swing.JFrame {
                 .addGap(113, 113, 113))
         );
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Architecture(s)", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Input Architecture(s)", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         jLabel11.setText("A list of paths separated by comma");
 
@@ -1146,7 +1150,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select where you want to save outputs", 0, 0, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Select where you want to save outputs", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), java.awt.Color.magenta)); // NOI18N
 
         fieldOutput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1246,9 +1250,9 @@ public class main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Execution Configurations", algorithms);
 
-        jPanel4.setName("DesignPatterns");
+        jPanel4.setName("DesignPatterns"); // NOI18N
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Design Pattern Selection Strategy", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Design Pattern Selection Strategy", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
 
         checkMediator.setText("Mediator");
         checkMediator.addActionListener(new java.awt.event.ActionListener() {
@@ -1295,7 +1299,7 @@ public class main extends javax.swing.JFrame {
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
-        panelPatternScope.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Scope Selection Strategy", 0, 0, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
+        panelPatternScope.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Scope Selection Strategy", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 1, 14), new java.awt.Color(255, 0, 255))); // NOI18N
 
         buttonGroup1.add(radioRandomStrategy);
         radioRandomStrategy.setSelected(true);
